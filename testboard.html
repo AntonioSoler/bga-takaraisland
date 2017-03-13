@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+			<title>Takara board</title>
+			<link rel="stylesheet" href="takaraisland.css">
+			</head>
+			<body>
+				<table id="playArea">
+					<tr id="up">
+						<td id="boardcell">
+							<div id="boardPanel" class="boarddiv">
+								<div id="swordholder">
+									<div id="sword" onclick="this.classList.toggle('flipped');">
+											<div class="front"></div>
+											<div class="back"></div>
+									</div>
+								</div>
+								<div id="expertsC"></div>
+								<div id="expert1" class="expertholder"></div>
+								<div id="expert2" class="expertholder"></div>
+								<div id="expert3" class="expertholder"></div>
+								<div id="expert4" class="expertholder"></div>
+								<div id="HospitalC"></div>
+								<div id="WaitingroomC"></div>
+
+								<div id="deck1" class="deckholder"></div>
+								<div id="deck2" class="deckholder"></div>
+								<div id="deck3" class="deckholder"></div>
+								<div id="deck4" class="deckholder"></div>
+								<div id="deck5" class="deckholder"></div>
+								<div id="deck6" class="deckholder"></div>
+								<div id="workersC"></div>
+								<div id="treasuredeck"></div>
+								<div id="counterC"></div>
+								<div id="diveC"></div>
+								<div id="explore1" class="exploreholder"></div>
+								<div id="explore2" class="exploreholder"></div>
+								<div id="explore3" class="exploreholder"></div>
+								<div id="explore4" class="exploreholder"></div>
+								<div id="explore5" class="exploreholder"></div>
+								<div id="explore6" class="exploreholder"></div>
+
+							</div>
+						</td>
+						<td>
+							<div id="campswrapper">
+								<!-- BEGIN camp -->
+								<div id="playerCamp_{PLAYER_ID}" class="playercamp">
+								    <div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};" ><b>{PLAYER_NAME}</b></div>
+									<div id="playerxpstore_{PLAYER_ID}" class="xpstore"></div> 
+									
+									<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
+									<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
+									
+									<div id="playerTileHolder_{PLAYER_ID}_1" class="playertileholder t1"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_2" class="playertileholder t2"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_3" class="playertileholder t3"></div>
+								</div>
+								<div id="playerCamp_{PLAYER_ID}" class="playercamp">
+									<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
+									<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
+									<div id="playerxpstore_{PLAYER_ID}" class="xpstore"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_1" class="playertileholder t1"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_2" class="playertileholder t2"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_3" class="playertileholder t3"></div>
+								</div>
+								<div id="playerCamp_{PLAYER_ID}" class="playercamp">
+									<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
+									<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
+									<div id="playerxpstore_{PLAYER_ID}" class="xpstore"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_1" class="playertileholder t1"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_2" class="playertileholder t2"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_3" class="playertileholder t3"></div>
+								</div>
+								<div id="playerCamp_{PLAYER_ID}" class="playercamp">
+									<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
+									<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
+									<div id="playerxpstore_{PLAYER_ID}" class="xpstore"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_1" class="playertileholder t1"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_2" class="playertileholder t2"></div>
+									<div id="playerTileHolder_{PLAYER_ID}_3" class="playertileholder t3"></div>
+								</div>
+
+								<!-- END camp -->
+							</div>
+						</td>
+					</div>
+					<tr id="down">
+						<td colspan="2">
+							<div id="table_wrap">
+								<h2>{TABLE}</h2>
+								<div id="tablecards" class="whiteblock table"></div>
+							</div>
+						</div></td></tr></table></body></html>
+	
