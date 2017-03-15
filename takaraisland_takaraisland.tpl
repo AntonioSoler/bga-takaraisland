@@ -28,7 +28,12 @@
 	<tr id="up">
 		<td id="boardcell">
 			<div id="boardPanel" class="boarddiv">
-				<div id="swordholder"></div>
+				<div id="swordholder">
+				<div id="sword" onclick="this.classList.toggle('flipped');">
+											<div class="front"></div>
+											<div class="back"></div>
+				</div>
+				</div>
 				<div id="expertsC"></div>
 				<div id="expert1" class="expertholder"></div>
 				<div id="expert2" class="expertholder"></div>

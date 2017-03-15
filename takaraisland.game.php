@@ -30,10 +30,11 @@ class takaraisland extends Table
         //  the corresponding ID in gameoptions.inc.php.
         // Note: afterwards, you can get/set the global variables with getGameStateValue/setGameStateInitialValue/setGameStateValue
         parent::__construct();self::initGameStateLabels( array( 
-                "iterations" => 10,
+                "stonesfound" => 10,
                 "gameOverTrigger" => 11,
-                "deckSize" => 12,
-				"artifactspicked" => 13,
+				
+                
+				
 				
             //    "my_second_global_variable" => 11,
             //      ...
@@ -43,6 +44,12 @@ class takaraisland extends Table
         ) );
         $this->cards = self::getNew( "module.common.deck" );
 		$this->cards->init( "cards" );
+		
+		$this->treasures = self::getNew( "module.common.deck" );
+		$this->treasures->init( "treasures" );
+		
+		$this->tokens = self::getNew( "module.common.deck" );
+		$this->tokens->init( "tokens" );
 	}
 	
     protected function getGameName( )
@@ -91,53 +98,116 @@ class takaraisland extends Table
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
         
-		self::initStat( 'table', 'cards_drawn', 1 );    // Init a table statistics
-        self::initStat( 'table', 'artifacts_drawn', 0 );
-		self::initStat( 'player', 'cards_seen' , 0 );  // Init a player statistics (for all players)
-		self::initStat( 'player', 'artifacts_number' , 0 );  // Init a player statistics (for all players)
-		self::initStat( 'player', 'gems_number' , 0 );  // Init a player statistics (for all players)
-		
+		self::initStat( 'table', 'cards_digged', 0 );    // Init a table statistics
+        self::initStat( 'table', 'stones_found', 0 );
+		self::initStat( 'player', 'cards_digged' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'gold' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'experience' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'stones_found' , 0 );  // Init a player statistics (for all players)
 		
         // setup the initial game situation here
 
-        self::setGameStateInitialValue( 'iterations', 0 ); //times deck has been exhausted
+        self::setGameStateInitialValue( 'stonesfound', 0 ); // Stones of legend found
 
 
-        //create the card deck here. There are 34 cards
-        // (3 of each of the 5 types of hazard) = 15
-        // 14 gems cards = 14
-        // 5 artifacts one of each type = 5
         $cards = array();
-
-        foreach( $this->card_types as $cardType)
+        foreach( $this->treasure_types as $cardType)
         {
-			if ($cardType['type_id']  <= 11)
-            {
-                $cardValues = array( 1, 2, 3, 4, 5, 7, 9,11,13,14,15); 
-				$cardNumbers = array(1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1); 
-                $type_id = $cardType["type_id"]-1 ;
-				$card = array( 'type' => $cardType["type_id"], 'type_arg' => $cardValues[$type_id] , 'nbr' => $cardNumbers[$type_id]);
-				array_push($cards, $card);
-            }
-            if ($cardType['isArtifact'] == 1)
-            {	
-                $card = array( 'type' => $cardType["type_id"], 'type_arg' => 0, 'nbr' => 1);
-                array_push($cards, $card);
-            }
-			if ($cardType['isHazard'] == 1)   // 3 of each hazard
-            {
-                $card = array( 'type' => $cardType["type_id"], 'type_arg' => 0, 'nbr' => 3);
-                array_push($cards, $card);
-            }
-        }
-        
-        $this->cards->createCards( $cards, 'deck' );
-		
-		self::setGameStateInitialValue( 'deckSize', $this->cards->countCardsInLocation("deck"));
-        self::setGameStateInitialValue( 'artifactspicked', 0 );
-		
+			$card = array( 'type' => $cardType["type_id"], 'type_arg' => $cardType["isMonster"] , 'nbr' => 1);
+			array_push($cards, $card);   
+        }        
+        $this->treasures->createCards( $cards, 'deck' );
         //shuffle 
-        $this->cards->shuffle( 'deck' );
+        $this->treasures->shuffle( 'deck' );
+		
+		
+		$cards = array();
+		foreach( $this->card_types as $cardType)
+        {
+			$card = array( 'type' => $cardType["type_id"], 'type_arg' => $cardType["deep"] , 'nbr' => $cardType["amount"]);
+			if ( $cardType["deep"] == 1 ) 
+				{
+					array_push($cards, $card);   
+				}
+        }
+        $this->cards->createCards( $cards, 'deep1' );
+        //shuffle 
+        $this->cards->shuffle( 'deep1' );
+		
+		$cards = array();
+		foreach( $this->card_types as $cardType)
+        {
+			$card = array( 'type' => $cardType["type_id"], 'type_arg' => $cardType["deep"] , 'nbr' => $cardType["amount"]);
+			if ( $cardType["deep"] == 2 ) 
+				{
+					array_push($cards, $card);   
+				}
+        }
+        $this->cards->createCards( $cards, 'deep2' );
+        //shuffle 
+        $this->cards->shuffle( 'deep2' );
+		
+		$cards = array();
+		foreach( $this->card_types as $cardType)
+        {
+			$card = array( 'type' => $cardType["type_id"], 'type_arg' => $cardType["deep"] , 'nbr' => $cardType["amount"]);
+			if ( $cardType["deep"] == 3  ) 
+				{
+					array_push($cards, $card);   
+				}
+        }
+	
+        $this->cards->createCards( $cards, 'deep3' );
+        //shuffle 
+        $this->cards->shuffle( 'deep3' );
+		
+		
+		$decks=array('deck1','deck2','deck3','deck4','deck5','deck6');
+		shuffle($decks);
+		$location=array_pop($decks);
+		$sql = "UPDATE cards SET card_location='$location' WHERE card_type=22";
+        self::DbQuery( $sql ); 
+		$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 2";
+        self::DbQuery( $sql ); 
+		$this->cards->shuffle( $location );
+		
+		$location=array_pop($decks);
+		$sql = "UPDATE cards SET card_location='$location' WHERE card_type=23";
+		self::DbQuery( $sql );
+		$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 2";
+        self::DbQuery( $sql );
+		$this->cards->shuffle( $location );
+		
+		for ($i=1 ; $i<=4 ; $i++ )
+		{
+			$location=array_pop($decks);
+			$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 3";
+			self::DbQuery( $sql );
+			$this->cards->shuffle( $location );
+		}
+				
+		$deeps=array('deep2','deep1');
+		$decks=array('deck1','deck2','deck3','deck4','deck5','deck6');
+		foreach ( $deeps as $thisdeep )
+		{
+			$this->cards->shuffle( $thisdeep );
+			foreach ( $decks as $thisdeck)
+			{
+				for ($i=1 ; $i<=3 ; $i++ ) 
+				{
+					 //$thiscard = $this->cards->getCardOnTop( $thisdeep );
+					 $sql = "SELECT card_id FROM cards WHERE card_location='$thisdeep' LIMIT 1";
+                     $thiscard = self::getUniqueValueFromDB( $sql );
+					 $this->cards->insertCardOnExtremePosition( $thiscard , $thisdeck, true ); 
+				}
+			}
+		}
+
+		
+    
+		
+		
+		
 
         $players = self::loadPlayersBasicInfos();
 
@@ -170,6 +240,8 @@ class takaraisland extends Table
 		
         $result['players'] = self::getCollectionFromDb( $sql ); //fields of all players are visible 
 		
+		
+		/*
 		$sql = "SELECT player_tent FROM player WHERE player_id='$current_player_id'";
         $result['tent'] = self::getUniqueValueFromDB( $sql );  //only you can see your tent
         
@@ -180,7 +252,7 @@ class takaraisland extends Table
 		$sql = "SELECT COUNT(*) FROM cards WHERE card_location ='temple' AND card_type in (12,13,14,15,16)"; 
 		$result['templeartifacts'] = self::getUniqueValueFromDB( $sql );
 		$result['table'] = $this->cards->getCardsInLocation( 'table' );
-              
+         */     
         return $result;
     }
 
@@ -199,9 +271,9 @@ class takaraisland extends Table
         //Compute and return the game progression
         // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
 
-        $iterations = self::getGameStateValue("iterations");
-        $cardsDrawn = $this->cards->countCardsInLocation( 'table' );
-		$result = ( ($iterations -1) * 20 ) + $cardsDrawn ;
+        $result = 0;
+        //$cardsDrawn = $this->cards->countCardsInLocation( 'table' );
+		//$result = ( ($iterations -1) * 20 ) + $cardsDrawn ;
         return ($result);
     }
 
@@ -369,7 +441,7 @@ class takaraisland extends Table
 
     function streshuffle()
 	{
-	$this->cards->moveAllCardsInLocation( 'table', 'deck' );  //collect all cards to the deck and reshuffle
+	/*$this->cards->moveAllCardsInLocation( 'table', 'deck' );  //collect all cards to the deck and reshuffle
 	$this->cards->shuffle( 'deck' );
 	$cardsRemaining = $this->cards->countCardsInLocation('deck');
 	$iterations = 1 + $this->getGameStateValue('iterations');	
@@ -406,7 +478,7 @@ class takaraisland extends Table
 			$iterations++ ;
 			self::setGameStateInitialValue( 'iterations', $iterations );
 			$this->gamestate->nextState( 'explore' );
-		}
+		} */
 	}
 ////////////////////////////////////////////////////////////////////////////
 	function stexplore()

@@ -52,11 +52,11 @@ $stats_type = array(
     // Statistics global to table
     "table" => array(
 
-        "cards_drawn" => array("id"=> 10,
-                    "name" => totranslate("Number of cards drawn"),
+        "cards_digged" => array("id"=> 10,
+                    "name" => totranslate("Number of cards digged by all players"),
                     "type" => "int" ),
-		"artifacts_drawn" => array("id"=> 11,
-                    "name" => totranslate("Number of artifacts drawn"),
+		"stones_found" => array("id"=> 11,
+                    "name" => totranslate("Number of Stones of Legend found"),
                     "type" => "int" ),			
 
 /*
@@ -76,17 +76,20 @@ $stats_type = array(
     // Statistics existing for each player
     "player" => array(
 
-        "cards_seen" => array("id"=> 12,
-                    "name" => totranslate("Number of cards seen (while exploring) "),
+        "cards_digged" => array("id"=> 12,
+                    "name" => totranslate("Number of cards digged (while exploring) "),
                     "type" => "int" ),
         
-        "artifacts_number" => array("id"=> 13,
-                    "name" => totranslate("Artifacts in storage"),
+        "gold" => array("id"=> 13,
+                    "name" => totranslate("Gold collected at the end of the game"),
                     "type" => "int" ),
         
-        "gems_number" => array("id"=> 14,
-                    "name" => totranslate("Gems in storage"),
+        "experience" => array("id"=> 14,
+                    "name" => totranslate("Experience collected at the end of the game"),
                     "type" => "int" ),
+		"stones_found" => array("id"=> 15,
+                    "name" => totranslate("Number of Stones of Legend found"),
+                    "type" => "int" ),			
 
 /*
         Examples:    
