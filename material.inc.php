@@ -33,13 +33,15 @@
 	"spiders"         => clienttranslate('Spiders'),
 	"stone of legend" => clienttranslate('Stone of Legend'),
 	"gold"            => clienttranslate('gold'),
-	"playertile"      => clienttranslate('player tile'),
+	"playertile1"      => clienttranslate('player tile 1'),
+	"playertile2"      => clienttranslate('player tile 2'),
+	"playertile3"      => clienttranslate('player tile 3'),
 	"wound"           => clienttranslate('wound'),
 	"sword"           => clienttranslate('sword'),
 	"expert"          => clienttranslate('expert'),
 	"tablet"          => clienttranslate('tablet'),
 	"map"             => clienttranslate('map'),
-	"mimichest"       => clienttranslate('mimichest'),
+	"mimichest"       => clienttranslate('mimic chest'),
 	"idol"            => clienttranslate('idol'),
 	"skull"           => clienttranslate('skull'),
 	"score_window_title" => clienttranslate('FINAL SCORE'),
@@ -76,14 +78,16 @@
 
  
  $this->token_types = array(
- 	1  => array( 'name' => $this->resources["playertile"     ], 'type_id' => 1 ),
-	2  => array( 'name' => $this->resources["wound"          ], 'type_id' => 2 ),
-	3  => array( 'name' => $this->resources["sword"          ], 'type_id' => 3 ),
-	4  => array( 'name' => $this->resources["experience"     ], 'type_id' => 4 ),
-	5  => array( 'name' => $this->resources["expert"         ], 'type_id' => 5 ),
-	6  => array( 'name' => $this->resources["expert"         ], 'type_id' => 6 ),
-	7  => array( 'name' => $this->resources["expert"         ], 'type_id' => 7 ),
-	8  => array( 'name' => $this->resources["expert"         ], 'type_id' => 8 )
+ 	1  => array( 'name' => $this->resources["playertile1"    ], 'type_id' => 1  ),
+	2  => array( 'name' => $this->resources["playertile2"    ], 'type_id' => 2  ),
+	3  => array( 'name' => $this->resources["playertile3"    ], 'type_id' => 3  ),
+	4  => array( 'name' => $this->resources["sword"          ], 'type_id' => 4  ),
+	5  => array( 'name' => $this->resources["wound"          ], 'type_id' => 5  ),
+	6  => array( 'name' => $this->resources["experience"     ], 'type_id' => 6  ),
+	7  => array( 'name' => $this->resources["expert"         ], 'type_id' => 7  ),
+	8  => array( 'name' => $this->resources["expert"         ], 'type_id' => 8  ),
+	9  => array( 'name' => $this->resources["expert"         ], 'type_id' => 9  ),
+	10 => array( 'name' => $this->resources["expert"         ], 'type_id' => 10 )
 );
 
 

@@ -41,12 +41,13 @@
 				<div id="expert4" class="expertholder"></div>
 				<div id="HospitalC"></div>
 				<div id="WaitingroomC"></div>
-				<div id="deck1" class="deckholder"></div>
-				<div id="deck2" class="deckholder"></div>
-				<div id="deck3" class="deckholder"></div>
-				<div id="deck4" class="deckholder"></div>
-				<div id="deck5" class="deckholder"></div>
-				<div id="deck6" class="deckholder"></div>
+				<div id="deckholder1" class="deckholder"><div id="deck1" class="deck"></div><div id="button_deck1" class="buttondiv" ></div></div>
+				<div id="deckholder2" class="deckholder"><div id="deck2" class="deck"></div><div id="button_deck2" class="buttondiv" ></div></div>
+				<div id="deckholder3" class="deckholder"><div id="deck3" class="deck"></div><div id="button_deck3" class="buttondiv" ></div></div>
+				<div id="deckholder4" class="deckholder"><div id="deck4" class="deck"></div><div id="button_deck4" class="buttondiv" ></div></div>
+				<div id="deckholder5" class="deckholder"><div id="deck5" class="deck"></div><div id="button_deck5" class="buttondiv" ></div></div>
+				<div id="deckholder6" class="deckholder"><div id="deck6" class="deck"></div><div id="button_deck6" class="buttondiv" ></div></div>
+				
 				<div id="workersC"></div>
 				<div id="treasuredeck"></div>
 				<div id="counterC"></div>

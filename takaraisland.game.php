@@ -202,13 +202,18 @@ class takaraisland extends Table
 				}
 			}
 		}
+		
+		$cards=array();
+		foreach( $players as $player_id => $player )
+        {			
+            $sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (1,$player_id,'playerTileHolder_".$player_id."_1'), (2,$player_id,'playerTileHolder_".$player_id."_2'),(3,$player_id,'workersC' )";
+			self::DbQuery( $sql );
+        }
+		$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (5,0,'swordholder')";
+			
+		self::DbQuery( $sql );
 
 		
-    
-		
-		
-		
-
         $players = self::loadPlayersBasicInfos();
 
         // Activate first player (which is in general a good idea :) )
@@ -236,10 +241,21 @@ class takaraisland extends Table
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-        $sql = "SELECT player_id id, player_field field , Count(card_id) artifacts FROM player LEFT OUTER JOIN cards On player_id=card_location GROUP BY player_id";
+        $sql = "SELECT player_id id, player_gold gold FROM player ";
 		
         $result['players'] = self::getCollectionFromDb( $sql ); //fields of all players are visible 
 		
+		$sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location from tokens ";
+		
+        $result['tokens'] = self::getCollectionFromDb( $sql );
+		
+		$sql = "SELECT card_id id, card_location_arg location_arg from treasures ";
+		
+        $result['treasures'] = self::getCollectionFromDb( $sql );
+		
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards ";
+		
+        $result['cards'] = self::getCollectionFromDb( $sql );
 		
 		/*
 		$sql = "SELECT player_tent FROM player WHERE player_id='$current_player_id'";

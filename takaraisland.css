@@ -194,12 +194,44 @@
 }
 .deckholder {
   border: 1px;
-  width: 150px;
+  width: 160px;
   height: 200px;
   position: absolute;
   border-style: solid;
   border-color: #c100dd;
 }
+.deck {
+  
+  width: 99%;
+  height: 200px;
+  position: absolute;
+  
+  
+}
+
+.deckholder:hover .buttondiv {  
+  display: block;
+  background-image:url('img/browse.gif');
+  left: 0px;
+  top: 0px;
+  z-index: 10;
+}
+
+.buttondiv {
+  position: absolute;
+  display: none;
+  width: 75px;
+  height: 33px;
+  background-image:none;
+  
+}
+
+.stockitem {
+  border-radius: 14px;
+  
+}
+
+
 .exploreholder {
   border: 1px;
   width: 150px;
@@ -232,27 +264,27 @@
  left: 0px;
   top: 560px;
 }
-#deck1 {
+#deckholder1 {
  left: 520px;
   top: 50px;
 }
-#deck2 {
+#deckholder2 {
  left: 690px;
   top: 20px;
 }
-#deck3 {
+#deckholder3 {
  left: 860px;
   top: 20px;
 }
-#deck4 {
+#deckholder4 {
  left: 510px;
   top: 510px;
 }
-#deck5 {
+#deckholder5 {
  left: 690px;
   top: 530px;
 }
-#deck6 {
+#deckholder6 {
  left: 860px;
   top: 490px;
 }

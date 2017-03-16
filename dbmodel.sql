@@ -59,8 +59,6 @@ CREATE TABLE IF NOT EXISTS `treasures` (
 
 -- Example 2: add a custom field to the standard "player" table
 
-ALTER TABLE `player` ADD `player_field` INT UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `player` ADD `player_tent` INT UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `player` ADD `player_exploring` INT UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `player` ADD `player_leaving` INT UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `player` ADD `player_gold` INT UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `player` ADD `player_xp` INT UNSIGNED NOT NULL DEFAULT '0';
 

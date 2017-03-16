@@ -80,33 +80,85 @@ function (dojo, declare) {
 			{			
 				 dojo.addClass( "votecard_"+i , "votecardExplore" );
 			}
-			
-            this.tablecards = new ebg.stock();
-            this.tablecards.create( this, $('tablecards'), this.cardwidth, this.cardheight );
-            this.tablecards.image_items_per_row = 7;
-			this.tablecards.setSelectionMode( 0 );
+			*/
+			//debugger;
+            this.deck1 = new ebg.stock();
+            this.deck2 = new ebg.stock();
+            this.deck3 = new ebg.stock();
+            this.deck4 = new ebg.stock();
+            this.deck5 = new ebg.stock();
+            this.deck6 = new ebg.stock();
+            this.deck1.create( this, $('deck1'), this.cardwidth, this.cardheight );
+			this.deck2.create( this, $('deck2'), this.cardwidth, this.cardheight );
+			this.deck3.create( this, $('deck3'), this.cardwidth, this.cardheight );
+			this.deck4.create( this, $('deck4'), this.cardwidth, this.cardheight );
+			this.deck5.create( this, $('deck5'), this.cardwidth, this.cardheight );
+			this.deck6.create( this, $('deck6'), this.cardwidth, this.cardheight );
             
+			this.deck1.image_items_per_row = 7;
+			this.deck2.image_items_per_row = 7;
+			this.deck3.image_items_per_row = 7;
+			this.deck4.image_items_per_row = 7;
+			this.deck5.image_items_per_row = 7;
+			this.deck6.image_items_per_row = 7;
+			  
+			this.deck1.setSelectionMode( 2 );
+			this.deck2.setSelectionMode( 2 );
+			this.deck3.setSelectionMode( 2 );
+			this.deck4.setSelectionMode( 2 );
+			this.deck5.setSelectionMode( 2 );
+			this.deck6.setSelectionMode( 2 );
+			
+			this.deck1.setOverlap( 0.05 , 0 );
+            this.deck2.setOverlap( 0.05 , 0 );
+            this.deck3.setOverlap( 0.05 , 0 );
+            this.deck4.setOverlap( 0.05 , 0 );
+            this.deck5.setOverlap( 0.05 , 0 );
+            this.deck6.setOverlap( 0.05 , 0 );
+            
+			this.deck1.item_margin = 0;
+			this.deck2.item_margin = 0;
+			this.deck3.item_margin = 0;
+			this.deck4.item_margin = 0;
+			this.deck5.item_margin = 0;
+			this.deck6.item_margin = 0;
+			
             // Create cards types:
-            for(  i=1;i<=21;i++ )
+            for( var i in this.gamedatas.cards )
             {
-             
-            this.tablecards.addItemType( i, 1, g_gamethemeurl+'img/cards.jpg', i-1 );
-              
-            }
-			for( var i in this.gamedatas.table )
-            {
-                var card = this.gamedatas.table[i];
-                this.tablecards.addToStockWithId( card.type , "tablecard_"+card.id , 'templecard'+this.gamedatas.iterations );
-				if ( card.type >=12 && card.type <=16 ) 
-				    {
-						dojo.addClass( "tablecards_item_tablecard_"+card.id , "isartifact" )
-						//dojo.attr("tablecards_item_tablecard_"+card.id, "title", card.id)
-					}
-				 for ( var g=card.location_arg ; g>0 ; g-- )
+				var card = this.gamedatas.cards[i];
+				switch (card.location)
 				{
-					this.placeGem( card.id+"_"+g, "tablecards_item_tablecard_"+card.id   ) ;					
+					case 'deck1':
+					 this.deck1.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck1.addToStockWithId( card.id , "card_"+card.id  )
+					break;
+					case 'deck2':
+					 this.deck2.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck2.addToStockWithId( card.id , "card_"+card.id  )
+					break;
+					case 'deck3':
+					 this.deck3.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck3.addToStockWithId( card.id , "card_"+card.id  )
+					break;
+					case 'deck4':
+					 this.deck4.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck4.addToStockWithId( card.id , "card_"+card.id  )
+					break;
+					case 'deck5':
+					 this.deck5.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck5.addToStockWithId( card.id , "card_"+card.id  )
+					break;
+					case 'deck6':
+					 this.deck6.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+					 this.deck6.addToStockWithId( card.id , "card_"+card.id  )
+					break;
 				}
             }
+			
+			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
+
+			/*
 			for ( var i=1;i<=gamedatas.iterations;i++ )
 			{
 					dojo.addClass( "templecard"+i ,"on");
@@ -238,7 +290,73 @@ function (dojo, declare) {
         
         */
         /* fsno and fstype controls the css style to load, boardloc controls on which predefine div should the tile slides to. */
+        
+		browseGatherDeck : function(sourceclick) {
+            thisdeck="deck"+sourceclick.srcElement.id.charAt(11)
+			this.slideToObjectRelative (thisdeck, "tablecards");
+			this.deck1.setOverlap( 100 , 0 )
+			
+			
+        },
+		
+		
+		attachToNewParentNoDestroy : function(mobile, new_parent) {
+            if (mobile === null) {
+                console.error("attachToNewParent: mobile obj is null");
+                return;
+            }
+            if (new_parent === null) {
+                console.error("attachToNewParent: new_parent is null");
+                return;
+            }
+            if (typeof mobile == "string") {
+                mobile = $(mobile);
+            }
+            if (typeof new_parent == "string") {
+                new_parent = $(new_parent);
+            }
 
+            var src = dojo.position(mobile);
+            dojo.style(mobile, "position", "absolute");
+            dojo.place(mobile, new_parent, "last");
+            var tgt = dojo.position(mobile);
+            var box = dojo.marginBox(mobile);
+
+            var left = box.l + src.x - tgt.x;
+            var top = box.t + src.y - tgt.y;
+            dojo.style(mobile, "top", top + "px");
+            dojo.style(mobile, "left", left + "px");
+            return box;
+        },
+
+        /**
+         * This method is similar to slideToObject but works on object which do not use inline style positioning. It also attaches object to
+         * new parent immediately, so parent is correct during animation
+         */
+        slideToObjectRelative : function(token, finalPlace, tlen, tdelay, onEnd) {
+            this.stripPosition(token);
+
+            var box = this.attachToNewParentNoDestroy(token, finalPlace);
+            var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
+
+            dojo.connect(anim, "onEnd", dojo.hitch(this, function(token) {
+                this.stripPosition(token);
+                if (onEnd) onEnd(token);
+            }));
+
+            anim.play();
+        },
+		
+		stripPosition : function(token) {
+            // console.log(token + " STRIPPING");
+            // remove any added positioning style
+            dojo.style(token, "display", null);
+            dojo.style(token, "top", null);
+            dojo.style(token, "left", null);
+            dojo.style(token, "position", null);
+        },
+		
+		////////////////////////////////////////////////
         placeGem: function ( gem_id, destination) 
 		{
 			
