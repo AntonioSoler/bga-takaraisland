@@ -261,12 +261,13 @@ function (dojo, declare) {
         
 		browseGatherDeck : function(sourceclick) {
             var browseddeck = "";
+			var target = sourceclick.target || sourceclick.srcElement;
 			if (dojo.byId("tablecards").children.length > 0 )
 			{
 				browseddeck=dojo.byId("tablecards").children[0].id;
 			}
-			thisdeck="deck"+sourceclick.srcElement.id.charAt(11);
-			returndeck="deckholder"+sourceclick.srcElement.id.charAt(11);
+			thisdeck="deck"+target.id.charAt(11);
+			returndeck="deckholder"+target.id.charAt(11);
 			
 			if ( thisdeck==browseddeck) 
 			{
