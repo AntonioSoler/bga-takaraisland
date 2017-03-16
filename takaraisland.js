@@ -89,18 +89,18 @@ function (dojo, declare) {
 			     // Create decks:	
 				this[decks[i]] = new ebg.stock();
 				this[decks[i]].create( this, $(decks[i]), this.cardwidth, this.cardheight );
-				this[decks[i]].image_items_per_row = 7;
-				this[decks[i]].setSelectionMode( 2 );
+				this[decks[i]].image_items_per_row = 3;
+				this[decks[i]].setSelectionMode( 0 );
 				this[decks[i]].item_margin = 0;
 				this[decks[i]].setOverlap( 0.05 , 0 );
 			}
 			
-			this[decks[i]] = new ebg.stock();
-				this[decks[i]].create( this, $(decks[i]), this.cardwidth, this.cardheight );
-				this[decks[i]].image_items_per_row = 7;
-				this[decks[i]].setSelectionMode( 2 );
-				this[decks[i]].item_margin = 0;
-				this[decks[i]].setOverlap( 0.05 , 0 );
+			this.treasures = new ebg.stock();
+			this.treasures.create( this, $("treasuredeck"), this.cardwidth, this.cardheight );
+			this.treasures.image_items_per_row = 3;
+			this.treasures.setSelectionMode( 2 );
+			this.treasures.item_margin = 0;
+			this.treasures.setOverlap( 0.05 , 0 );
             
 			
             for( var i in this.gamedatas.cards )
@@ -109,6 +109,14 @@ function (dojo, declare) {
 				var card = this.gamedatas.cards[i];
 				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
 				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  )
+            }
+			
+			for( var i in this.gamedatas.treasures )
+            {
+				
+				var card = this.gamedatas.treasures[i];
+				this.treasures.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
+				this.treasures.addToStockWithId( card.id , "card_"+card.id  )
             }
 			
 			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
