@@ -29,10 +29,10 @@
 		<td id="boardcell">
 			<div id="boardPanel" class="boarddiv">
 				<div id="swordholder">
-				<div id="sword" onclick="this.classList.toggle('flipped');">
-											<div class="front"></div>
-											<div class="back"></div>
-				</div>
+					<div id="sword" onclick="this.classList.toggle('flipped');">
+						<div class="front"></div>
+						<div class="back"></div>
+					</div>
 				</div>
 				<div id="expertsC"></div>
 				<div id="expert1" class="expertholder"></div>
@@ -41,13 +41,13 @@
 				<div id="expert4" class="expertholder"></div>
 				<div id="HospitalC"></div>
 				<div id="WaitingroomC"></div>
-				<div id="deckholder1" class="deckholder"><div id="deck1" class="deck"></div><div id="button_deck1" class="buttondiv" ></div></div>
-				<div id="deckholder2" class="deckholder"><div id="deck2" class="deck"></div><div id="button_deck2" class="buttondiv" ></div></div>
-				<div id="deckholder3" class="deckholder"><div id="deck3" class="deck"></div><div id="button_deck3" class="buttondiv" ></div></div>
-				<div id="deckholder4" class="deckholder"><div id="deck4" class="deck"></div><div id="button_deck4" class="buttondiv" ></div></div>
-				<div id="deckholder5" class="deckholder"><div id="deck5" class="deck"></div><div id="button_deck5" class="buttondiv" ></div></div>
-				<div id="deckholder6" class="deckholder"><div id="deck6" class="deck"></div><div id="button_deck6" class="buttondiv" ></div></div>
-				
+				<div id="deckholder1" class="deckholder"><div id="deck1" class="deck"><div id="button_deck1" class="buttondiv" ></div></div> </div>
+				<div id="deckholder2" class="deckholder"><div id="deck2" class="deck"><div id="button_deck2" class="buttondiv" ></div></div> </div>
+				<div id="deckholder3" class="deckholder"><div id="deck3" class="deck"><div id="button_deck3" class="buttondiv" ></div></div> </div>
+				<div id="deckholder4" class="deckholder"><div id="deck4" class="deck"><div id="button_deck4" class="buttondiv" ></div></div> </div>
+				<div id="deckholder5" class="deckholder"><div id="deck5" class="deck"><div id="button_deck5" class="buttondiv" ></div></div> </div>
+				<div id="deckholder6" class="deckholder"><div id="deck6" class="deck"><div id="button_deck6" class="buttondiv" ></div></div> </div>
+
 				<div id="workersC"></div>
 				<div id="treasuredeck"></div>
 				<div id="counterC"></div>
@@ -64,7 +64,7 @@
 			<div id="campswrapper">
 				<!-- BEGIN camp -->
 				<div id="playerCamp_{PLAYER_ID}" class="playercamp playercolor_{PLAYER_COLOR}" >
-				    <div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
+					<div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
 					<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
 					<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
 					<div id="playerxpstore_{PLAYER_ID}" class="xpstore"></div>
@@ -80,7 +80,7 @@
 		<td colspan="2">
 			<div id="table_wrap">
 				<h2>{TABLE}</h2>
-				<div id="tablecards" class="whiteblock table"></div>
+				<div id="tablecards" class="whiteblock tablecards"></div>
 			</div>
 		</div></td></tr></table>
 

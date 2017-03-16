@@ -183,15 +183,17 @@
   border-color: #ff0f40;
 }
 #treasuredeck {
-  border: 1px;
-  width: 200px;
-  height: 150px;
-  position: absolute;
-  left: 660px;
-  top: 300px;
-  border-style: solid;
-  border-color: #ff0f40;
+    border: 1px;
+    width: 155px;
+    height: 200px;
+    position: absolute;
+    left: 680px;
+    top: 270px;
+    border-style: solid;
+    border-color: #ff0f40;
+    transform: rotate(-90deg);
 }
+	
 .deckholder {
   border: 1px;
   width: 160px;
@@ -201,20 +203,19 @@
   border-color: #c100dd;
 }
 .deck {
-  
   width: 99%;
   height: 200px;
   position: absolute;
-  
-  
 }
 
-.deckholder:hover .buttondiv {  
+.deckholder .deck:hover .buttondiv {  
   display: block;
   background-image:url('img/browse.gif');
-  left: 0px;
-  top: 0px;
-  z-index: 10;
+}
+
+.tablecards .deck:hover .buttondiv {  
+  display: block;
+  background-image:url('img/gather.gif');
 }
 
 .buttondiv {
@@ -223,14 +224,14 @@
   width: 75px;
   height: 33px;
   background-image:none;
-  
+  left: -17px;
+  top:-17px;
+  z-index: 15;
 }
 
 .stockitem {
-  border-radius: 14px;
-  
+  border-radius: 14px;  
 }
-
 
 .exploreholder {
   border: 1px;

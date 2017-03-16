@@ -52,6 +52,7 @@ function (dojo, declare) {
         {
             console.log( "Starting game setup" );
             this.param=new Array();
+			
             // Setting up player boards
 			
 			/*
@@ -81,82 +82,41 @@ function (dojo, declare) {
 				 dojo.addClass( "votecard_"+i , "votecardExplore" );
 			}
 			*/
-			//debugger;
-            this.deck1 = new ebg.stock();
-            this.deck2 = new ebg.stock();
-            this.deck3 = new ebg.stock();
-            this.deck4 = new ebg.stock();
-            this.deck5 = new ebg.stock();
-            this.deck6 = new ebg.stock();
-            this.deck1.create( this, $('deck1'), this.cardwidth, this.cardheight );
-			this.deck2.create( this, $('deck2'), this.cardwidth, this.cardheight );
-			this.deck3.create( this, $('deck3'), this.cardwidth, this.cardheight );
-			this.deck4.create( this, $('deck4'), this.cardwidth, this.cardheight );
-			this.deck5.create( this, $('deck5'), this.cardwidth, this.cardheight );
-			this.deck6.create( this, $('deck6'), this.cardwidth, this.cardheight );
-            
-			this.deck1.image_items_per_row = 7;
-			this.deck2.image_items_per_row = 7;
-			this.deck3.image_items_per_row = 7;
-			this.deck4.image_items_per_row = 7;
-			this.deck5.image_items_per_row = 7;
-			this.deck6.image_items_per_row = 7;
-			  
-			this.deck1.setSelectionMode( 2 );
-			this.deck2.setSelectionMode( 2 );
-			this.deck3.setSelectionMode( 2 );
-			this.deck4.setSelectionMode( 2 );
-			this.deck5.setSelectionMode( 2 );
-			this.deck6.setSelectionMode( 2 );
 			
-			this.deck1.setOverlap( 0.05 , 0 );
-            this.deck2.setOverlap( 0.05 , 0 );
-            this.deck3.setOverlap( 0.05 , 0 );
-            this.deck4.setOverlap( 0.05 , 0 );
-            this.deck5.setOverlap( 0.05 , 0 );
-            this.deck6.setOverlap( 0.05 , 0 );
-            
-			this.deck1.item_margin = 0;
-			this.deck2.item_margin = 0;
-			this.deck3.item_margin = 0;
-			this.deck4.item_margin = 0;
-			this.deck5.item_margin = 0;
-			this.deck6.item_margin = 0;
+			decks= ["deck1","deck2","deck3","deck4","deck5","deck6"];
+			for ( var i = 0; i < decks.length; i++) 
+            {
+			     // Create decks:	
+				this[decks[i]] = new ebg.stock();
+				this[decks[i]].create( this, $(decks[i]), this.cardwidth, this.cardheight );
+				this[decks[i]].image_items_per_row = 7;
+				this[decks[i]].setSelectionMode( 2 );
+				this[decks[i]].item_margin = 0;
+				this[decks[i]].setOverlap( 0.05 , 0 );
+			}
 			
-            // Create cards types:
+			this[decks[i]] = new ebg.stock();
+				this[decks[i]].create( this, $(decks[i]), this.cardwidth, this.cardheight );
+				this[decks[i]].image_items_per_row = 7;
+				this[decks[i]].setSelectionMode( 2 );
+				this[decks[i]].item_margin = 0;
+				this[decks[i]].setOverlap( 0.05 , 0 );
+            
+			
             for( var i in this.gamedatas.cards )
             {
+				var thisdeck = this.gamedatas.cards[i].location;
 				var card = this.gamedatas.cards[i];
-				switch (card.location)
-				{
-					case 'deck1':
-					 this.deck1.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck1.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-					case 'deck2':
-					 this.deck2.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck2.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-					case 'deck3':
-					 this.deck3.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck3.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-					case 'deck4':
-					 this.deck4.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck4.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-					case 'deck5':
-					 this.deck5.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck5.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-					case 'deck6':
-					 this.deck6.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-					 this.deck6.addToStockWithId( card.id , "card_"+card.id  )
-					break;
-				}
+				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
+				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  )
             }
 			
 			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
+			dojo.connect( $('button_deck2'), 'onclick', this, 'browseGatherDeck' );
+			dojo.connect( $('button_deck3'), 'onclick', this, 'browseGatherDeck' );
+			dojo.connect( $('button_deck4'), 'onclick', this, 'browseGatherDeck' );
+			dojo.connect( $('button_deck5'), 'onclick', this, 'browseGatherDeck' );
+			dojo.connect( $('button_deck6'), 'onclick', this, 'browseGatherDeck' );
 
 			/*
 			for ( var i=1;i<=gamedatas.iterations;i++ )
@@ -292,11 +252,37 @@ function (dojo, declare) {
         /* fsno and fstype controls the css style to load, boardloc controls on which predefine div should the tile slides to. */
         
 		browseGatherDeck : function(sourceclick) {
-            thisdeck="deck"+sourceclick.srcElement.id.charAt(11)
-			this.slideToObjectRelative (thisdeck, "tablecards");
-			this.deck1.setOverlap( 100 , 0 )
+            var browseddeck = "";
+			if (dojo.byId("tablecards").children.length > 0 )
+			{
+				browseddeck=dojo.byId("tablecards").children[0].id;
+			}
+			thisdeck="deck"+sourceclick.srcElement.id.charAt(11);
+			returndeck="deckholder"+sourceclick.srcElement.id.charAt(11);
 			
-			
+			if ( thisdeck==browseddeck) 
+			{
+				this[thisdeck].item_margin = 0;			
+				this[thisdeck].setOverlap( 0.05 , 0 );
+				
+				this.slideToObjectRelative (thisdeck, returndeck);			
+			}
+			else
+			{   
+				if ( browseddeck != "" )
+				{
+		            this[browseddeck].item_margin = 0;	
+					this[browseddeck].setOverlap( 0.05 , 0 );
+					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
+				    
+            		
+					this.slideToObjectRelative (browseddeck, returndeck);
+				}
+				this[thisdeck].item_margin = 5;
+				this.slideToObjectRelative (thisdeck, "tablecards" );
+				this[thisdeck].setOverlap( 100 , 0 );
+							
+			}
         },
 		
 		
