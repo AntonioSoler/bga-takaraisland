@@ -68,9 +68,7 @@
 					<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
 					<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
 					<div id="xpstore_{PLAYER_ID}" class="xpstore"></div>
-					<div id="TH_{PLAYER_ID}_1" class="playertileholder t1"></div>
-					<div id="TH_{PLAYER_ID}_2" class="playertileholder t2"></div>
-					<div id="TH_{PLAYER_ID}_3" class="playertileholder t3"></div>
+					<div id="TH_{PLAYER_ID}" class="playertileholder"></div>
 				</div>
 				<!-- END camp -->
 			</div>

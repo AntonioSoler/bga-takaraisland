@@ -118,6 +118,21 @@ function (dojo, declare) {
 				{
 					this[thisstore].addItemType( tarray[c] , 0 , g_gamethemeurl+'img/xp.png', c );
 				}
+				tileholder="TH_"+thisplayerid;
+				this[tileholder] = new ebg.stock();
+				this[tileholder].create( this, $(tileholder), 60 , 60);
+				this[tileholder].image_items_per_row = 4;
+				this[tileholder].setSelectionMode( 0 );
+				
+                this[tileholder].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem playertile\" style=\"width:${width}px;height:${height}px;z-index:${position};background-image:url('${image}');border-radius:50%;\"></div>";
+				
+				colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };	
+				
+				for ( var c = 0; c <= 2; c++) 
+				{
+					this[tileholder].addItemType( c+1 , 0 , g_gamethemeurl+'img/playertiles.png', c * 4 +colortiles["h"+this.gamedatas.players[i].color] );
+					this[tileholder].addToStockWithId( c+1 , c+1  )
+				}				
 			}
 			
 			
@@ -285,20 +300,21 @@ function (dojo, declare) {
         /* fsno and fstype controls the css style to load, boardloc controls on which predefine div should the tile slides to. */
         
 		placetoken : function(thetoken) {
+			
             switch (thetoken.type)
 			{
 				
-				/* case "1":
+				case "1":
 				case "2":
 				case "3":
-						this.placeplayertile(thetoken);
+						this.moveplayertile(thetoken);
 						break; 
 				case "4" :
-						this.placesword(thetoken);
+						//this.placesword(thetoken);
 						break; 
 				case "5" :
-						this.placewound(thetoken);
-						break; */
+						//this.placewound(thetoken);
+						break; 
 				case "6" :
 						this.placexptoken(thetoken);
 						break; 
@@ -308,6 +324,10 @@ function (dojo, declare) {
 		
 		placexptoken: function(thetoken) {
 			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
+		},
+		
+		moveplayertile: function(thetoken) {
+			this.slideToObjectRelative ("TH_"+thetoken.type_arg+"_item_"+thetoken.type, thetoken.location);			
 		},
 		
 

@@ -128,6 +128,27 @@
   border-color: #ffb00f;
   transform: rotate(10deg);
 }
+#HospitalC div:nth-child(1) {
+    z-index:1!important;
+	top:0px!important;
+	left:220px!important;
+}
+#HospitalC div:nth-child(2) {
+    z-index:2!important;
+	top:80px!important;
+	left:0px!important;
+}
+#HospitalC div:nth-child(3) {
+    z-index:3!important;
+	top:80px!important;
+	left:240px!important;
+}
+#HospitalC div:nth-child(4) {
+    z-index:4!important;
+	top:0px!important;
+	left:0px!important;
+}
+
 #WaitingroomC {
   border: 1px;
   width: 160px;
@@ -161,6 +182,28 @@
   border-color: #ff0f40;
   border-radius: 50%;
 }
+
+#workersC div:nth-child(1) {
+    z-index:1!important;
+	top:-10px!important;
+	left:-10px!important;
+}
+#workersC div:nth-child(2) {
+    z-index:2!important;
+	top:-10px!important;
+	left:10px!important;
+}
+#workersC div:nth-child(3) {
+    z-index:3!important;
+	top:10px!important;
+	left:-10px!important;
+}
+#workersC div:nth-child(4) {
+    z-index:4!important;
+	top:10px!important;
+	left:10px!important;
+}
+
 #counterC {
   border: 1px;
   width: 60px;
@@ -325,23 +368,26 @@
 .playertileholder {
   border: 1px;
   width: 60px;
-  height: 60px;
+  height: 246px !important;
   position: absolute;
   border-style: solid;
   border-color: #c0dd00;
-}
-.t1 {
- right: 5px;
+  right: 5px;
   top: 18px;
 }
-.t2 {
- right: 5px;
-  top: 105px;
+
+.playertileholder div:nth-child(1) {
+	top:0px;
+	left:0px;
 }
-.t3 {
- right: 5px;
-  top: 196px;
+.playertileholder div:nth-child(2) {   
+	top:87px !important;
 }
+.playertileholder div:nth-child(3) {
+	top:178px !important;
+}
+
+
 .cardstore {
   border: 1px;
   width: 300px;

@@ -239,7 +239,7 @@ class takaraisland extends Table
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-        $sql = "SELECT player_id id, player_gold gold FROM player ";
+        $sql = "SELECT player_id id, player_gold gold, player_color color, player_no nbr FROM player ";
 		
         $result['players'] = self::getCollectionFromDb( $sql ); //fields of all players are visible 
 		
