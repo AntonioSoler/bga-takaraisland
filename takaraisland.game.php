@@ -33,8 +33,6 @@ class takaraisland extends Table
                 "stonesfound" => 10,
                 "gameOverTrigger" => 11,
 				
-                
-				
 				
             //    "my_second_global_variable" => 11,
             //      ...
@@ -206,7 +204,7 @@ class takaraisland extends Table
 		$cards=array();
 		foreach( $players as $player_id => $player )
         {			
-            $sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (1,$player_id,'playerTileHolder_".$player_id."_1'), (2,$player_id,'playerTileHolder_".$player_id."_2'),(3,$player_id,'workersC' )";
+            $sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (1,$player_id,'TH_".$player_id."_1'), (2,$player_id,'playerTileHolder_".$player_id."_2'),(3,$player_id,'workersC' )";
 			self::DbQuery( $sql );
         }
 		$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (5,0,'swordholder')";

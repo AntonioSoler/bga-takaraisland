@@ -32,7 +32,6 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 			this.cardwidth = 150;
             this.cardheight = 200;
-
         },
         
         /*
@@ -98,10 +97,29 @@ function (dojo, declare) {
 			this.treasures = new ebg.stock();
 			this.treasures.create( this, $("treasuredeck"), this.cardwidth, this.cardheight );
 			this.treasures.image_items_per_row = 3;
-			this.treasures.setSelectionMode( 2 );
+			this.treasures.setSelectionMode( 0 );
 			this.treasures.item_margin = 0;
 			this.treasures.setOverlap( 0.05 , 0 );
-            
+
+			
+			for (  i in gamedatas.players ) 
+            {
+			     // Create decks:
+                thisplayerid=this.gamedatas.players[i].id;
+				thisstore="xpstore_"+thisplayerid;
+				this[thisstore] = new ebg.stock();
+				this[thisstore].create( this, $(thisstore), 45 , 50);
+				this[thisstore].image_items_per_row = 2;
+				this[thisstore].setSelectionMode( 0 );
+				this[thisstore].item_margin = 1;
+				this[thisstore].setOverlap( 50 , 0 );
+				tarray=[1,2,4,5,8,10,-2,3]   //xp values
+				for ( var c = 0; c < 8; c++) 
+				{
+					this[thisstore].addItemType( tarray[c] , 0 , g_gamethemeurl+'img/xp.png', c );
+				}
+			}
+			
 			
             for( var i in this.gamedatas.cards )
             {
@@ -112,8 +130,7 @@ function (dojo, declare) {
             }
 			
 			for( var i in this.gamedatas.treasures )
-            {
-				
+            {		
 				var card = this.gamedatas.treasures[i];
 				this.treasures.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
 				this.treasures.addToStockWithId( card.id , "card_"+card.id  )
@@ -125,6 +142,14 @@ function (dojo, declare) {
 			dojo.connect( $('button_deck4'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck5'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck6'), 'onclick', this, 'browseGatherDeck' );
+			
+			
+			for( var i in this.gamedatas.tokens )
+            {
+				
+				var thistoken = this.gamedatas.tokens[i];
+				this.placetoken(thistoken);
+            }
 
 			/*
 			for ( var i=1;i<=gamedatas.iterations;i++ )
@@ -259,6 +284,33 @@ function (dojo, declare) {
         */
         /* fsno and fstype controls the css style to load, boardloc controls on which predefine div should the tile slides to. */
         
+		placetoken : function(thetoken) {
+            switch (thetoken.type)
+			{
+				
+				/* case "1":
+				case "2":
+				case "3":
+						this.placeplayertile(thetoken);
+						break; 
+				case "4" :
+						this.placesword(thetoken);
+						break; 
+				case "5" :
+						this.placewound(thetoken);
+						break; */
+				case "6" :
+						this.placexptoken(thetoken);
+						break; 
+			}
+        },
+		
+		
+		placexptoken: function(thetoken) {
+			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
+		},
+		
+
 		browseGatherDeck : function(sourceclick) {
             var browseddeck = "";
 			var target = sourceclick.target || sourceclick.srcElement;
