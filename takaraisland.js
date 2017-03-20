@@ -54,44 +54,26 @@ function (dojo, declare) {
 			
             // Setting up player boards
 			
-			/*
-            for( var player in this.gamedatas.players )
+			for( var player_id in gamedatas.players )
             {
-                dojo.byId("gem_field_"+this.gamedatas.players[player].id).innerHTML=this.gamedatas.players[player].field;
-				for ( var i=0 ; i < this.gamedatas.players[player].artifacts ;i++)
-					{
-						dojo.place( "<div class='artifacticon'></div>" , "field_" + this.gamedatas.players[player].id, "last" );
-						this.addTooltipToClass( "artifacticon", _( "Each artifact worths 5 gems, the 3rd and 4th add 5 extra gems" ), "" );
-					} 
+                var player = gamedatas.players[player_id];
+                         
+                // Setting up players boards if needed
+                var player_board_div = $('player_board_'+player_id);
+                dojo.place( this.format_block('jstpl_player_board', player ), player_board_div );
             }
-			
-			for ( var i=0 ; i < this.gamedatas.templeartifacts ;i++)
-					{
-						dojo.place( "<div class='artifacticon removed'></div>" , "templecard5", "last" );
-						this.addTooltipToClass( "removed", _( "This artifact was not picked by the explorers and now is lost forever in the temple" ), "" );
-					} 
-			
-			
-            dojo.byId("tent_"+this.gamedatas.current_player_id).innerHTML=this.gamedatas.tent;
-			
-			dojo.byId("decksize").innerHTML=this.gamedatas.cardsRemaining;
-			
-            for (i in this.gamedatas.exploringPlayers)
-			{			
-				 dojo.addClass( "votecard_"+i , "votecardExplore" );
-			}
-			*/
-			
+
 			decks= ["deck1","deck2","deck3","deck4","deck5","deck6"];
 			for ( var i = 0; i < decks.length; i++) 
             {
 			     // Create decks:	
 				this[decks[i]] = new ebg.stock();
 				this[decks[i]].create( this, $(decks[i]), this.cardwidth, this.cardheight );
-				this[decks[i]].image_items_per_row = 3;
+				this[decks[i]].image_items_per_row = 7;
 				this[decks[i]].setSelectionMode( 0 );
 				this[decks[i]].item_margin = 0;
-				this[decks[i]].setOverlap( 0.05 , 0 );
+				this[decks[i]].setOverlap( 0.5 , 0 );
+				this[decks[i]].jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\"></div><div id=\"${id}_back\" class=\"card-back\"></div>";
 			}
 			
 			this.treasures = new ebg.stock();
@@ -100,6 +82,7 @@ function (dojo, declare) {
 			this.treasures.setSelectionMode( 0 );
 			this.treasures.item_margin = 0;
 			this.treasures.setOverlap( 0.05 , 0 );
+			this.treasures.jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card treasure\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\" ></div><div id=\"${id}_back\" class=\"card-back\"></div>";
 
 			
 			for (  i in gamedatas.players ) 
@@ -141,14 +124,23 @@ function (dojo, declare) {
 				var thisdeck = this.gamedatas.cards[i].location;
 				var card = this.gamedatas.cards[i];
 				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
-				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  )
+				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  );
+				
+			    // custom backgound positioning, to apply the backgound pos to the front instead of the father element
+				xpos= -150*((card.type_arg - 1 )% this[thisdeck].image_items_per_row );
+				ypos= -200*(Math.floor( (card.type_arg -1 ) / this[thisdeck].image_items_per_row ));
+				position= xpos+"px "+ ypos+"px ";
+				
+				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
+				
+				
             }
 			
 			for( var i in this.gamedatas.treasures )
             {		
 				var card = this.gamedatas.treasures[i];
 				this.treasures.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
-				this.treasures.addToStockWithId( card.id , "card_"+card.id  )
+				this.treasures.addToStockWithId( card.id , "treasure_"+card.id  )
             }
 			
 			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
@@ -158,6 +150,52 @@ function (dojo, declare) {
 			dojo.connect( $('button_deck5'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck6'), 'onclick', this, 'browseGatherDeck' );
 			
+			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );
+			
+			dojo.connect( $('dice'), 'onclick', this, 'rolldice' ); // FOR TEST!!!!
+			
+			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
+			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3>&#128481; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
+				
+			this.addTooltipHtml("expert1",  "<div class='tooltipimage'><div class='card expertcardfront expert1' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <h3> &#10010 </h3> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
+			
+			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the original price ot the selected speciallist +2 Kara gold." )+"</div>", "" );
+			
+			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE ARCHEOLOGIST:  <hr>  Reveals the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			
+			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'</div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE SOOTHSAYER:  <hr>  Reveals 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			
+			this.addTooltipHtml("sword",  "<div class='tooltipimage'><div class='swfront' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE MAGIC SWORD:  <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
+			
+			this.addTooltipHtml("HospitalC",  "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			
+			this.addTooltipHtml("WaitingroomC",  "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			
+			this.addTooltipHtml("thedive",  "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE DIVE:  <hr>  <b> The local pub of the ilsand. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
+			
+			this.addTooltipHtml("counter",  "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point." )+"</div>", "" );
+			
+			this.addTooltipHtml("expertsC",  "<div class='tooltipimage' ><img src='"+ g_gamethemeurl +"img/expert_front.jpg'  height='100' width='75' ></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE DOCKS:  <hr>  <b> A player can send here 1 Adventurer per turn to hire an Specialist.<p> The Specialists can perform special operations depending on the type. <p> The Specialist card is moved to the player's board <p> A the end of the turn  the Specialist has to rest for another turn: this card fliped faced down. <p> Faced down Specialists are returned to the docks at the end of the next turn." )+"</div>", "" );
+			
+			this.addTooltipHtml("workersC",  "<div class='tooltipimage  beachthumb'></div> <div  class='tooltipmessage'> "  +
+			_( " THE BEACH:  <hr>  <b> At the end of the turn a player can hire an extra Adventurer for 5 Kara gold.<p> The new Adventurer  tile is then moved to the player's board. <p> This can only be done once in the game." )+"</div>", "" );
+			
+			this.addTooltip("explore1", "Excavation site 1","");
+			this.addTooltip("explore2", "Excavation site 2","");
+			this.addTooltip("explore3", "Excavation site 3","");
+			this.addTooltip("explore4", "Excavation site 4","");
+			this.addTooltip("explore5", "Excavation site 5","");
+			this.addTooltip("explore6", "Excavation site 6","");
 			
 			for( var i in this.gamedatas.tokens )
             {
@@ -299,6 +337,65 @@ function (dojo, declare) {
         */
         /* fsno and fstype controls the css style to load, boardloc controls on which predefine div should the tile slides to. */
         
+		flipcard: function ( card, visible )
+		{
+			image_items_per_row=this[card.location].image_items_per_row;
+			
+			xpos= -150*((card.id - 1 )% image_items_per_row );
+			ypos= -200*(Math.floor( (card.id -1 ) / image_items_per_row ));
+			position= xpos+"px "+ ypos+"px ";
+			
+			dojo.style('card_back_'+card.id , "background-position", position);
+
+			if (visible) 
+				{
+				dojo.toggleClass('stile_'+location_arg , "visible", true);
+				}		
+			else
+				{
+				dojo.toggleClass('stile_'+location_arg , "flipped", true);
+				}
+		},
+		
+		fliptreasure: function ( sourceclick,card, visible )
+		{
+			image_items_per_row=3;
+			//debugger;
+			var target = sourceclick.target || sourceclick.srcElement;
+			target_id=target.id;
+			card_id= target_id.replace(/\D+/g, "");  //Regex to all chars but numbers
+			
+			xpos= -150*((card_id - 1 )% image_items_per_row );
+			ypos= -200*(Math.floor( (card_id -1 ) / image_items_per_row ));
+			position= xpos+"px "+ ypos+"px ";
+			
+			dojo.style('treasuredeck_item_treasure_'+card_id +'_back', "background-position", position);
+            this.slideToObjectRelative ('treasuredeck_item_treasure_'+card_id , "reward",1000,1000);
+			if (visible) 
+				{
+				dojo.toggleClass('treasuredeck_item_treasure_'+card_id , "visible", true);
+				}		
+			else
+				{
+				dojo.toggleClass('treasuredeck_item_treasure_'+card_id, "flipped", true);
+				}
+		},
+		
+		rolldice : function(thetoken) {
+			dojo.toggleClass("dice",'rolled');
+			if(dojo.hasClass("dice", "rolled"))
+				{var audio = new Audio(g_gamethemeurl+'sound/roll.mp3');
+				audio.play();
+				r=Math.floor((Math.random() * 6 ) + 1);
+				diceresult ="num"+r;	
+				dojo.replaceClass("diceresult",diceresult);
+			}
+			else
+			{
+				dojo.replaceClass("diceresult","")
+			}
+		},
+		
 		placetoken : function(thetoken) {
 			
             switch (thetoken.type)
@@ -306,30 +403,56 @@ function (dojo, declare) {
 				
 				case "1":
 				case "2":
-				case "3":
+				case "3": 
 						this.moveplayertile(thetoken);
 						break; 
 				case "4" :
-						//this.placesword(thetoken);
+						this.movesword(thetoken);
 						break; 
 				case "5" :
-						//this.placewound(thetoken);
+						this.placewound(thetoken);
 						break; 
 				case "6" :
 						this.placexptoken(thetoken);
+						break; 
+				case "7" :
+				case "8":
+				case "9":
+				case "10":
+						this.moveexpert(thetoken);
 						break; 
 			}
         },
 		
 		
+		placewound: function(thetoken) {
+		x = Math.floor(Math.random() * 50) + 50;  	
+		y = Math.floor(Math.random() * 120) + 50;
+		dojo.place(
+                this.format_block('jstpl_woundtoken', {
+                    id: thetoken.id ,
+					x : x,
+					y : y
+                }), thetoken.location);
+		this.addTooltipToClass( "woundtoken", _( "This monster has received a wound and now it has one life point less" ), "" );
+    
+		},
+		
 		placexptoken: function(thetoken) {
 			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
+		},
+		
+		moveexpert: function(thetoken) {
+			this.slideToObjectRelative ("expert"+thetoken.type_arg, thetoken.location);
 		},
 		
 		moveplayertile: function(thetoken) {
 			this.slideToObjectRelative ("TH_"+thetoken.type_arg+"_item_"+thetoken.type, thetoken.location);			
 		},
 		
+		movesword: function(thetoken) {
+			this.slideToObjectRelative ("sword", thetoken.location);			
+		},
 
 		browseGatherDeck : function(sourceclick) {
             var browseddeck = "";
@@ -344,7 +467,7 @@ function (dojo, declare) {
 			if ( thisdeck==browseddeck) 
 			{
 				this[thisdeck].item_margin = 0;			
-				this[thisdeck].setOverlap( 0.05 , 0 );
+				this[thisdeck].setOverlap( 0.5 , 0 );
 				
 				this.slideToObjectRelative (thisdeck, returndeck);			
 			}
@@ -353,7 +476,7 @@ function (dojo, declare) {
 				if ( browseddeck != "" )
 				{
 		            this[browseddeck].item_margin = 0;	
-					this[browseddeck].setOverlap( 0.05 , 0 );
+					this[browseddeck].setOverlap( 0.5 , 0 );
 					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
 				    
             		
