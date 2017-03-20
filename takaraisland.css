@@ -71,21 +71,17 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   perspective: 2000px;
-  position: static;
-  display: inline-block;
 }
 .boarddiv {
-  border: 0px;
   width: 1024px;
   height: 738px;
   background-image: url('img/board.jpg');
   position:relative;
-  display: inline-block;
 }
 
 #campswrapper {
   display: table-cell;
-  /* position: relative; */
+  position: relative;
 }
 
 #boardwrapper {
@@ -121,14 +117,14 @@
   position: relative;
 }
 
-.swfront,
-.swback {
-  /* backface-visibility: hidden; */
+.swfront, .swback {
+  backface-visibility: hidden; 
   width:49px;
   height:100px;
   background-image: url('img/sword.png');
   position: absolute;
 }
+
 .swfront { 
   transform: rotateY(0deg);
 }
@@ -136,28 +132,11 @@
   transform: rotateY(180deg);
 }
 
-.flipped {
-  transform: rotateY(180deg);
-}
-
 .card {
-  width:150px;
-  height:200px;
-  border-radius: 8%;
-  display: inline-block;
+  width:155px;
+  height:205px;
+  transition: transform 1s ease-out;
 }
-
-
-.squaretile {
-	perspective: 200px;
-	position: relative;
-	margin: 0px;
-	top:0px;
-	display: inline-block;
-	height: 100px;
-	width: 100px;
-	padding: 0px;
-	}
 	
 .card-front {
   top:0px;
@@ -167,29 +146,10 @@
   transition: transform 1s ease, visibility 1s ease;
   width: 150px;
   height: 200px;
+  position: relative;
   background-image: url('img/cards.jpg');
   transform: rotateY(0deg);
 }
-
-.treasure  .card-front{
-	background-image: url('img/treasure.jpg')!important;
-}
-.treasure  .card-back{
-	background-image: url('img/treasure.jpg')!important;
-}
-
-.expert  .card-front{
-	background-image: url('img/expert_front.jpg')!important;
-}
-
-.expertcardfront{
-	background-image: url('img/expert_front.jpg')!important;
-}
-
-.expert  .card-back{
-	background-image: url('img/expert_back.jpg')!important;
-}
-
 
 .card-back {
   top:0px;
@@ -204,7 +164,6 @@
   background-image: url('img/cards.jpg');
   visibility: hidden;
   position: absolute;
-  transform: scaleX(-1);
   transform: rotateY(180deg) ;
 }
 
@@ -220,10 +179,10 @@
     transform: rotateY(-180deg);
 	}
 	
- .card.flipped  .card-back {
+.card.flipped  .card-back {
     visibility: visible;
-    /* position: static; */
-    transform: rotateY(0deg) ;
+    position: static;
+    transform: rotateY(0deg);
  }
 
 .card.visible  .card-back {
@@ -232,6 +191,23 @@
     transform: rotateY(0deg) ;
 	}
 
+.treasure  .card-front{
+	background-image: url('img/treasure.jpg')!important;
+}
+.treasure  .card-back{
+	background-image: url('img/treasure.jpg')!important;
+}
+.expert  .card-front{
+	background-image: url('img/expert_front.jpg')!important;
+}
+
+.expertcardfront{
+	background-image: url('img/expert_front.jpg')!important;
+}
+
+.expert  .card-back{
+	background-image: url('img/expert_back.jpg')!important;
+}
 
 
 #HospitalC {
@@ -420,19 +396,21 @@
 }
 
 #treasuredeck {
-    border: 0px;
-    width: 155px;
-    height: 210px;
+    border: 1px;
+    width: 210px;
+    height: 150px;
     position: absolute;
-    left: 680px;
-    top: 270px;
+    transform-style: preserve-3d;
+    left: 670px;
+    top: 273px;
     border-style: solid;
     border-color: #ff0f40;
-    transform: rotate(-90deg);
+    /* transform: rotate(-90deg); */
 }
-.treasure
-{
-	transition: rotate 1s ease
+#treasuredeck .card {
+  transform-style: preserve-3d;
+  transition: transform 1s ease, visibility 1s ease;
+  transform: rotate(-90deg); 
 }
 
 .treasurereward {
@@ -444,7 +422,15 @@
     top: 257px;
     border-style: solid;
     border-color: #ff0f40;
+	transform-style: preserve-3d;
 }
+
+#treasurereward .card { 
+transform-style: preserve-3d;
+transition: transform 1s ease, visibility 1s ease;
+transform: rotate(0deg); 
+}
+
 
 #treasuredeck div:nth-child(1) {
 	box-shadow: -6px 6px 8px 0px rgba(6, 6, 6, 0.13);
@@ -577,7 +563,7 @@
 
 .tooltipimage {
 	display: inline-block;
-	position: inline !important;
+	position: relative !important;
 }
 
 .tooltipimage * { position: relative 
