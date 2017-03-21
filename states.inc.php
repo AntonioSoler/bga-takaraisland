@@ -61,57 +61,124 @@ $machinestates = array(
     ),
     
     2 => array(
-        "name" => "reshuffle",
+        "name" => "startturn",
+		"description" => clienttranslate('a new turn starts...'),
         "type" => "game",
-        "action" => "streshuffle",
+        "action" => "ststartturn",
         "updateGameProgression" => true,
-        "transitions" => array( "explore" => 3, "gameEndScoring" => 90 ) //game ends if iterations are 5
+        "transitions" => array( "playermove" => 3, "gameEndScoring" => 90 ) //game ends if  2 stones found or 4/5 decks are depleted
     ),
 
     3 => array(
-        "name" => "explore",  // a card is drawn and gems splitted if necessary
-        "type" => "game",
-        "description" => clienttranslate('Some players are exploring the temple'),
-		"action" => "stexplore",
+        "name" => "playermove",  
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
+		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
+		"action" => "stplayermove",
+		"possibleactions" => array( "playermovetile" ),
         "updateGameProgression" => true,
-        "transitions" => array("cleanpockets" => 4, "vote" => 5) //4 after seeing the card if the 2nd hazard is drawn or 5 the remaining players vote to stay or to continue exploring
-    ),
-
-    4 => array(
-	    "name" => "cleanpockets", 
-        "description" => clienttranslate('2nd hazard of the same type was drawn and all explorers in the temple flee, droping their pouches'),
-        "type" => "game",
-        "action" => "stcleanpockets",
-        "updateGameProgression" => true,
-        "transitions" => array("reshuffle" => 2)  // iterations++
-    ),
-
-    5 => array(
-        "name" => "vote",
-        "description" => clienttranslate('Players in the temple must vote to stay exploring or to return to camp'),
-        "descriptionmyturn" => clienttranslate('${you} must vote to stay exploring or to return to camp'),
-        "type" => "multipleactiveplayer",
-		"action" => "stvote",
-        "possibleactions" => array( "voteExplore", "voteLeave" ),
-        "updateGameProgression" => true,
-        "transitions" => array( "processLeavers" => 6   ) //iteration ends if no players are still exploring
+        "transitions" => array("cleanpockets" => 4, "endturn" => 3) 
     ),
 	
-	6 => array(
-	    "name" => "processLeavers", 
-        "description" => clienttranslate('...processing player actions acording to their votes'),
-        "type" => "game",
-        "action" => "stprocessLeavers",
-        "updateGameProgression" => true,
-        "transitions" => array( "explore" => 3,"reshuffle" => 2) 
+	 4 => array(
+        "name" => "endturn",  //  pay hospital and hire new recruit
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
+		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or pass'),
+		"action" => "stplayermove",
+		"possibleactions" => array( "payhospital", "recruit", 'pass' ),
+        "updateGameProgression" => false,
+        "transitions" => array("cleanpockets" => 4, "pass" => 2) //4 after seeing the card if the 2nd hazard is drawn or 5 the remaining players vote to stay or to continue exploring
+    ),
+	
+	5 => array(
+        "name" => "hireexpert",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding what Specialist he wants to hire '),
+		"descriptionmyturn" => clienttranslate('${you} need to decide what Specialist you want to hire '),
+		"possibleactions" => array( "pickexpert"),
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 6  ) //
+    ),
+
+
+    6 => array(
+        "name" => "sendexpert",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
+		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
+		"possibleactions" => array( "selectcards"),
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 3 ) //
+    ),
+
+    7 => array(
+        "name" => "exchange",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding whether to buy or sell xp '),
+		"descriptionmyturn" => clienttranslate('${you} have to select the xp tile that you want to sell or to buy a 2 XP tile for 5 Kara Gold '),
+		"possibleactions" => array( "sellxp","buyxp"),
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 3 ) //
+    ),
+	
+	8 => array(
+        "name" => "sendexpert",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
+		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
+		"possibleactions" => array( "selectcards"),
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 3 ) //
+    ),
+	
+	9 => array(
+        "name" => "exploresite",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
+		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
+		"possibleactions" => array( "digg","survey"),
+        "updateGameProgression" => false,
+        "transitions" => array( "digg" => 12 , "fight" => 11 , "browsecards" => 10  ) //
     ),
     
+	10 => array(
+        "name" => "explore",  // 
+        "type" => "activeplayer",
+        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
+		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
+		"possibleactions" => array( "digg","survey"),
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 3 ) //
+    ),
+	
+	11 => array(
+	    "name" => "fight",
+	    "description" => clienttranslate('${actplayer} is fighting a monster'),
+		"descriptionmyturn" => clienttranslate('${you} are fighting a monster'),
+        "type" => "game",
+        "action" => "stfight",
+        "updateGameProgression" => false,
+        "transitions" => array( "" => 3 )
+    ),
+	
+	12 => array(
+	    "name" => "dig",
+	    "description" => clienttranslate('${actplayer} is digging in a Excavation site'),
+		"descriptionmyturn" => clienttranslate('${you} are digging in a Excavation site'),
+        "type" => "game",
+        "action" => "stdig",
+        "updateGameProgression" => true,
+        "transitions" => array( "playermove" => 3 , "fight" => 11 )
+    ),
+	
+	
     90 => array(
 	   "description" => clienttranslate('Final Score'),
         "name" => "gameEndScoring",
         "type" => "game",
         "action" => "stGameEndScoring",
-        "updateGameProgression" => true,
+        "updateGameProgression" => false,
         "transitions" => array( "" => 99 )
     ),
     

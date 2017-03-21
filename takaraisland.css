@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : Â© Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: Ã‚Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : Ã‚Â© Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -22,15 +22,15 @@
     
     Usually, you are using CSS to:
     
-    1Â°) define the overall layout of your game
+    1Ã‚Â°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
-    2Â°) create your CSS-sprites:
+    2Ã‚Â°) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
         background-image and background-position CSS properties, you create HTML blocks that can 
         display these images correctly (see example below).
     
-    3Â°) ... anything else:
+    3Ã‚Â°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
@@ -72,6 +72,11 @@
   background-repeat: no-repeat;
   perspective: 2000px;
 }
+.goldcounter {
+	font-family: "Roboto", Arial, sans-serif;
+    font-size: 18px;
+}
+
 .boarddiv {
   width: 1024px;
   height: 738px;
@@ -181,7 +186,7 @@
 	
 .card.flipped  .card-back {
     visibility: visible;
-    position: static;
+    position: absolute;
     transform: rotateY(0deg);
  }
 
@@ -396,13 +401,13 @@
 }
 
 #treasuredeck {
-    border: 1px;
+    border: 0px;
     width: 210px;
-    height: 150px;
+    height: 210px;
     position: absolute;
     transform-style: preserve-3d;
-    left: 670px;
-    top: 273px;
+    left: 680px;
+    top: 270px;
     border-style: solid;
     border-color: #ff0f40;
     /* transform: rotate(-90deg); */
@@ -414,15 +419,15 @@
 }
 
 .treasurereward {
-    border: 1px;
+    border: 0px;
     width: 151px;
     height: 201px;
     position: absolute;
-    left: 863px;
+    left: 872px;
     top: 257px;
     border-style: solid;
     border-color: #ff0f40;
-	transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 #treasurereward .card { 
@@ -516,7 +521,7 @@ transform: rotate(0deg);
     width: 75px;
     top: 17px;
     background-size: 200%;
-    left: -15px;
+    left: -30%;
 }
 
 #expertholder1 {
@@ -537,11 +542,12 @@ transform: rotate(0deg);
 }
 
 .expert {
-  left: 0px;
+  float: left;
   border: 0px;
   width: 150px;
   height: 200px;
-  position: absolute;
+  display: inline-block;
+  margin-right: -22%;
   transition: .35s ease-in-out;
 }
 
@@ -642,6 +648,7 @@ transform: rotate(0deg);
     background-image: url(img/coin.png);
     background-size: cover;
     position: relative;
+    display: inline-block;
 }
 .playertileholder {
   border: 0px;
@@ -668,10 +675,10 @@ transform: rotate(0deg);
 
 .cardstore {
   border: 0px;
-  width: 300px;
+  width: 309px;
   height: 200px;
   top:75px;
-  left:2px;
+  left: 1px;
   position: absolute;
   border-style: solid;
   border-color: #00cddd;
@@ -700,7 +707,7 @@ transform: rotate(0deg);
   display:inline;  
 }
 .xpstore {
-  border: 1px;
+  border: 0px;
   width: 210px;
   height: 50px;
   top:20px;

@@ -243,7 +243,7 @@ class takaraisland extends Table
 		
         $result['players'] = self::getCollectionFromDb( $sql ); //fields of all players are visible 
 		
-		$sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location from tokens ";
+		$sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg from tokens ";
 		
         $result['tokens'] = self::getCollectionFromDb( $sql );
 		

@@ -196,6 +196,7 @@ function (dojo, declare) {
 			this.addTooltip("explore4", "Excavation site 4","");
 			this.addTooltip("explore5", "Excavation site 5","");
 			this.addTooltip("explore6", "Excavation site 6","");
+			this.addTooltipToClass("coin", "Kara Gold","");
 			
 			for( var i in this.gamedatas.tokens )
             {
@@ -444,6 +445,10 @@ function (dojo, declare) {
 		
 		moveexpert: function(thetoken) {
 			this.slideToObjectRelative ("expert"+thetoken.type_arg, thetoken.location);
+			if (thetoken.location_arg==1) 
+			{
+				dojo.toggleClass("expert"+thetoken.type_arg , "flipped", true);
+			}
 		},
 		
 		moveplayertile: function(thetoken) {
