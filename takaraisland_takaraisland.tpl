@@ -114,7 +114,7 @@
 				<div id="diveC"></div>
 				
 
-				<div id="explore1" class="exploreholder borderpulse"></div>
+				<div id="explore1" class="exploreholder"></div>
 				<div id="explore2" class="exploreholder"></div>
 				<div id="explore3" class="exploreholder"></div>
 				<div id="explore4" class="exploreholder"></div>

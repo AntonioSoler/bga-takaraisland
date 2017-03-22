@@ -51,6 +51,7 @@ function (dojo, declare) {
         {
             console.log( "Starting game setup" );
             this.param=new Array();
+			this.gameconnections=new Array();
 			
             // Setting up player boards
 			
@@ -118,7 +119,6 @@ function (dojo, declare) {
 				}				
 			}
 			
-			
             for( var i in this.gamedatas.cards )
             {
 				var thisdeck = this.gamedatas.cards[i].location;
@@ -126,7 +126,7 @@ function (dojo, declare) {
 				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
 				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  );
 				
-			    // custom backgound positioning, to apply the backgound pos to the front instead of the father element
+			    // custom background positioning, to apply the backgound pos to the front instead of the father element
 				xpos= -150*((card.type_arg - 1 )% this[thisdeck].image_items_per_row );
 				ypos= -200*(Math.floor( (card.type_arg -1 ) / this[thisdeck].image_items_per_row ));
 				position= xpos+"px "+ ypos+"px ";
@@ -153,6 +153,13 @@ function (dojo, declare) {
 			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );
 			
 			dojo.connect( $('dice'), 'onclick', this, 'rolldice' ); // FOR TEST!!!!
+
+			for( var i in this.gamedatas.tokens )
+            {
+				var thistoken = this.gamedatas.tokens[i];
+				this.placetoken(thistoken);
+            }
+
 			
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3>&#128481; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
@@ -198,12 +205,6 @@ function (dojo, declare) {
 			this.addTooltip("explore6", "Excavation site 6","");
 			this.addTooltipToClass("coin", "Kara Gold","");
 			
-			for( var i in this.gamedatas.tokens )
-            {
-				
-				var thistoken = this.gamedatas.tokens[i];
-				this.placetoken(thistoken);
-            }
 
 			/*
 			for ( var i=1;i<=gamedatas.iterations;i++ )
@@ -227,7 +228,7 @@ function (dojo, declare) {
 			
             // Setup game notifications to handle (see "setupNotifications" method below) */
 			
-			//debugger;
+			
             this.setupNotifications();
 
             console.log( "Ending game setup" );
@@ -257,9 +258,15 @@ function (dojo, declare) {
                 break;
            */
             case 'playermove':
-			    dojo.query( 'TH_' +this.getActivePlayerId() +' playertile' ).addClass( 'borderpulse' ) ;
-				dojo.query( 'TH_' +this.getActivePlayerId() +' playertile' ).connect ( 'onclick',this,'selectadventurer');
-           
+			    
+			    dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
+				var list = dojo.query('#TH_' +this.getActivePlayerId() +' .playertile');
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i];
+					this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
+				}
+				
             case 'dummmy':
                 break;
 		    
@@ -287,7 +294,12 @@ function (dojo, declare) {
                 dojo.style( 'my_html_block_id', 'display', 'none' );
                 
                 break;
+				
            */
+		    case 'startturn':
+			    dojo.addClass( 'swordholder','borderpulse' ) ;
+				dojo.connect ( 'onclick',this,'rentsword');
+			break;	
             case 'endturn':
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
            
@@ -397,8 +409,44 @@ function (dojo, declare) {
 			}
 		},
 		
+		selectadventurer : function(sourceclick) {
+		multilocations=["diveC","explore1","explore2","explore3","explore4","explore5","explore6"]
+			var browseddeck = "";
+			var target = sourceclick.target || sourceclick.srcElement;
+			this.adventurer=target.id;
+			dojo.toggleClass(this.adventurer,"tileselected")
+			dojo.forEach(this.gameconnections, dojo.disconnect);
+			dojo.query(".borderpulse").removeClass("borderpulse");
+			
+			if (dojo.byId("expertsC").children.length == 0) 
+			{
+				dojo.toggleClass("expertsC","borderpulse")
+				this.gameconnections.push ( dojo.connect( "expertsC" ,'onclick',this,'playermovetile'));
+			}
+			if (dojo.byId("counterC").children.length == 0) 
+			{
+				dojo.toggleClass("counterC","borderpulse");
+				this.gameconnections.push ( dojo.connect( "counterC" ,'onclick',this,'playermovetile'));
+			}
+			
+		
+		for ( i in multilocations	)
+		{
+			//debugger;
+			dojo.toggleClass( multilocations[i] ,"borderpulse");
+			this.gameconnections.push ( dojo.connect( multilocations[i] ,'onclick',this,'playermovetile'));
+			
+		}
+			
+			
+		
+		},
+		
 		placetoken : function(thetoken) {
 			
+		},
+		
+		placetoken : function(thetoken) {
             switch (thetoken.type)
 			{
 				
@@ -552,33 +600,8 @@ function (dojo, declare) {
         },
 		
 		////////////////////////////////////////////////
-        placeGem: function ( gem_id, destination) 
-		{
-			
-		x = Math.floor(Math.random() * 80) + 40;  	
-		y = Math.floor(Math.random() * 150) + 60;
-		dojo.place(
-                this.format_block('jstpl_gem', {
-                    id: gem_id ,
-					x : x,
-					y : y
-                }), destination);
-		this.addTooltipToClass( "cardgem", _( "Some gems were left on the floor because they could not be didvidied evenly among the explorers. The players could pick this when returning on the way back to camp" ), "" );
-        },
-		
-		placeVotecard: function ( player_id, action) 
-		{	
-			
-            dojo.place( this.format_block ( 'jstpl_votecard', {
-                player_id: player_id,
-                action: action
-            } ) , 'cardholder_'+player_id,"only" );
-            
-            this.placeOnObject( 'votecard_'+player_id, 'overall_player_board_'+player_id );
-            this.slideToObject( 'votecard_'+player_id, 'cardholder_'+player_id ).play();
-        },
-		
-		moveGem: function ( source, destination ,amount) 
+
+		giveGold: function ( source, destination ,amount) 
 		{
 			var animspeed=300;
 			for (var i = 1 ; i<= amount ; i++)
@@ -592,16 +615,6 @@ function (dojo, declare) {
 			//}
         },
 		
-		moveCard: function ( id , destination , isartifact ) 
-		{
-			dojo.addClass( "tablecards_item_tablecard_"+id ,"animatedcard") ;
-			this.tablecards.removeFromStockById( "tablecard_"+id , destination  );	
-			if ( isartifact == 1 ) 
-				{
-					dojo.place( "<div class='artifacticon'></div>" , destination  , "last");
-					this.addTooltipToClass( "artifacticon", _( "Each artifact worths 5 gems, the 4th and 5th drawn give 5 extra gems" ), "" );
-				}
-		},
 		
 		slideToObjectAndDestroyAndIncCounter: function( mobile_obj , to, duration, delay ) 
 		{
@@ -616,7 +629,7 @@ function (dojo, declare) {
 			dojo.connect(anim, "onEnd", this, 'incAndDestroy' );
 			anim.play();
 			return anim;
-			},
+		},
 		
 		slideTemporaryObjectAndIncCounter: function( mobile_obj_html , mobile_obj_parent, from, to, duration, delay ) 
 		{
@@ -686,8 +699,9 @@ function (dojo, declare) {
         },        
         
         */
+		
 
-		voteExplore: function( evt )
+		playermovetile: function( evt )
         {
             console.log( 'voteExplore' );
             
@@ -695,7 +709,7 @@ function (dojo, declare) {
             dojo.stopEvent( evt );
 
             // Check that this action is possible (see "possibleactions" in states.inc.php)
-            if( ! this.checkAction( 'voteExplore' ) )
+            if( ! this.checkAction( 'playermovetile' ) )
             {   return; }
 
             this.ajaxcall( "/takaraisland/takaraisland/voteExplore.html", {  }, 

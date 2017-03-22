@@ -75,9 +75,9 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
 		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
 		"action" => "stplayermove",
-		"possibleactions" => array( "playermovetile" ),
+		"possibleactions" => array( "playermovetile", "rentsword" ),
         "updateGameProgression" => true,
-        "transitions" => array( "endturn" => 3, "hireexpert" => 5, "exchange" => 7 , "fight" => 5,  ) 
+        "transitions" => array( "endturn" => 3, "hireexpert" => 5, "exchange" => 7 , "dig" => 10, "playermove"=>3  ) 
     ),
 	
 	 4 => array(
@@ -127,7 +127,7 @@ $machinestates = array(
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is viewing the cards of the survey'),
 		"descriptionmyturn" => clienttranslate('${you} can view some cards of the selected Excavation site.'),
-		"possibleactions" => array( "revealmonster","pass"),
+		"possibleactions" => array( "revealmonster","viewdone"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),
@@ -139,7 +139,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} are sending an adventurer to an Excavation site'),
 		"possibleactions" => array( "dig","survey"),
         "updateGameProgression" => false,
-        "transitions" => array( "digg" => 12 , "fight" => 11 , "browsecards" => 8  ) //
+        "transitions" => array( "dig" => 12 , "fight" => 11 , "browsecards" => 8  ) //
     ),
     
 	10 => array(
@@ -169,7 +169,7 @@ $machinestates = array(
         "type" => "game",
         "action" => "stdig",
         "updateGameProgression" => true,
-        "transitions" => array( "playermove" => 3 , "fight" => 11 )
+        "transitions" => array( "playermove" => 3 , "fight" => 11 , "gettreasure" =>10)
     ),
 	
 	

@@ -407,13 +407,39 @@ class takaraisland extends Table
 		$this->gamestate->nextState( 'playermove' );
 		
 	}
-////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	
 	function stplayermove()
 	{
+		    $player_id=self::getActivePlayerId();
+			$sql = "SELECT COUNT(*) from tokens where card_location = 'TH_$player_id'";
+			$availableAdventurers = self::getUniqueValueFromDB( $sql );
+			if ( $availableAdventurers == 0 )
+			{
+				$this->gamestate->nextState( 'endturn' );
+			}
+			
+	}
+	////////////////////////////////////////////////////////////////////////////
+	function stendturn()
+	{
 		
+		$this->activeNextPlayer();
+		$this->gamestate->nextState( );
 		
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+		
+	function stexploresite()
+	{
+		
+	
+		$this->gamestate->nextState( );
+		
+	}
+	
 ////////////////////////////////////////////////////////////////////////////
 	function stcleanpockets()
 	{

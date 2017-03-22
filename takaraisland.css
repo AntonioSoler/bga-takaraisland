@@ -955,3 +955,7 @@ background-image: url('img/ffa500.jpg');
 	    0 0 0 2px #c0dd00;
   }
 }
+
+.tileselected {
+border: 2px red solid !important;
+}
