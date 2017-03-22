@@ -215,7 +215,7 @@ class takaraisland extends Table
         $players = self::loadPlayersBasicInfos();
 
         // Activate first player (which is in general a good idea :) )
-       // $this->activeNextPlayer();
+        $this->activeNextPlayer();
 
         /************ End of the game initialization *****/
     }
@@ -286,8 +286,8 @@ class takaraisland extends Table
         // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
 
         $result = 0;
-        //$cardsDrawn = $this->cards->countCardsInLocation( 'table' );
-		//$result = ( ($iterations -1) * 20 ) + $cardsDrawn ;
+        $cardsDrawn = $this->cards->countCardsInLocation( 'discard' );
+		$result = $cardsDrawn * 2 ;
         return ($result);
     }
 
@@ -299,59 +299,7 @@ class takaraisland extends Table
         In this space, you can put any utility methods useful for your game logic
     */
 
-	function getExploringPlayers()
-    {
-        $playersIds = array();
-		$sql = "SELECT player_id id, player_name playerName , player_color playerColor FROM player WHERE player_exploring=1";
-        //$playersIds = self::getObjectListFromDB( $sql );
-		$playersIds = self::getCollectionFromDB( $sql );	
-		self::debug ("******* getExploringPlayers   ".$playersIds);
-        return $playersIds;
-    }
-	function getExploringPlayersList()
-    {
-        $playersIds = array();
-		$sql = "SELECT player_id id FROM player WHERE player_exploring=1";
-        $playersIds = self::getObjectListFromDB( $sql );
-		//$playersIds = self::getCollectionFromDB( $sql );	
-		self::debug ("******* getExploringPlayers   ".$playersIds);
-        return $playersIds;
-    }
 	
-	function setExploringPlayer ( $playerId , $exploringValue )
-    {
-		$sql = "UPDATE player SET player_exploring=$exploringValue WHERE player_id=$playerId";
-        self::DbQuery( $sql ); 
-    }
-	
-	function getLeavingPlayers()
-    {
-        $playersIds = array();
-		$sql = "SELECT player_id id, player_name playerName , player_color playerColor FROM player WHERE player_leaving=1";
-        //$playersIds = self::getObjectListFromDB( $sql );
-		$playersIds = self::getCollectionFromDB( $sql );	
-		self::debug ("******* getExploringPlayers   ".$playersIds);
-        return $playersIds;
-    }
-	
-	function setLeavingPlayer ( $playerId , $leavingValue )
-    {
-		$sql = "UPDATE player SET player_leaving=$leavingValue WHERE player_id=$playerId";
-        self::DbQuery( $sql ); 
-    }
-	
-	function setGemsPlayer ( $playerId , $location , $value )  // location can be 'tent' or 'field'
-    {
-		$sql = "UPDATE player SET player_$location=$value WHERE player_id=$playerId";
-        self::DbQuery( $sql ); 
-    }
-	
-	function getGemsPlayer ( $playerId , $location )  //returns the number of gems in a location
-	{
-		$sql = $sql = "SELECT player_$location FROM player WHERE player_id=$playerId";
-		$value=self::getUniqueValueFromDB( $sql );
-		return $value;
-	}
 	
 	
 //////////////////////////////////////////////////////////////////////////////
@@ -453,109 +401,18 @@ class takaraisland extends Table
 
 	////////////////////////////////////////////////////////////////////////////
 
-    function streshuffle()
+    function ststartturn()
 	{
-	/*$this->cards->moveAllCardsInLocation( 'table', 'deck' );  //collect all cards to the deck and reshuffle
-	$this->cards->shuffle( 'deck' );
-	$cardsRemaining = $this->cards->countCardsInLocation('deck');
-	$iterations = 1 + $this->getGameStateValue('iterations');	
-	
-	if  ( $iterations <= 4 ) 
-	{
-	self::notifyAllPlayers( "reshuffle", clienttranslate( '<b>All explorers returned to camp. Any artifact not picked is now lost forever. The deck is shuffled. This is the expedition number ${iterations}</b>'), array( 'iterations' => $iterations , 'cardsRemaining' => $cardsRemaining )) ;
-	}
-	if  ( $iterations == 5 ) 
-	{ 
-    self::notifyAllPlayers( "reshuffle", clienttranslate( '<b>All explorers returned to camp. Any artifact not picked is now lost forever. The deck is reshufled. This is the FINAL expedition.</b>' ), array( 'iterations' => $iterations , 'cardsRemaining' => $cardsRemaining )) ;
-	}
-	if  ( $iterations > 5 ) 
-	{ 
-    self::notifyAllPlayers( "reshuffle", clienttranslate( '<b>All explorers returned to camp. END OF THE GAME</b>'), array( 'iterations' => $iterations , 'cardsRemaining' => $cardsRemaining )) ;
-	}
-	
-	$players = self::loadPlayersBasicInfos();
-	foreach( $players as $player_id => $player )
-	{
-		$this->setExploringPlayer($player_id , 1);   // All players are now exploring
-	}
-	$sql = "UPDATE player SET player_leaving=0 WHERE 1";  // Reset players votes
-    self::DbQuery( $sql ); 
 		
-	$iterations = self::getGameStateValue("iterations");
-	
-	if ( $iterations == 5 ) 
-		{
-			$this->gamestate->nextState( 'gameEndScoring' );
-		}
-	else
-		{
-			$iterations++ ;
-			self::setGameStateInitialValue( 'iterations', $iterations );
-			$this->gamestate->nextState( 'explore' );
-		} */
+		$this->gamestate->nextState( 'playermove' );
+		
 	}
 ////////////////////////////////////////////////////////////////////////////
-	function stexplore()
-	{
-	self::incStat(1, 'cards_drawn' );
-	$exploringPlayers = $this->getExploringPlayers();
-	for ($i = 1; $i <= 1; $i++)   // silly loop for test, draw more of one card at the time
-		{
-			
-		$TopCard = $this->cards->getCardOnTop( 'deck' ) ; //look at the top card of the deck
-			if ( $TopCard['type_arg'] > 0 )  // is it a gems card?
-				{
-				$gems = $TopCard['type_arg'] % sizeof( $exploringPlayers );  //calculate the remaining gems on the card
-				}
-			else
-				{
-				$gems=0;	
-				}
-		$PlayedCard = $this->cards->pickCardForLocation( 'deck', 'table', $gems ); //  Draw a card
-		$gemsSplit = floor( $PlayedCard['type_arg'] / sizeof( $exploringPlayers )); //and gems to split on the players
-		foreach($exploringPlayers as $player_id => $player )    // Add gems to the fields
-			{  
-				$thisid = $player['id'] ;
-				$temp = $this->getGemsPlayer( $thisid  , 'field' )  ;
-				$this->setGemsPlayer( $thisid , 'field' , $temp + $gemsSplit ) ;
-			}
-		} 
-	$thisTypeid = $PlayedCard['type']; 	
-	$cardPlayedName	= $this->card_types[$thisTypeid]['name'];
-	if  ( $PlayedCard['type_arg'] > 0) 
-	{
-		$cardPlayedName = $cardPlayedName ." ". $PlayedCard['type_arg'] ;
-	}
-	$cardsontable = $this->cards->countCardsInLocation( 'table' );
-	self::notifyAllPlayers( "playCard", clienttranslate( 'A new card is drawn and it is ${card_played_name}' ), array(
-                'card_played' => $PlayedCard,
-				'card_played_name' => $cardPlayedName
-            ) );
 	
-	
-	$HazardsDrawn = self::getCollectionFromDB("SELECT COUNT(*) c FROM cards WHERE card_location ='table' AND card_type > 12 GROUP BY card_type HAVING c > 1 ");
-	if (sizeof( $HazardsDrawn )>=1)
-		{
-			self::notifyAllPlayers( "stcleanpockets", clienttranslate( 'This is the second ${card_played_name} drawn. Players in the temple lost their gems. One card of this kind is removed.' ), array(
-                'card_played' => $PlayedCard,
-				'card_played_name' => $cardPlayedName
-            ) ); 
-		$this->cards->moveCard( $PlayedCard['id'], 'temple'  );   // Remove 1 hazard to the temple
+	function stplayermove()
+	{
 		
-		$this->gamestate->nextState( 'cleanpockets' );	
-		}
-	else
-		{ 
-		if ( $gemsSplit > 0 ) 
-			{ 
-				self::notifyAllPlayers( "ObtainGems", clienttranslate( 'The loot is divided. All explorers in the temple obtain ${gems} gems.' ), array(
-					'gems' => $gemsSplit,
-					'card_played' => $PlayedCard,
-					'players' => $exploringPlayers
-				) );				
-			}
-		$this->gamestate->nextState( 'vote' );	
-		}
+		
 	}
 ////////////////////////////////////////////////////////////////////////////
 	function stcleanpockets()

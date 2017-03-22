@@ -256,14 +256,13 @@ function (dojo, declare) {
                 
                 break;
            */
+            case 'playermove':
+			    dojo.query( 'TH_' +this.getActivePlayerId() +' playertile' ).addClass( 'borderpulse' ) ;
+				dojo.query( 'TH_' +this.getActivePlayerId() +' playertile' ).connect ( 'onclick',this,'selectadventurer');
            
-		    case 'reshuffle':
-
-            
-                // Show some HTML block at this game state
-                dojo.query('.votecardExplore').removeClass('votecardExplore') ;
-                
+            case 'dummmy':
                 break;
+		    
            
             case 'dummmy':
                 break;
@@ -289,7 +288,8 @@ function (dojo, declare) {
                 
                 break;
            */
-           
+            case 'endturn':
+			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
            
             case 'dummmy':
                 break;

@@ -109,10 +109,11 @@
   width: 50px;
   height: 100px;
   position: absolute;
-  left: 90px;
-  top: 110px;
+  left: 85px;
+  top: 100px;
   border-style: solid;
   border-color: #beff0f;
+  padding: 10px;
 }
 #sword {
   transition: 0.6s;
@@ -319,22 +320,22 @@
 
 #workersC div:nth-child(1) {
     z-index:1!important;
-	top:-10px!important;
-	left:-10px!important;
+    top: -20px!important;
+    left: -30px!important;
 }
 #workersC div:nth-child(2) {
     z-index:2!important;
-	top:-10px!important;
-	left:10px!important;
+    top: -20px!important;
+    left: 10px!important;
 }
 #workersC div:nth-child(3) {
     z-index:3!important;
-	top:10px!important;
-	left:-10px!important;
+    top: 30px!important;
+    left: -30px!important;
 }
 #workersC div:nth-child(4) {
     z-index:4!important;
-	top:10px!important;
+	top:30px!important;
 	left:10px!important;
 }
 
@@ -937,23 +938,20 @@ background-image: url('img/ffa500.jpg');
 
 .borderpulse {
 	border-style: solid;
-  border-color: #c0dd00;
-  border-radius: 35px;
-	border: 1px !important;
-    animation: pulse 1s ease infinite; 
-     
+	border-radius: 30px;
+	animation: pulse 1s ease infinite;
+	transition: border 1s ease;
+	z-index: 1;
 }
 
 @keyframes pulse {
   0% {
-    transform: scale(1,1);
-  }
-
-  50% {
-    transform: scale(1.05,1.05);
+  box-shadow: 
+	    0 0 0 8px #c0dd00;
   }
 
   100% {
-  transform: scale(1,1);
+  box-shadow: 
+	    0 0 0 2px #c0dd00;
   }
 }

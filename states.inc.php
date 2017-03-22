@@ -77,7 +77,7 @@ $machinestates = array(
 		"action" => "stplayermove",
 		"possibleactions" => array( "playermovetile" ),
         "updateGameProgression" => true,
-        "transitions" => array("cleanpockets" => 4, "endturn" => 3) 
+        "transitions" => array( "endturn" => 3, "hireexpert" => 5, "exchange" => 7 , "fight" => 5,  ) 
     ),
 	
 	 4 => array(
@@ -85,10 +85,10 @@ $machinestates = array(
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
 		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or pass'),
-		"action" => "stplayermove",
+		"action" => "stendturn",
 		"possibleactions" => array( "payhospital", "recruit", 'pass' ),
         "updateGameProgression" => false,
-        "transitions" => array("cleanpockets" => 4, "pass" => 2) //4 after seeing the card if the 2nd hazard is drawn or 5 the remaining players vote to stay or to continue exploring
+        "transitions" => array("" => 2) //
     ),
 	
 	5 => array(
@@ -116,18 +116,18 @@ $machinestates = array(
         "name" => "exchange",  // 
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding whether to buy or sell xp '),
-		"descriptionmyturn" => clienttranslate('${you} have to select the xp tile that you want to sell or to buy a 2 XP tile for 5 Kara Gold '),
+		"descriptionmyturn" => clienttranslate('${you} have to select the xp tile that you want to sell or to buy an 2 XP tile for 5 Kara Gold '),
 		"possibleactions" => array( "sellxp","buyxp"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),
 	
 	8 => array(
-        "name" => "sendexpert",  // 
+        "name" => "browsecards",  // 
         "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
-		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
-		"possibleactions" => array( "selectcards"),
+        "description" => clienttranslate('${actplayer} is viewing the cards of the survey'),
+		"descriptionmyturn" => clienttranslate('${you} can view some cards of the selected Excavation site.'),
+		"possibleactions" => array( "revealmonster","pass"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),
@@ -135,21 +135,21 @@ $machinestates = array(
 	9 => array(
         "name" => "exploresite",  // 
         "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
-		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
-		"possibleactions" => array( "digg","survey"),
+        "description" => clienttranslate('${actplayer} is sending an adventurer to an Excavation site'),
+		"descriptionmyturn" => clienttranslate('${you} are sending an adventurer to an Excavation site'),
+		"possibleactions" => array( "dig","survey"),
         "updateGameProgression" => false,
-        "transitions" => array( "digg" => 12 , "fight" => 11 , "browsecards" => 10  ) //
+        "transitions" => array( "digg" => 12 , "fight" => 11 , "browsecards" => 8  ) //
     ),
     
 	10 => array(
-        "name" => "explore",  // 
-        "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
-		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
-		"possibleactions" => array( "digg","survey"),
+        "name" => "gettreasure",  // 
+        "description" => clienttranslate('${actplayer} obtains a treasure'),
+		"descriptionmyturn" => clienttranslate('${you} obtain a treasure'),
+        "type" => "game",
+        "action" => "sttreasure",
         "updateGameProgression" => false,
-        "transitions" => array( "" => 3 ) //
+        "transitions" => array( "" => 3 )
     ),
 	
 	11 => array(
