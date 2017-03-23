@@ -1,8 +1,8 @@
 <?php
 /**
  *------
- * BGA framework: Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : Â© Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -74,7 +74,7 @@
     {
 		self::setAjaxMode();
 		$tile = self::getArg( "tile", AT_posint, true );
-		$destination = self::getArg( "destination", AT_posint, true );
+		$destination = self::getArg( "destination", AT_alphanum, true );
 		$this->game->playermovetile($tile,$destination);
 		self::ajaxResponse();    
 	}	
