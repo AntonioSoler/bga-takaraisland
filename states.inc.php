@@ -78,12 +78,12 @@ $machinestates = array(
 		"args" => "argPlayerMoves",
 		"possibleactions" => array( "playermovetile", "rentsword" ),
         "updateGameProgression" => true,
-        "transitions" => array( "endturn" => 3, "hireexpert" => 5, "exchange" => 7 , "dig" => 10, "playermove"=>3  ) 
+        "transitions" => array( "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "dig" => 12, "playermove"=>3  ) 
     ),
 	
 	 4 => array(
         "name" => "endturn",  //  pay hospital and hire new recruit
-        "type" => "activeplayer",
+        "type" => "game",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
 		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or pass'),
 		"action" => "stendturn",
@@ -172,8 +172,7 @@ $machinestates = array(
         "updateGameProgression" => true,
         "transitions" => array( "playermove" => 3 , "fight" => 11 , "gettreasure" =>10)
     ),
-	
-	
+		
     90 => array(
 	   "description" => clienttranslate('Final Score'),
         "name" => "gameEndScoring",

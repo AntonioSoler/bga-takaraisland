@@ -84,7 +84,7 @@ class takaraisland extends Table
             $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
         }
 	
-    	$sql .= implode( $values, ',' );
+    	$sql .= implode( $values , "," );
 		self::DbQuery( $sql );
 		self::reattributeColorsBasedOnPreferences( $players, array(  /* LIST HERE THE AVAILABLE COLORS OF YOUR GAME INSTEAD OF THESE ONES */"ff0000", "008000", "0000ff", "ffa500" ) );
 		self::reloadPlayersBasicInfos();
@@ -350,6 +350,8 @@ class takaraisland extends Table
 				'tile' => $tile
 				) );
 	
+	$this->gamestate->nextState( 'dig' );
+	
     }
 
     function rentsword()
@@ -450,145 +452,21 @@ class takaraisland extends Table
 		
 	function stexploresite()
 	{
-		
-	
+
 		$this->gamestate->nextState( );
 		
 	}
 	
-////////////////////////////////////////////////////////////////////////////
-	function stcleanpockets()
-	{
-		$sql = "UPDATE player SET player_field= 0 ";  // All players loose their gems
-        self::DbQuery( $sql );
-		$sql = "SELECT card_id AS id FROM cards WHERE card_location ='table' AND card_type in ( 12,13,14,15,16)";  
-		$cards = self::getCollectionFromDB($sql);
-		$artifactsOnTable = sizeof($cards);
-		self::incGameStateValue( 'artifactspicked', $artifactsOnTable  );		// the 4th and 5th artifacts have bonus	
-		$sql = "UPDATE cards SET card_location ='temple' WHERE card_location = 'table' AND card_type in ( 12,13,14,15,16)";
-		self::DbQuery( $sql );	            //Remove the artifacts left behind
+	////////////////////////////////////////////////////////////////////////////
+	
 		
-	    $this->gamestate->nextState( 'reshuffle' );	
-	}
-////////////////////////////////////////////////////////////////////////////
-	function stvote()
+	function stdig()
 	{
-		    $activePlayersId = array();
-			$getExploringPlayers = $this->getExploringPlayers() ;
-            /* $players = $this->loadPlayersBasicInfos();*/
-			
-            foreach($getExploringPlayers as $playerId => $player) 
-			{
-						$activePlayersId[] = $playerId;
-						self::giveExtraTime( $playerId );
-            }
-            $this->gamestate->setPlayersMultiactive($activePlayersId, 'processleavers');
-        
-    }
-////////////////////////////////////////////////////////////////////////////
-	function stprocessLeavers()
-	{
-		    $players = self::loadPlayersBasicInfos();
-			
-			$leavingPlayers = $this->getLeavingPlayers() ;
-			$leavingPlayersNum = sizeof($leavingPlayers) ;
-			
-			self::notifyAllPlayers ( "votingend", clienttranslate( 'Voting has ended and ${leavingPlayersNum} players decided to return to camp' ) , 
-				    array( 	'leavingPlayersNum' => $leavingPlayersNum 
-					) );
-			$sql = "SELECT sum( card_location_arg ) gemsonthetable FROM cards WHERE card_location = 'table'";
-			$gemsonthetable = self::getUniqueValueFromDB( $sql );
-			
-			$gemsSplit=0 ;
-			if ( $leavingPlayersNum >= 1 )
-			{
-					$remaininggemsoncard = $gemsonthetable % $leavingPlayersNum;
-					$gemsSplit = floor( $gemsonthetable /  $leavingPlayersNum ); //and gems to split on the players
-					
-					$sql = "UPDATE cards SET card_location_arg = 0 WHERE card_location = 'table'";
-					self::DbQuery( $sql );
-					$sql = "UPDATE cards SET card_location_arg = $remaininggemsoncard WHERE card_location = 'table' AND card_type < 12 LIMIT 1";
-					self::DbQuery( $sql ); 		
-			}
-			
-			foreach($leavingPlayers as $playerId => $player )
-			{
-				$thisid = $player['id'] ;
-				$thisPlayerName = $players[$thisid]['player_name'];
-								
-				if ( $leavingPlayersNum < 2  )    // pick artifacts
-					{
-					$sql = "SELECT card_id AS id FROM cards WHERE card_location ='table' AND card_type in ( 12,13,14,15,16)";
-					$cards = self::getCollectionFromDB($sql);
-					$artifactsOnTable = sizeof($cards);
-					
-					if ( $artifactsOnTable >0)
-						{
-							$extra=0;
-							self::incGameStateValue( 'artifactspicked', $artifactsOnTable  );
-							self::getGameStateValue( 'artifactspicked' );
-							if ( $artifactspicked = 4  )  
-							{
-							$extra=5;	
-							}
-							if ( $artifactspicked = 5 ) 
-							{
-								if ( $artifactsOnTable = 1 )
-								{
-									$extra=5;	
-								}
-								if ( $artifactsOnTable > 1 ) 
-								{
-									$extra=10;	
-								}
-							}
-							$sql = "UPDATE cards SET card_location ='".$thisid."' WHERE card_location = 'table' AND card_type in ( 12,13,14,15,16)";
-							self::DbQuery( $sql );
-							self::notifyAllPlayers ( "artifactspicked", clienttranslate( '${player_name} is the only player returning to camp this turn and has picked some artifacts (4th and 5th artifact appearing give 5 extra gems)' ) , 
-								array( 'thisid' => $thisid ,
-									  'player_name' => $thisPlayerName ,
-									  'cards' => $cards,
-									  'extra' => $extra
-								) );	
-						}	
-					} ;
-				$this->setExploringPlayer( $thisid  , 0);
-				
-				$gems = $this->getGemsPlayer ( $thisid , 'field') ;  
-				$gems = $gems + $this->getGemsPlayer ( $thisid , 'tent') + $gemsSplit;
-				
-				$this->setGemsPlayer ( $thisid , 'tent', $gems );
-				$this->setGemsPlayer ( $thisid , 'field', 0 );
-				
-				self::notifyAllPlayers ( "playerleaving", clienttranslate( '${player_name} returned to camp may grab some gems left on the floor' ) , 
-				    array( 'thisid' => $thisid ,
-					      'player_name' => $thisPlayerName,
-						  'gems' => $gemsSplit 
-					) );
-				$this->setLeavingPlayer( $thisid  , 0);
-		 	}
-			
-			$exploringPlayers = $this->getExploringPlayers();
-			foreach($exploringPlayers as $playerId => $player )
-			{
-				$thisid = $player['id'] ;
-				self::incStat(1, 'cards_seen', $thisid);
-				$thisPlayerName = $players[$thisid]['player_name'];
-				self::notifyAllPlayers ( "playerexploring", clienttranslate( '${player_name} decided to continue exploring ' ) , 
-				    array( 'thisid' => $thisid ,
-					      'player_name' => $thisPlayerName 
-					) );		
-		 	}		
-			if ( sizeof( $exploringPlayers ) == 0 )
-				{
-					
-				$this->gamestate->nextState( 'reshuffle' );	
-				}
-			else
-			{
-				$this->gamestate->nextState( 'explore' );
-			}
+
+		$this->gamestate->nextState("playermove");
+		
 	}
+
 
 ////////////////////////////////////////////////////////////////////////////
 

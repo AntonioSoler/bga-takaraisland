@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: � Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : � Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: ÃƒÂ¯Ã‚Â¿Ã‚Â½ Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : ÃƒÂ¯Ã‚Â¿Ã‚Â½ Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -22,15 +22,15 @@
     
     Usually, you are using CSS to:
     
-    1Â°) define the overall layout of your game
+    1ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
-    2Â°) create your CSS-sprites:
+    2ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
         background-image and background-position CSS properties, you create HTML blocks that can 
         display these images correctly (see example below).
     
-    3Â°) ... anything else:
+    3ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
@@ -320,23 +320,23 @@
 
 #workersC div:nth-child(1) {
     z-index:1!important;
-    top: -20px!important;
-    left: -30px!important;
+    top: -20px;
+    left: -30px;
 }
 #workersC div:nth-child(2) {
     z-index:2!important;
-    top: -20px!important;
-    left: 10px!important;
+    top: -20px;
+    left: 10px;
 }
 #workersC div:nth-child(3) {
     z-index:3!important;
-    top: 30px!important;
-    left: -30px!important;
+    top: 30px;
+    left: -30px;
 }
 #workersC div:nth-child(4) {
     z-index:4!important;
-	top:30px!important;
-	left:10px!important;
+	top:30px;
+	left:10px;
 }
 
 #counterC {
@@ -386,19 +386,19 @@
 }
 
 #diveC div:nth-child(1) {
-    z-index:1!important;
-	top:0px!important;
-	left:0px!important;
+
+	top:0px;
+	left:0px;
 }
 #diveC div:nth-child(2) {
-    z-index:2!important;
-    top:0px!important;
-    left: 65px!important;
+
+    top:0px;
+    left: 65px;
 }
 #diveC div:nth-child(3) {
-    /* z-index:3!important; */
-    top:0px!important;
-    left:130px!important;
+
+    top:0px;
+    left:130px;
 }
 
 #treasuredeck {
@@ -499,7 +499,7 @@ transform: rotate(0deg);
 }
 
 .exploreholder {
-  border: 0px;
+  border: 1px;
   width: 150px;
   height: 60px;
   position: absolute;
@@ -507,6 +507,13 @@ transform: rotate(0deg);
   border-color: #c0dd00;
   border-radius: 35px;
 }
+
+.exploreholder div:nth-child(1) 
+{top:0px;left:0px;}
+.exploreholder div:nth-child(2) 
+{top: 0px;left: 45px;}
+.exploreholder div:nth-child(3) 
+{top: 0px;left: 90px;}
 
 .expertholder {
   border: 0px;
@@ -609,7 +616,7 @@ transform: rotate(0deg);
 }
 #explore1 {
  left: 500px;
-  top: 260px;
+ top: 260px;
 }
 #explore2 {
  left: 690px;
@@ -621,8 +628,8 @@ transform: rotate(0deg);
 }
 
 #explore4 {
- left: 500px;
-  top: 440px;
+ left: 507px;
+ top: 445px;
 }
 #explore5 {
  left: 690px;
@@ -633,6 +640,7 @@ transform: rotate(0deg);
   top: 420px;
 }
 .playercamp {
+  z-index: -100;
   width: 380px;
   height: 277px;
   margin: 3px;
@@ -641,7 +649,9 @@ transform: rotate(0deg);
   position:relative;
   margin: 10px;
 }
-
+.cp_board{
+  display: inline-flex;
+}
 .coin {
     width: 30px;
     height: 30px;
@@ -651,6 +661,16 @@ transform: rotate(0deg);
     position: relative;
     display: inline-block;
 }
+.xpcounter {
+    width: 30px;
+    height: 30px;
+    margin: 1px;
+    background-image: url(img/xpicon.png);
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+}
+
 .playertileholder {
   border: 0px;
   width: 60px;
@@ -663,16 +683,17 @@ transform: rotate(0deg);
 }
 
 .playertileholder div:nth-child(1) {
-	top:0px;
-	left:0px;
+	top:0px!important;
+	left:0px!important;
 }
 .playertileholder div:nth-child(2) {   
 	top:87px !important;
+	left:0px!important;
 }
 .playertileholder div:nth-child(3) {
 	top:178px !important;
+	left:0px!important;
 }
-
 
 .cardstore {
   border: 0px;
@@ -730,9 +751,57 @@ background-image: url('img/0000ff.jpg');
 background-image: url('img/ffa500.jpg');	
 }
 .playertile {
+	background-image: url('img/playertiles.png');
 	box-shadow: 6px 6px 3px 1px rgba(0, 0, 0, 0.72);
+	width:60px;
+	height:60px;
+	border-radius: 50%;
 	position: absolute;
+	display: inline;
+	margin-right: -15px;
+	z-index=100 !important;
+	border: 0px;
+	z-index: 10!important;
 }
+/*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
+
+.tile1.colorff0000{
+	background-position: -120px 0px;
+}
+.tile2.colorff0000{
+	background-position: -120px -60px;
+}
+.tile3.colorff0000{
+    background-position: -120px -120px;
+}
+.tile1.color008000{
+	background-position: -180px 0px;
+}
+.tile2.color008000{
+	background-position: -180px -60px;
+}
+.tile3.color008000{
+    background-position: -180px -120px;
+}
+.tile1.color0000ff{
+	background-position: 0px 0px;
+}
+.tile2.color0000ff{
+	background-position: 0px -60px;
+}
+.tile3.color0000ff{
+    background-position: 0px -120px;
+}
+.tile1.colorffa500{
+	background-position: -60px 0px;
+}
+.tile2.colorffa500{
+	background-position: -60px -60px;
+}
+.tile3.colorffa500{
+    background-position: -60px -120px;
+}
+
 .whiteblock {
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.29);

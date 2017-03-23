@@ -102,12 +102,12 @@ function (dojo, declare) {
 				{
 					this[thisstore].addItemType( tarray[c] , 0 , g_gamethemeurl+'img/xp.png', c );
 				}
-				tileholder="TH_"+thisplayerid;
+				/*tileholder="TH_"+thisplayerid;
 				this[tileholder] = new ebg.stock();
 				this[tileholder].create( this, $(tileholder), 60 , 60);
 				this[tileholder].image_items_per_row = 4;
 				this[tileholder].setSelectionMode( 0 );
-				
+				this[tileholder].setOverlap( 0 , 0 );
                 this[tileholder].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem playertile\" style=\"width:${width}px;height:${height}px;z-index:${position};background-image:url('${image}');border-radius:50%;\"></div>";
 				
 				colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };	
@@ -116,7 +116,8 @@ function (dojo, declare) {
 				{
 					this[tileholder].addItemType( c+1 , 0 , g_gamethemeurl+'img/playertiles.png', c * 4 +colortiles["h"+this.gamedatas.players[i].color] );
 					this[tileholder].addToStockWithId( c+1 , c+1  )
-				}				
+				}*/
+				
 			}
 			
             for( var i in this.gamedatas.cards )
@@ -132,7 +133,6 @@ function (dojo, declare) {
 				position= xpos+"px "+ ypos+"px ";
 				
 				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
-				
 				
             }
 			
@@ -160,7 +160,6 @@ function (dojo, declare) {
 				this.placetoken(thistoken);
             }
 
-			
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3>&#128481; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
 				
@@ -205,30 +204,6 @@ function (dojo, declare) {
 			this.addTooltip("explore6", "Excavation site 6","");
 			this.addTooltipToClass("coin", "Kara Gold","");
 			
-
-			/*
-			for ( var i=1;i<=gamedatas.iterations;i++ )
-			{
-					dojo.addClass( "templecard"+i ,"on");
-			}
-            
-			this.addTooltipToClass( "templeclass", _( "The number of expeditions remaining" ), "" );
-			
-			this.addTooltipToClass( "tent", _( "Gems are stored here after each expedition. Once in your tent, the gems are safe.<br><b> ONLY the player owner of the tent knows how many gems does it contain</b>" ), "" );
-			
-			this.addTooltipToClass( "gemfield", _( "These are your share of Gems obtained on the current expedition, you need to return to the camp to safely store them" ), "" );
-			
-			this.addTooltipToClass( "cardback", _( "Each round players vote to return to camp or to keep exploring. Players who leave can pick up the gems left on the cards " ), "" );
-			
-			this.addTooltipToClass( "votecardLeave", _( "This player has voted to return to camp and has stored his gems in the tent" ), "" );
-			
-			this.addTooltipToClass( "votecardExplore", _( "This player has voted to continue exploring" ), "" );
-			
-			this.addTooltipToClass( "stockitem", _( "This represents the events ocurred during exploration" ), "" );
-			
-            // Setup game notifications to handle (see "setupNotifications" method below) */
-			
-			
             this.setupNotifications();
 
             console.log( "Ending game setup" );
@@ -259,19 +234,21 @@ function (dojo, declare) {
            */
             case 'playermove':
 			    
-			    dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
-				var list = dojo.query('#TH_' +this.getActivePlayerId() +' .playertile');
-				for (var i = 0; i < list.length; i++)
+			    if (this.isCurrentPlayerActive() )
 				{
-					var thiselement = list[i];
-					this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
+					dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
+					var list = dojo.query('#TH_' +this.getActivePlayerId() +' .playertile');
+					for (var i = 0; i < list.length; i++)
+					{
+						var thiselement = list[i];
+						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
+					}
+					if ( args.args.playermoves == 1 )
+					{
+						dojo.addClass( 'swordholder','borderpulse' ) ;
+						dojo.connect ( $('sword'),'onclick',this,'rentsword');
+					}
 				}
-				if ( args.args.playermoves == 1 )
-				{
-					dojo.addClass( 'swordholder','borderpulse' ) ;
-					dojo.connect ( $('sword'),'onclick',this,'rentsword');
-				}
-			    
 			break;
 				
             case 'dummmy':
@@ -377,7 +354,7 @@ function (dojo, declare) {
 		fliptreasure: function ( sourceclick,card, visible )
 		{
 			image_items_per_row=3;
-			//debugger;
+			
 			var target = sourceclick.target || sourceclick.srcElement;
 			target_id=target.id;
 			card_id= target_id.replace(/\D+/g, "");  //Regex to all chars but numbers
@@ -418,7 +395,8 @@ function (dojo, declare) {
 			var browseddeck = "";
 			var target = sourceclick.target || sourceclick.srcElement;
 			this.adventurer=target.id;
-			dojo.toggleClass(this.adventurer,"tileselected")
+			dojo.toggleClass(this.adventurer,"tileselected");
+			
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			dojo.query(".borderpulse").removeClass("borderpulse");
 			
@@ -436,7 +414,7 @@ function (dojo, declare) {
 		
 		for ( i in multilocations	)
 		{
-			//debugger;
+			
 			dojo.toggleClass( multilocations[i] ,"borderpulse");
 			this.gameconnections.push ( dojo.connect($(multilocations[i]) ,'onclick',this,'playermovetile'));
 			
@@ -504,7 +482,9 @@ function (dojo, declare) {
 		},
 		
 		moveplayertile: function(thetoken) {
-			this.slideToObjectRelative ("TH_"+thetoken.type_arg+"_item_"+thetoken.type, thetoken.location);			
+			
+			
+			this.slideToObjectRelative ("tile_"+thetoken.type_arg+"_"+thetoken.type, thetoken.location);			
 		},
 		
 		movesword: function(thetoken) {
@@ -708,6 +688,7 @@ function (dojo, declare) {
 		playermovetile: function( evt )
         {
             // Stop this event propagation
+			
             dojo.stopEvent( evt );
 			if( ! this.checkAction( 'playermovetile' ) )
             {   return; }
@@ -715,9 +696,15 @@ function (dojo, declare) {
             // Get the cliqued pos and Player field ID
             var destination = evt.currentTarget.id;
 			var tile_id = this.adventurer.split('_');
+			var tile = tile_id[2];
 			
-            
-            var tile = tile_id[3];
+			dojo.toggleClass(this.adventurer,"tileselected")
+			dojo.forEach(this.gameconnections, dojo.disconnect);
+			dojo.query(".borderpulse").removeClass("borderpulse");
+			
+			dojo.removeClass( 'swordholder','borderpulse' ) ;
+			dojo.disconnect ( $('sword'),'onclick',this,'rentsword');
+			
 			
             if( this.checkAction( 'playermovetile' ) )    // Check that this action is possible at this moment
             {            
@@ -756,7 +743,7 @@ function (dojo, declare) {
             // Example 2: standard notification handling + tell the user interface to wait
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
-            dojo.subscribe( 'playCard', this, "notif_cardPlayed" );
+            dojo.subscribe( 'playermovetile', this, "notif_playermovetile" );
 			this.notifqueue.setSynchronous( 'playCard', 2000 );
 			dojo.subscribe( 'ObtainGems', this, "notif_ObtainGems" );
             this.notifqueue.setSynchronous( 'ObtainGems', 2000 );
@@ -781,23 +768,12 @@ function (dojo, declare) {
         /*
         Example:
         */
-        notif_cardPlayed: function( notif )
+        notif_playermovetile: function( notif )
         {
-            console.log( 'notif_cardPlayed' );
+            console.log( 'notif_playermovetile' );
             console.log( notif );
 			var card = notif.args.card_played;
-            this.tablecards.addToStockWithId( card.type , "tablecard_"+card.id ,  'templecard'+this.gamedatas.iterations  );
-			if ( card.type >=12 && card.type <=16 ) 
-			   {
-					dojo.addClass( "tablecards_item_tablecard_"+card.id , "isartifact" )
-					//dojo.attr("tablecards_item_tablecard_"+card.id, "title", card.id)
-				}
-			for ( var g=card.location_arg ; g>0 ; g-- )
-				{
-					this.placeGem( card.id+"_"+g, "tablecards_item_tablecard_"+card.id   ) ;					
-				}
-			this.addTooltipToClass( "stockitem", _( "This represents the events ocurred during exploration" ), "" );
-			dojo.byId("decksize").innerHTML=eval(dojo.byId("decksize").innerHTML)-1;
+            this.slideToObjectRelative ("tile_"+notif.args.player_id+"_"+notif.args.tile, notif.args.destination,2000)
         },
 		
 		notif_playerleaving: function( notif )

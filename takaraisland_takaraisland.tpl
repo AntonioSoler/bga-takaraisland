@@ -26,9 +26,6 @@
 -->
 <div id="playArea">
 	<div id="playareaup">
-		<!-- 
-	
-		<td id="boardcell">-->
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
 				<div id="swordholder">
@@ -123,30 +120,27 @@
 				<div id="reward"   class="treasurereward"></div>
 			</div>
 		</div>
-		<!-- 	</td>
-		<td>
-		<div id="campswrapper"> -->
 			<!-- BEGIN camp -->
 			<div id="playerCamp_{PLAYER_ID}" class="playercamp playercolor_{PLAYER_COLOR}" >
 				<div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
 				<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
 				<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
 				<div id="xpstore_{PLAYER_ID}" class="xpstore"></div>
-				<div id="TH_{PLAYER_ID}" class="playertileholder"></div>
+				<div id="TH_{PLAYER_ID}" class="playertileholder">
+					<div id="tile_{PLAYER_ID}_1" class="playertile tile1 color{PLAYER_COLOR}"></div>
+					<div id="tile_{PLAYER_ID}_2" class="playertile tile2 color{PLAYER_COLOR}"></div>
+					<div id="tile_{PLAYER_ID}_3" class="playertile tile3 color{PLAYER_COLOR}"></div>
+				
+				</div>
 			</div>
 			<!-- END camp -->
 		</div>
-	<!--</div>
-	  </td>
-	 	<tr id="down">
-		<td colspan="2">-->
 	<BR>	
 	<div id="table_wrap">
 
 		<div id="tablecards" class="whiteblock tablecards"></div>
 	</div>
 </div>
-<!-- </td></tr></table>-->
 
 
 <script type="text/javascript">
@@ -161,7 +155,7 @@ var jstpl_some_game_item='<div class="my_game_item" id="my_game_item_${id}" styl
 */
 
 var jstpl_woundtoken='<div  id="woundtoken_${id}" class="woundtoken" style="left: ${x}px; top: ${y}px;" ></div>';
-var jstpl_player_board = '\<div class="cp_board">\<div id="gold_p${id}" class="goldcounter"> <div class="coin"></div> <span id="goldcount_p${id}"><b>0</b></span>\</div></div>';
+var jstpl_player_board = '<br>\<div class="cp_board">\<div id="gold_p${id}" class="goldcounter"> <div class="coin"></div> <span id="goldcount_p${id}"><b>0</b></span>\</div><div id="xp_p${id}" class="goldcounter"> <div class="xpcounter"></div> <span id="xpcount_p${id}"><b>0</b></span>\</div></div>';
 
 </script>  
 
