@@ -266,6 +266,13 @@ function (dojo, declare) {
 					var thiselement = list[i];
 					this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
 				}
+				if ( args.args.playermoves == 1 )
+				{
+					dojo.addClass( 'swordholder','borderpulse' ) ;
+					dojo.connect ( 'onclick',this,'rentsword');
+				}
+			    
+			break;
 				
             case 'dummmy':
                 break;
@@ -296,10 +303,7 @@ function (dojo, declare) {
                 break;
 				
            */
-		    case 'startturn':
-			    dojo.addClass( 'swordholder','borderpulse' ) ;
-				dojo.connect ( 'onclick',this,'rentsword');
-			break;	
+		    	
             case 'endturn':
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
            
@@ -703,52 +707,30 @@ function (dojo, declare) {
 
 		playermovetile: function( evt )
         {
-            console.log( 'voteExplore' );
-            
-            // Preventing default browser reaction
+            // Stop this event propagation
             dojo.stopEvent( evt );
-
-            // Check that this action is possible (see "possibleactions" in states.inc.php)
-            if( ! this.checkAction( 'playermovetile' ) )
+			if( ! this.checkAction( 'playermovetile' ) )
             {   return; }
 
-            this.ajaxcall( "/takaraisland/takaraisland/voteExplore.html", {  }, 
-                         this, function( result ) {
-                            
-                            // What to do after the server call if it succeeded
-                            // (most of the time: nothing)
-                            
-                         }, function( is_error) {
+            // Get the cliqued pos and Player field ID
+            var destination = evt.currentTarget.id;
+			var tile_id = this.adventurer.split('_');
+			
+            
+            var tile = tile_id[3];
+			
+            if( this.checkAction( 'playermovetile' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/bonbons/bonbons/playermovetile.html", {
+                    tile:tile,
+                    destination:destination
+                }, this, function( result ) {} );
+            }            
+        },    
 
-                            // What to do after the server call in anyway (success or failure)
-                            // (most of the time: nothing)
-
-                         } );        
-        },
-        
-		voteLeave: function( evt )
+		rentsword: function( evt )
         {
-            console.log( 'voteLeave' );
-            
-            // Preventing default browser reaction
-            dojo.stopEvent( evt );
-
-            // Check that this action is possible (see "possibleactions" in states.inc.php)
-            if( ! this.checkAction( 'voteLeave' ) )
-            {   return; }
-
-            this.ajaxcall( "/takaraisland/takaraisland/voteLeave.html", {  }, 
-                         this, function( result ) {
-                            
-                            // What to do after the server call if it succeeded
-                            // (most of the time: nothing)
-                            
-                         }, function( is_error) {
-
-                            // What to do after the server call in anyway (success or failure)
-                            // (most of the time: nothing)
-
-                         } );        
+			
         },
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications

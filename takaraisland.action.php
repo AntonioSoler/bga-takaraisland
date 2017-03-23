@@ -63,21 +63,28 @@
     
     */
 
-    public function voteExplore()
+    public function rentsword()
     {
-		self::setAjaxMode();     
-		$this->game->voteExplore();
+		self::setAjaxMode();	
+		$this->game->rentsword();
 		self::ajaxResponse();    
 	}
-
-    public function voteLeave()
+	
+	 public function playermovetile()
     {
-		self::setAjaxMode();     
-		$this->game->voteLeave();
+		self::setAjaxMode();
+		$tile = self::getArg( "tile", AT_posint, true );
+		$destination = self::getArg( "destination", AT_posint, true );
+		$this->game->playermovetile($tile,$destination);
+		self::ajaxResponse();    
+	}	
+	
+	 public function pass()
+    {
+		self::setAjaxMode();
+		$this->game->pass();
 		self::ajaxResponse();    
 	}
-
-    
 
   }
   

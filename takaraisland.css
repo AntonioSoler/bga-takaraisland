@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: Ã‚Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : Ã‚Â© Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: Ãƒâ€šÃ‚Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : Ãƒâ€šÃ‚Â© Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -22,15 +22,15 @@
     
     Usually, you are using CSS to:
     
-    1Ã‚Â°) define the overall layout of your game
+    1Ãƒâ€šÃ‚Â°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
-    2Ã‚Â°) create your CSS-sprites:
+    2Ãƒâ€šÃ‚Â°) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
         background-image and background-position CSS properties, you create HTML blocks that can 
         display these images correctly (see example below).
     
-    3Ã‚Â°) ... anything else:
+    3Ãƒâ€šÃ‚Â°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
@@ -300,8 +300,8 @@
   width: 60px;
   height: 60px;
   position: absolute;
-  left: 60px;
-  top: 305px;
+  left: 61px;
+  top: 307px;
   border-style: solid;
   border-color: #ff0f40;
   border-radius: 50%;
@@ -376,7 +376,7 @@
 
 #diveC {
   border: 0px;
-  width: 190px;
+  width: 194px;
   height: 60px;
   position: absolute;
   left: 283px;

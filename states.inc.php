@@ -75,6 +75,7 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
 		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
 		"action" => "stplayermove",
+		"args" => "argPlayerMoves",
 		"possibleactions" => array( "playermovetile", "rentsword" ),
         "updateGameProgression" => true,
         "transitions" => array( "endturn" => 3, "hireexpert" => 5, "exchange" => 7 , "dig" => 10, "playermove"=>3  ) 
