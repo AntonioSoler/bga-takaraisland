@@ -721,7 +721,7 @@ function (dojo, declare) {
 			
             if( this.checkAction( 'playermovetile' ) )    // Check that this action is possible at this moment
             {            
-                this.ajaxcall( "/bonbons/bonbons/playermovetile.html", {
+                this.ajaxcall( "/takaraisland/takaraisland/playermovetile.html", {
                     tile:tile,
                     destination:destination
                 }, this, function( result ) {} );

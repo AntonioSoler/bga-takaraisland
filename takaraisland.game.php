@@ -383,13 +383,13 @@ class takaraisland extends Table
         );
     }    
     */
-	
 	function argPlayerMoves()
     {
-		
-        return self::getGameStateValue( 'playermoves' );
-       
+        return array(
+            'playermoves' => self::getGameStateValue( 'playermoves' )
+        );
     }
+	
 	
 
 //////////////////////////////////////////////////////////////////////////////
