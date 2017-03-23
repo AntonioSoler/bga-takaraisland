@@ -120,7 +120,7 @@ function (dojo, declare) {
 			}
 			
             for( var i in this.gamedatas.cards )
-            {
+            { 
 				var thisdeck = this.gamedatas.cards[i].location;
 				var card = this.gamedatas.cards[i];
 				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
@@ -269,7 +269,7 @@ function (dojo, declare) {
 				if ( args.args.playermoves == 1 )
 				{
 					dojo.addClass( 'swordholder','borderpulse' ) ;
-					dojo.connect ( 'onclick',this,'rentsword');
+					dojo.connect ( $('sword'),'onclick',this,'rentsword');
 				}
 			    
 			break;
@@ -425,12 +425,12 @@ function (dojo, declare) {
 			if (dojo.byId("expertsC").children.length == 0) 
 			{
 				dojo.toggleClass("expertsC","borderpulse")
-				this.gameconnections.push ( dojo.connect( "expertsC" ,'onclick',this,'playermovetile'));
+				this.gameconnections.push ( dojo.connect( $("expertsC") ,'onclick',this,'playermovetile'));
 			}
 			if (dojo.byId("counterC").children.length == 0) 
 			{
 				dojo.toggleClass("counterC","borderpulse");
-				this.gameconnections.push ( dojo.connect( "counterC" ,'onclick',this,'playermovetile'));
+				this.gameconnections.push ( dojo.connect( $("counterC"),'onclick',this,'playermovetile'));
 			}
 			
 		
@@ -438,7 +438,7 @@ function (dojo, declare) {
 		{
 			//debugger;
 			dojo.toggleClass( multilocations[i] ,"borderpulse");
-			this.gameconnections.push ( dojo.connect( multilocations[i] ,'onclick',this,'playermovetile'));
+			this.gameconnections.push ( dojo.connect($(multilocations[i]) ,'onclick',this,'playermovetile'));
 			
 		}
 			

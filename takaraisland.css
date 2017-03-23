@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: Â© Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : Â© Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -22,15 +22,15 @@
     
     Usually, you are using CSS to:
     
-    1°) define the overall layout of your game
+    1Â°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
-    2°) create your CSS-sprites:
+    2Â°) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
         background-image and background-position CSS properties, you create HTML blocks that can 
         display these images correctly (see example below).
     
-    3°) ... anything else:
+    3Â°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
@@ -939,7 +939,7 @@ background-image: url('img/ffa500.jpg');
 .borderpulse {
 	border-style: solid;
 	border-radius: 30px;
-	animation: pulse 1s ease infinite;
+	animation: pulse 2s ease infinite;
 	transition: border 1s ease;
 	z-index: 1;
 }
@@ -947,12 +947,12 @@ background-image: url('img/ffa500.jpg');
 @keyframes pulse {
   0% {
   box-shadow: 
-	    0 0 0 8px #c0dd00;
+	    0 0 0 5px #c0dd00;
   }
 
   100% {
   box-shadow: 
-	    0 0 0 2px #c0dd00;
+	    0 0 0 1px #c0dd00;
   }
 }
 
