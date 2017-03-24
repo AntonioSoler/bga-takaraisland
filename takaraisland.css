@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: ÃƒÂ¯Ã‚Â¿Ã‚Â½ Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : ÃƒÂ¯Ã‚Â¿Ã‚Â½ Antonio Soler <morgald.es@gmail.com>
+ * BGA framework:  Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation :  Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -22,15 +22,15 @@
     
     Usually, you are using CSS to:
     
-    1ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) define the overall layout of your game
+    1) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
-    2ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) create your CSS-sprites:
+    2) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
         background-image and background-position CSS properties, you create HTML blocks that can 
         display these images correctly (see example below).
     
-    3ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°) ... anything else:
+    3) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
@@ -115,12 +115,15 @@
   border-color: #beff0f;
   padding: 10px;
 }
+
+.playerswordholder div:nth-child(1) {transform: rotate(520deg);}
 #sword {
   transition: 0.6s;
   width: 49px;
   height: 100px;
   transform-style: preserve-3d;
   position: relative;
+  transition: all 2s
 }
 
 .swfront, .swback {
@@ -592,11 +595,11 @@ transform: rotate(0deg);
 
 #deckholder1 {
  left: 520px;
-  top: 50px;
+ top: 30px;
 }
 #deckholder2 {
  left: 690px;
-  top: 20px;
+ top: 10px;
 }
 #deckholder3 {
  left: 860px;
@@ -612,15 +615,15 @@ transform: rotate(0deg);
 }
 #deckholder6 {
  left: 860px;
-  top: 490px;
+ top: 510px;
 }
 #explore1 {
- left: 500px;
- top: 260px;
+ left: 510px;
+ top: 240px;
 }
 #explore2 {
  left: 690px;
-  top: 230px;
+ top: 220px;
 }
 #explore3 {
  left: 860px;
@@ -636,8 +639,8 @@ transform: rotate(0deg);
   top: 460px;
 }
 #explore6 {
- left: 870px;
-  top: 420px;
+ left: 860px;
+ top: 440px;
 }
 .playercamp {
   z-index: -100;
@@ -706,11 +709,11 @@ transform: rotate(0deg);
   border-color: #00cddd;
 }
 .playerswordholder {
-  border: 0px;
+  border: 1px;
   width: 60px;
-  height: 100px;
-  top:1px;
-  left:215px;
+  height: 14px;
+  top: 0px;
+  left: 225px;
   position: absolute;
   border-style: solid;
   border-color: #c0dd00;
@@ -1028,3 +1031,5 @@ background-image: url('img/ffa500.jpg');
 .tileselected {
 border: 2px red solid !important;
 }
+
+a {}
