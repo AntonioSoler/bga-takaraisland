@@ -168,20 +168,24 @@ class takaraisland extends Table
         self::DbQuery( $sql ); 
 		$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 2";
         self::DbQuery( $sql ); 
-		$this->cards->shuffle( $location );
+		
 		
 		$location=array_pop($decks);
 		$sql = "UPDATE cards SET card_location='$location' WHERE card_type=23";
 		self::DbQuery( $sql );
 		$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 2";
         self::DbQuery( $sql );
-		$this->cards->shuffle( $location );
+		
 		
 		for ($i=1 ; $i<=4 ; $i++ )
 		{
 			$location=array_pop($decks);
 			$sql = "UPDATE cards SET card_location='$location' WHERE card_location='deep3' LIMIT 3";
-			self::DbQuery( $sql );
+			self::DbQuery( $sql );		
+		}
+		for ($i=1 ; $i<=6 ; $i++ )
+		{
+			$location='deck'.$i;
 			$this->cards->shuffle( $location );
 		}
 				
@@ -338,16 +342,16 @@ class takaraisland extends Table
     
 */    
 
-    function playermovetile($tile,$destination)
+    function movetile($tile,$destination)
     {
-	self::checkAction( 'playermovetile' );
+	self::checkAction( 'movetile' );
 	$player_id = self::getActivePlayerId();
-	self::DbQuery( "UPDATE tokens SET card_location='$destination' WHERE card_type_arg=$player_id AND card_type='$tile'" );;
-    self::notifyAllPlayers( "playermovetile", clienttranslate( '${player_name} moved and adventurer.' ), array(
+	self::DbQuery( "UPDATE tokens SET card_location='$destination' WHERE card_type_arg=$player_id AND card_type='$tile'" );
+    self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} moved an adventurer.' ), array(
 				'player_id' => $player_id,
 				'player_name' => self::getActivePlayerName(),
 				'destination' => $destination,
-				'tile' => $tile
+				'tile_id' => "tile_".$player_id."_".$tile
 				) );
 	
 	$this->gamestate->nextState( 'dig' );
@@ -356,6 +360,17 @@ class takaraisland extends Table
 
     function rentsword()
     {
+	self::checkAction( 'rentsword' );
+	$player_id = self::getActivePlayerId();
+	
+	self::DbQuery( "UPDATE tokens SET card_location='playerSwordholder_$player_id' WHERE card_type='4'" );
+    self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} rents the magic sword.' ), array(
+				'player_id' => $player_id,
+				'player_name' => self::getActivePlayerName(),
+				'destination' => "playerSwordholder_".$player_id,
+				'tile_id' => "sword"
+				) );
+		
 	;	
     }
 
@@ -441,7 +456,9 @@ class takaraisland extends Table
 	////////////////////////////////////////////////////////////////////////////
 	function stendturn()
 	{
-		
+		$player_id = self::getActivePlayerId();
+		self::DbQuery( "UPDATE tokens SET card_location='TH_$player_id' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and ((card_location like 'explore%') or (card_location in ('diveC','counterC','expertsC'))) " );
+		self::DbQuery( "UPDATE tokens SET card_location='swordholder' WHERE card_type='4'" );
 		$this->activeNextPlayer();
 		$this->gamestate->nextState( );
 		

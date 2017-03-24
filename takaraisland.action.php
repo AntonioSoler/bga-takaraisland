@@ -70,12 +70,12 @@
 		self::ajaxResponse();    
 	}
 	
-	 public function playermovetile()
+	 public function movetile()
     {
 		self::setAjaxMode();
 		$tile = self::getArg( "tile", AT_posint, true );
 		$destination = self::getArg( "destination", AT_alphanum, true );
-		$this->game->playermovetile($tile,$destination);
+		$this->game->movetile($tile,$destination);
 		self::ajaxResponse();    
 	}	
 	

@@ -29,10 +29,8 @@
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
 				<div id="swordholder">
-					<div id="sword" onclick="this.classList.toggle('flipped');">
-						<div class="swfront"></div>
-						<div class="swback"></div>
-					</div>
+					<div id="sword"></div>
+				</div>
 				</div>
 				<div id="expertsC"></div>
 				<div id="expertholder1" class="expertholder">

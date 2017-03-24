@@ -157,7 +157,7 @@ function (dojo, declare) {
 			for( var i in this.gamedatas.tokens )
             {
 				var thistoken = this.gamedatas.tokens[i];
-				this.placetoken(thistoken);
+				this.placetokens(thistoken);
             }
 
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
@@ -280,10 +280,14 @@ function (dojo, declare) {
                 break;
 				
            */
-		    	
+		    case 'playermove':
+			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
+                break;	
             case 'endturn':
+			    
+			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
-           
+                break; 
             case 'dummmy':
                 break;
             }               
@@ -424,11 +428,7 @@ function (dojo, declare) {
 		
 		},
 		
-		placetoken : function(thetoken) {
-			
-		},
-		
-		placetoken : function(thetoken) {
+		placetokens : function(thetoken) {
             switch (thetoken.type)
 			{
 				
@@ -690,7 +690,7 @@ function (dojo, declare) {
             // Stop this event propagation
 			
             dojo.stopEvent( evt );
-			if( ! this.checkAction( 'playermovetile' ) )
+			if( ! this.checkAction( 'movetile' ) )
             {   return; }
 
             // Get the cliqued pos and Player field ID
@@ -701,14 +701,12 @@ function (dojo, declare) {
 			dojo.toggleClass(this.adventurer,"tileselected")
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			dojo.query(".borderpulse").removeClass("borderpulse");
-			
-			dojo.removeClass( 'swordholder','borderpulse' ) ;
-			dojo.disconnect ( $('sword'),'onclick',this,'rentsword');
-			
-			
-            if( this.checkAction( 'playermovetile' ) )    // Check that this action is possible at this moment
+		
+			 $('sword').onclick=null;
+		
+            if( this.checkAction( 'movetile' ) )    // Check that this action is possible at this moment
             {            
-                this.ajaxcall( "/takaraisland/takaraisland/playermovetile.html", {
+                this.ajaxcall( "/takaraisland/takaraisland/movetile.html", {
                     tile:tile,
                     destination:destination
                 }, this, function( result ) {} );
@@ -717,6 +715,16 @@ function (dojo, declare) {
 
 		rentsword: function( evt )
         {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'rentsword' ) )
+            {   return; }
+			dojo.removeClass( 'swordholder','borderpulse' ) ;
+			$('sword').onclick=null;
+			if( this.checkAction( 'rentsword' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/rentsword.html", {
+                }, this, function( result ) {} );
+            }            
 			
         },
         ///////////////////////////////////////////////////
@@ -743,7 +751,7 @@ function (dojo, declare) {
             // Example 2: standard notification handling + tell the user interface to wait
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
-            dojo.subscribe( 'playermovetile', this, "notif_playermovetile" );
+            dojo.subscribe( 'movetoken', this, "notif_movetoken" );
 			this.notifqueue.setSynchronous( 'playCard', 2000 );
 			dojo.subscribe( 'ObtainGems', this, "notif_ObtainGems" );
             this.notifqueue.setSynchronous( 'ObtainGems', 2000 );
@@ -768,12 +776,12 @@ function (dojo, declare) {
         /*
         Example:
         */
-        notif_playermovetile: function( notif )
+        notif_movetoken: function( notif )
         {
-            console.log( 'notif_playermovetile' );
+            console.log( 'notif_movetoken' );
             console.log( notif );
-			var card = notif.args.card_played;
-            this.slideToObjectRelative ("tile_"+notif.args.player_id+"_"+notif.args.tile, notif.args.destination,2000)
+			
+            this.slideToObjectRelative (notif.args.tile_id, notif.args.destination,1500)
         },
 		
 		notif_playerleaving: function( notif )
