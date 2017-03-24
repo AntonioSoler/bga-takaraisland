@@ -116,18 +116,18 @@
   padding: 10px;
 }
 
-.playerswordholder div:nth-child(1) {transform: rotate(520deg);}
+.playerswordholder div:nth-child(1) {
+transform: rotate(520deg);
+}
+
 #sword {
-  
   width: 49px;
   height: 100px;
   position: absolute;
-  transition: all 2s;
-  z-index: 10;
+  transition: transform 1.5s;
+  z-index: 100;
   background-image: url('img/sword.png');
 }
-
-
 
 .card {
   width:155px;
@@ -378,18 +378,15 @@
 
 #diveC div:nth-child(1) {
 
-	top:0px;
-	left:0px;
+	margin-left:0px;
 }
 #diveC div:nth-child(2) {
 
-    top:0px;
-    left: 65px;
+    margin-left: 65px;
 }
 #diveC div:nth-child(3) {
 
-    top:0px;
-    left:130px;
+    margin-left:130px;
 }
 
 #treasuredeck {
@@ -599,7 +596,8 @@ transform: rotate(0deg);
 }
 #deckholder5 {
  left: 690px;
-  top: 530px;
+ top: 530px;
+ position: absolute;
 }
 #deckholder6 {
  left: 860px;
@@ -631,7 +629,7 @@ transform: rotate(0deg);
  top: 440px;
 }
 .playercamp {
-  z-index: -100;
+  /* z-index: -100; */
   width: 380px;
   height: 277px;
   margin: 3px;
@@ -673,17 +671,21 @@ transform: rotate(0deg);
   top: 18px;
 }
 
-.playertileholder div:nth-child(1) {
-	top:0px!important;
-	left:0px!important;
+.playertileholder .playertile{
+	transition: margin-top 0.5s;
 }
-.playertileholder div:nth-child(2) {   
-	top:87px !important;
-	left:0px!important;
+
+.playertileholder div:nth-child(1) {
+	margin-top: 0px;
+	
+}
+.playertileholder div:nth-child(2) {
+	margin-top: 87px;
+	
 }
 .playertileholder div:nth-child(3) {
-	top:178px !important;
-	left:0px!important;
+	margin-top:178px;
+	
 }
 
 .cardstore {

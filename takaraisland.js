@@ -52,6 +52,7 @@ function (dojo, declare) {
             console.log( "Starting game setup" );
             this.param=new Array();
 			this.gameconnections=new Array();
+			this.swordconnection=new Array();
 			
             // Setting up player boards
 			
@@ -246,10 +247,23 @@ function (dojo, declare) {
 					if ( args.args.playermoves == 1 )
 					{
 						dojo.addClass( 'swordholder','borderpulse' ) ;
-						dojo.connect ( $('sword'),'onclick',this,'rentsword');
+						this.swordconnection.push( dojo.connect ( $('sword'),'onclick',this,'rentsword'));
 					}
 				}
 			break;
+			case 'endturn':
+			    
+			    this.slideToObjectRelative ("sword","swordholder");
+				list=dojo.query( '.playable .playertile' );
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;
+					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+					
+				}
+			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
+			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
+                break; 
 				
             case 'dummmy':
                 break;
@@ -269,25 +283,11 @@ function (dojo, declare) {
             
             switch( stateName )
             {
-            
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Hide the HTML block we are displaying only during this game state
-                dojo.style( 'my_html_block_id', 'display', 'none' );
-                
-                break;
-				
-           */
+
 		    case 'playermove':
 			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
                 break;	
-            case 'endturn':
-			    
-			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
-			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
-                break; 
+
             case 'dummmy':
                 break;
             }               
@@ -700,9 +700,8 @@ function (dojo, declare) {
 			
 			dojo.toggleClass(this.adventurer,"tileselected")
 			dojo.forEach(this.gameconnections, dojo.disconnect);
+			dojo.forEach(this.swordconnection, dojo.disconnect);
 			dojo.query(".borderpulse").removeClass("borderpulse");
-		
-			 $('sword').onclick=null;
 		
             if( this.checkAction( 'movetile' ) )    // Check that this action is possible at this moment
             {            
@@ -719,12 +718,13 @@ function (dojo, declare) {
 			if( ! this.checkAction( 'rentsword' ) )
             {   return; }
 			dojo.removeClass( 'swordholder','borderpulse' ) ;
-			$('sword').onclick=null;
+			dojo.forEach(this.swordconnection, dojo.disconnect);
 			if( this.checkAction( 'rentsword' ) )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/rentsword.html", {
                 }, this, function( result ) {} );
-            }            
+            }
+			
 			
         },
         ///////////////////////////////////////////////////

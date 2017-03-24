@@ -28,11 +28,12 @@
 	<div id="playareaup">
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
+				
 				<div id="swordholder">
 					<div id="sword"></div>
 				</div>
-				</div>
-				<div id="expertsC"></div>
+				
+				
 				<div id="expertholder1" class="expertholder">
 					<div id="expert1" class="card expert">
 						<div id="expert1_front" class="expert1 card-front"></div>
@@ -103,18 +104,21 @@
 
 				<div id="workersC"></div>
 				<div id="treasuredeck"></div>
-				<div id="counter"></div>
-				<div id="counterC"></div>
-				<div id="thedive"></div>
-				<div id="diveC"></div>
 				
-
-				<div id="explore1" class="exploreholder"></div>
-				<div id="explore2" class="exploreholder"></div>
-				<div id="explore3" class="exploreholder"></div>
-				<div id="explore4" class="exploreholder"></div>
-				<div id="explore5" class="exploreholder"></div>
-				<div id="explore6" class="exploreholder"></div>
+				<div id="counter"></div>
+				<div id="thedive"></div>
+				
+				
+					<div id="counterC" class="playable" ></div>			
+					<div id="diveC"    class="playable" ></div>
+					<div id="expertsC" class="playable" ></div>
+					<div id="explore1" class="exploreholder playable"></div>
+					<div id="explore2" class="exploreholder playable"></div>
+					<div id="explore3" class="exploreholder playable"></div>
+					<div id="explore4" class="exploreholder playable"></div>
+					<div id="explore5" class="exploreholder playable"></div>
+					<div id="explore6" class="exploreholder playable"></div>
+				
 				<div id="reward"   class="treasurereward"></div>
 			</div>
 		</div>
