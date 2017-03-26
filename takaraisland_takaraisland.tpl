@@ -123,16 +123,18 @@
 			</div>
 		</div>
 			<!-- BEGIN camp -->
-			<div id="playerCamp_{PLAYER_ID}" class="playercamp playercolor_{PLAYER_COLOR}" >
-				<div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
-				<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
-				<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
-				<div id="xpstore_{PLAYER_ID}" class="xpstore"></div>
-				<div id="TH_{PLAYER_ID}" class="playertileholder">
-					<div id="tile_{PLAYER_ID}_1" class="playertile tile1 color{PLAYER_COLOR}"></div>
-					<div id="tile_{PLAYER_ID}_2" class="playertile tile2 color{PLAYER_COLOR}"></div>
-					<div id="tile_{PLAYER_ID}_3" class="playertile tile3 color{PLAYER_COLOR}"></div>
-				
+			<div class="campwrapper">
+				<div id="playerCamp_{PLAYER_ID}" class="playercamp playercolor_{PLAYER_COLOR}" >
+					<div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
+					<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
+					<div id="playercardstore_{PLAYER_ID}" class="cardstore"></div>
+					<div id="xpstore_{PLAYER_ID}" class="xpstore"></div>
+					<div id="TH_{PLAYER_ID}" class="playertileholder">
+						<div id="tile_{PLAYER_ID}_1" class="playertile tile1 color{PLAYER_COLOR}"></div>
+						<div id="tile_{PLAYER_ID}_2" class="playertile tile2 color{PLAYER_COLOR}"></div>
+						<div id="tile_{PLAYER_ID}_3" class="playertile tile3 color{PLAYER_COLOR}"></div>
+					
+					</div>
 				</div>
 			</div>
 			<!-- END camp -->

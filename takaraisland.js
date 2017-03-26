@@ -561,7 +561,7 @@ function (dojo, declare) {
          * new parent immediately, so parent is correct during animation
          */
         slideToObjectRelative : function(token, finalPlace, tlen, tdelay, onEnd) {
-            this.stripPosition(token);
+            this.resetPosition(token);
 
             var box = this.attachToNewParentNoDestroy(token, finalPlace);
             var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
@@ -583,6 +583,14 @@ function (dojo, declare) {
             dojo.style(token, "position", null);
         },
 		
+		resetPosition : function(token) {
+            // console.log(token + " RESETING");
+            // remove any added positioning style
+            dojo.style(token, "display", null);
+            dojo.style(token, "top", "0px");
+            dojo.style(token, "left", "0px");
+            dojo.style(token, "position", null);
+        },
 		////////////////////////////////////////////////
 
 		giveGold: function ( source, destination ,amount) 
