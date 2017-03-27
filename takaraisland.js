@@ -63,6 +63,8 @@ function (dojo, declare) {
                 // Setting up players boards if needed
                 var player_board_div = $('player_board_'+player_id);
                 dojo.place( this.format_block('jstpl_player_board', player ), player_board_div );
+				dojo.byId("goldcount_p"+player_id).innerHTML=player['gold'];
+				dojo.byId("xpcount_p"+player_id).innerHTML=player['xp'];
             }
 
 			decks= ["deck1","deck2","deck3","deck4","deck5","deck6"];
@@ -307,7 +309,12 @@ function (dojo, declare) {
                     break;
               
                 case 'browsecards':
-                    //this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
+				    
+				    if ( args.monsterpresent == 1 )
+					{
+						this.addActionButton( 'revealmonster_button', _('Reveal monsters for 2 Kara Gold'), 'revealmonster' );
+					}	
+                    
 					this.addActionButton( 'viewdone_button', _("Done"), 'viewdone' ); 
                     break;
 /*               
@@ -603,10 +610,17 @@ function (dojo, declare) {
 				this.slideTemporaryObjectAndIncCounter( '<div class="coin spining"></div>', 'page-content', source, destination, 500 , animspeed );
 				animspeed += 300;
 			}
-			//for (var i = 1 ; i<= amount ; i++)
-			//{
-			//	$(destination).innerHTML++ ;
-			//}
+        },
+		
+		payGold: function ( source, destination ,amount) 
+		{
+			var animspeed=300;
+			for (var i = 1 ; i<= amount ; i++)
+			{
+				dojo.byId(source).innerHTML=eval(dojo.byId(source).innerHTML) - 1;
+				this.slideTemporaryObject( '<div class="coin spining"></div>', 'page-content', source, destination, 500 , animspeed );
+				animspeed += 300;
+			}
         },
 		
 		
@@ -767,6 +781,20 @@ function (dojo, declare) {
             }	
         },
 		
+		revealmonster: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'revealmonster' ) )
+            {  return; }
+			
+			if( this.checkAction( 'revealmonster' ) )    // Check that this action is possible at this moment
+            {           
+				dojo.destroy("revealmonster_button");
+                this.ajaxcall( "/takaraisland/takaraisland/revealmonster.html", {
+                }, this, function( result ) {} );
+            }	
+        },
+		
 		viewdone: function( evt )
         {
 			dojo.stopEvent( evt );
@@ -812,8 +840,9 @@ function (dojo, declare) {
 			dojo.subscribe('browsecards', this, "notif_browsecards");
             this.notifqueue.setSynchronous('browsecards', 3000);
 			
-			dojo.subscribe('artifactspicked', this, "notif_artifactspicked");
-            this.notifqueue.setSynchronous('artifactspicked', 2000);
+			dojo.subscribe('playergetgold', this, "notif_playergetgold");
+            this.notifqueue.setSynchronous('playergetgold', 2000);
+			
 			dojo.subscribe('playerexploring', this, "notif_playerexploring");
             this.notifqueue.setSynchronous('playerexploring', 1000);
 			dojo.subscribe('stcleanpockets', this, "notif_stcleanpockets");
@@ -866,6 +895,13 @@ function (dojo, declare) {
 			
         },
 		
+		notif_playergetgold: function( notif )
+        {
+            console.log( 'notif_playergetgold' );
+            console.log( notif );
+   
+			this.giveGold ( notif.args.source , "goldcount_p"+notif.args.player_id, notif.args.amount );
+        },			
 		
 		notif_playerleaving: function( notif )
         {

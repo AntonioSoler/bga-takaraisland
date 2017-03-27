@@ -75,7 +75,6 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
 		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
 		"action" => "stplayermove",
-		"args" => "argPlayerMoves",
 		"possibleactions" => array( "movetile", "rentsword" ),
         "updateGameProgression" => true,
         "transitions" => array( "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "playermove"=>3  ) 
@@ -129,6 +128,7 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is inspecting the cards from the survey of this site'),
 		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, reveal discovered monsters if wanted and press done when finished.'),
 		"possibleactions" => array( "revealmonster","viewdone"),
+		"args" => "argMonsterpresent",
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),

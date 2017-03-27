@@ -159,7 +159,7 @@ var jstpl_some_game_item='<div class="my_game_item" id="my_game_item_${id}" styl
 */
 
 var jstpl_woundtoken='<div  id="woundtoken_${id}" class="woundtoken" style="left: ${x}px; top: ${y}px;" ></div>';
-var jstpl_player_board = '<br>\<div class="cp_board">\<div id="gold_p${id}" class="goldcounter"> <div class="coin"></div> <span id="goldcount_p${id}"><b>0</b></span>\</div><div id="xp_p${id}" class="goldcounter"> <div class="xpcounter"></div> <span id="xpcount_p${id}"><b>0</b></span>\</div></div>';
+var jstpl_player_board = '<br>\<div class="cp_board"></b>\<div id="gold_p${id}" class="goldcounter"> <div class="coin"></div> <span id="goldcount_p${id}">0</span>\</div><div id="xp_p${id}" class="goldcounter"> <div class="xpcounter"></div> <span id="xpcount_p${id}">0</span></b>\</div></div>';
 
 </script>  
 

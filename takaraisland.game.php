@@ -34,6 +34,7 @@ class takaraisland extends Table
                 "gameOverTrigger" => 11,
 				"playermoves"   => 12,
 				"currentsite"   => 13,
+				"monsterpresent" => 14, 
 				
 				
             //    "my_second_global_variable" => 11,
@@ -110,6 +111,7 @@ class takaraisland extends Table
         self::setGameStateInitialValue( 'stonesfound', 0 ); // Stones of legend found
         self::setGameStateInitialValue( 'playermoves', 0 ); // number of movements done by the player (sword can be only the 1st)
 		self::setGameStateInitialValue( 'currentsite', 0 ); // Current focused site for dig / survey / fight / expert
+		self::setGameStateInitialValue( 'monsterpresent', 0 );
 
         $cards = array();
         foreach( $this->treasure_types as $cardType)
@@ -246,7 +248,7 @@ class takaraisland extends Table
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-        $sql = "SELECT player_id id, player_gold gold, player_color color, player_no nbr FROM player ";
+        $sql = "SELECT player_id id, player_gold gold, player_xp xp, player_color color, player_no nbr FROM player ";
 		
         $result['players'] = self::getCollectionFromDb( $sql ); //fields of all players are visible 
 		
@@ -441,26 +443,37 @@ class takaraisland extends Table
     {
 	self::checkAction( 'survey' );
 	$player_id = self::getActivePlayerId();
+	self::setGameStateValue('monsterpresent' ,0 );
 	$sitenr= self::getGameStateValue('currentsite');
 	$topcards=$this->cards->getCardsOnTop( 3 , 'deck'.$sitenr );
+	$cards=array();
 	foreach($topcards as $thiscard )
 	{
 		if ( $this->card_types[$thiscard['type']]['isMonster'] ==1 ) 
 		{
-			echo "TROLOLO";
+			self::setGameStateValue('monsterpresent' ,1 );;
 		}
-		cards.push ($thiscard)
-		if ( ($thiscard['type'] == '14' ) || ($thiscard['type'] == '4' ) ) 
+		array_push ($cards, $thiscard);
+		if ( ($thiscard['type'] == '14' ) || ($thiscard['type'] == '2' ) ) 
 		{
+			$sql = "UPDATE player set player_gold = player_gold + 2 WHERE Player_id = $player_id";
+			self::DbQuery( $sql );
+			self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 Kara Gold for detecting a rockfall in the survey' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'amount' => 2 ,  //deck1_item_card_3
+					'source' => $thiscard['location']."_item_card_". $thiscard['id']
+					) );
+			
 			break;
 		}
 	
 	}
 	
-	$cards=array();
 	
 	
-	self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards you can see on the surevey of Excavation site: ${sitenr}' ), array(
+	
+	self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards you can see on the survey of Excavation site: ${sitenr}' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'sitenr' => $sitenr ,
@@ -505,10 +518,10 @@ class takaraisland extends Table
         );
     }    
     */
-	function argPlayerMoves()
+	function argMonsterpresent()
     {
         return array(
-            'playermoves' => self::getGameStateValue( 'playermoves' )
+            'monsterpresent' => self::getGameStateValue( 'monsterpresent' )
         );
     }
 	
