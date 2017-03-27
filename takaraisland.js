@@ -305,6 +305,11 @@ function (dojo, declare) {
                     this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
 					this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
                     break;
+              
+                case 'browsecards':
+                    //this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
+					this.addActionButton( 'viewdone_button', _("Done"), 'viewdone' ); 
+                    break;
 /*               
                  Example:
  
@@ -356,10 +361,10 @@ function (dojo, declare) {
 			
 			var target = sourceclick.target || sourceclick.srcElement;
 			target_id=target.id;
-			card_id= target_id.replace(/\D+/g, "");  //Regex to all chars but numbers
+			card_id= target_id.replace(/\D+/g, "");  //Regex to remove all chars but numbers
 			
-			xpos= -150*((card_id - 1 )% image_items_per_row );
-			ypos= -200*(Math.floor( (card_id -1 ) / image_items_per_row ));
+			xpos= -150*((card_id )% image_items_per_row );
+			ypos= -200*(Math.floor( (card_id  ) / image_items_per_row ));
 			position= xpos+"px "+ ypos+"px ";
 			
 			dojo.style('treasuredeck_item_treasure_'+card_id +'_back', "background-position", position);
@@ -758,6 +763,19 @@ function (dojo, declare) {
 			if( this.checkAction( 'survey' ) )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/survey.html", {
+                }, this, function( result ) {} );
+            }	
+        },
+		
+		viewdone: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'viewdone' ) )
+            {  return; }
+			
+			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/viewdone.html", {
                 }, this, function( result ) {} );
             }	
         },

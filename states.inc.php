@@ -126,8 +126,8 @@ $machinestates = array(
 	8 => array(
         "name" => "browsecards",  // 
         "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is viewing the cards of the survey'),
-		"descriptionmyturn" => clienttranslate('${you} can view some cards of the selected Excavation site.'),
+        "description" => clienttranslate('${actplayer} is inspecting the cards from the survey of this site'),
+		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, reveal discovered monsters if wanted and press done when finished.'),
 		"possibleactions" => array( "revealmonster","viewdone"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //

@@ -77,6 +77,13 @@
 		self::ajaxResponse();    
 	}
 	
+	public function viewdone()
+    {
+		self::setAjaxMode();	
+		$this->game->viewdone();
+		self::ajaxResponse();    
+	}
+	
 	public function survey()
     {
 		self::setAjaxMode();	

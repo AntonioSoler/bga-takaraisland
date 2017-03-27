@@ -258,7 +258,7 @@ class takaraisland extends Table
 		
         $result['treasures'] = self::getCollectionFromDb( $sql );
 		
-		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards ";
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards ORDER BY card_location_arg";
 		
         $result['cards'] = self::getCollectionFromDb( $sql );
 		
@@ -379,7 +379,7 @@ class takaraisland extends Table
                 //die('ok');
 				if ( $this->getCardStatus($topcard['id']) == 1 ) 
 				{    //is the card visible?
-					if ( $card_types[$topcard['type']]['isMonster'] ==1 ) 
+					if ( $this->card_types[$topcard['type']]['isMonster'] ==1 ) 
 					{
 						$this->gamestate->nextState( 'fight' );
 					}
@@ -443,14 +443,39 @@ class takaraisland extends Table
 	$player_id = self::getActivePlayerId();
 	$sitenr= self::getGameStateValue('currentsite');
 	$topcards=$this->cards->getCardsOnTop( 3 , 'deck'.$sitenr );
+	foreach($topcards as $thiscard )
+	{
+		if ( $this->card_types[$thiscard['type']]['isMonster'] ==1 ) 
+		{
+			echo "TROLOLO";
+		}
+		cards.push ($thiscard)
+		if ( ($thiscard['type'] == '14' ) || ($thiscard['type'] == '4' ) ) 
+		{
+			break;
+		}
+	
+	}
+	
+	$cards=array();
+	
 	
 	self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards you can see on the surevey of Excavation site: ${sitenr}' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'sitenr' => $sitenr ,
-					'cards' => $topcards
+					'cards' => $cards
 					) );
 			
+	$this->gamestate->nextState( 'browsecards' );
+    }
+	
+	function viewdone()
+    {
+	self::checkAction( 'viewdone' );
+	$player_id = self::getActivePlayerId();
+	
+	$this->gamestate->nextState( );
 	
     }
 
@@ -557,6 +582,15 @@ class takaraisland extends Table
 	{
 
 		//$this->gamestate->nextState( );
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	function stbrowsecards()
+	{
+
+		
 		
 	}
 	
