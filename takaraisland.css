@@ -482,6 +482,7 @@ transform: rotate(0deg);
   border-color: #21a7b6;
   border-radius: 35px;
   border-style: dashed;
+  display: flex;
 }
 
 .exploreholder div:nth-child(1) 

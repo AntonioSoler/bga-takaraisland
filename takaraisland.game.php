@@ -32,7 +32,8 @@ class takaraisland extends Table
         parent::__construct();self::initGameStateLabels( array( 
                 "stonesfound" => 10,
                 "gameOverTrigger" => 11,
-				"playermoves"   => 12
+				"playermoves"   => 12,
+				"currentsite"   => 13,
 				
 				
             //    "my_second_global_variable" => 11,
@@ -107,7 +108,8 @@ class takaraisland extends Table
         // setup the initial game situation here
 
         self::setGameStateInitialValue( 'stonesfound', 0 ); // Stones of legend found
-        self::setGameStateInitialValue( 'playermoves', 0 );
+        self::setGameStateInitialValue( 'playermoves', 0 ); // number of movements done by the player (sword can be only the 1st)
+		self::setGameStateInitialValue( 'currentsite', 0 ); // Current focused site for dig / survey / fight / expert
 
         $cards = array();
         foreach( $this->treasure_types as $cardType)
@@ -304,7 +306,16 @@ class takaraisland extends Table
         In this space, you can put any utility methods useful for your game logic
     */
 
-	
+	function getCardStatus($thiscard_id)
+    {
+        //Compute and return the game progression
+        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
+
+        $result = 0;
+        $sql = "SELECT card_status from cards where card_id=". $thiscard_id;
+		$result = self::getUniqueValueFromDB( $sql ) ;
+        return ($result);
+    }
 	
 	
 //////////////////////////////////////////////////////////////////////////////
@@ -352,26 +363,95 @@ class takaraisland extends Table
 				'player_name' => self::getActivePlayerName(),
 				'destination' => $destination,
 				'tile_id' => "tile_".$player_id."_".$tile
-				) );
-	
-	$this->gamestate->nextState( 'dig' );
-	
+				) );	
+	switch ($destination) 
+		{
+			case "explore1":
+			case "explore2":
+			case "explore3":
+			case "explore4":
+			case "explore5":
+			case "explore6":
+			    $sitenr= substr( $destination, 7, 1) ;
+				self::setGameStateValue('currentsite', $sitenr );
+				$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
+				//var_dump( $topcard );
+                //die('ok');
+				if ( $this->getCardStatus($topcard['id']) == 1 ) 
+				{    //is the card visible?
+					if ( $card_types[$topcard['type']]['isMonster'] ==1 ) 
+					{
+						$this->gamestate->nextState( 'fight' );
+					}
+				}
+					
+				else
+				{
+					$this->gamestate->nextState( 'exploresite' );
+				}
+				break;
+			case "diveC":
+				
+				$this->gamestate->nextState( 'playermove' );
+				break;
+			case "counterC":
+				$this->gamestate->nextState( 'playermove' );
+				break;
+		}
     }
 
     function rentsword()
     {
 	self::checkAction( 'rentsword' );
 	$player_id = self::getActivePlayerId();
+	if ( self::getGameStateValue ('playermoves') == 1) 
+		{
+		self::DbQuery( "UPDATE tokens SET card_location='playerSwordholder_$player_id' WHERE card_type='4'" );
+		self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} rents the magic sword.' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'destination' => "playerSwordholder_".$player_id,
+					'tile_id' => "sword"
+					) );
+			
+		}	
+    }
 	
-	self::DbQuery( "UPDATE tokens SET card_location='playerSwordholder_$player_id' WHERE card_type='4'" );
-    self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} rents the magic sword.' ), array(
-				'player_id' => $player_id,
-				'player_name' => self::getActivePlayerName(),
-				'destination' => "playerSwordholder_".$player_id,
-				'tile_id' => "sword"
-				) );
-		
-	;	
+	function dig()
+    {
+	self::checkAction( 'dig' );
+	$player_id = self::getActivePlayerId();
+	$sitenr= self::getGameStateValue('currentsite');
+	$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
+	//var_dump( $topcard );
+	$card=self::getObjectFromDB( "SELECT * FROM cards WHERE card_id=".$topcard['id'] );
+	
+	self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs a card on the excavation site: ${sitenr}' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'sitenr' => $sitenr ,
+					'card' => $topcard
+					) );
+					
+	$this->gamestate->nextState( 'dig' );
+	
+    }
+	
+	function survey()
+    {
+	self::checkAction( 'survey' );
+	$player_id = self::getActivePlayerId();
+	$sitenr= self::getGameStateValue('currentsite');
+	$topcards=$this->cards->getCardsOnTop( 3 , 'deck'.$sitenr );
+	
+	self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards you can see on the surevey of Excavation site: ${sitenr}' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'sitenr' => $sitenr ,
+					'cards' => $topcards
+					) );
+			
+	
     }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -444,7 +524,13 @@ class takaraisland extends Table
 	function stplayermove()
 	{
 		    self::incGameStateValue( 'playermoves' , 1 );
+			
 			$player_id=self::getActivePlayerId();
+			if ( self::getGameStateValue('playermoves') == 1 )
+			{
+				self::notifyPlayer($player_id, "activatesword", "" , array() );	
+			}
+			
 			$sql = "SELECT COUNT(*) from tokens where card_location = 'TH_$player_id'";
 			$availableAdventurers = self::getUniqueValueFromDB( $sql );
 			if ( $availableAdventurers == 0 )
@@ -470,7 +556,7 @@ class takaraisland extends Table
 	function stexploresite()
 	{
 
-		$this->gamestate->nextState( );
+		//$this->gamestate->nextState( );
 		
 	}
 	
@@ -479,7 +565,17 @@ class takaraisland extends Table
 		
 	function stdig()
 	{
-
+        
+		$player_id = self::getActivePlayerId();
+		$sitenr= self::getGameStateValue('currentsite');
+		$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
+		//var_dump ($this->card_types[$topcard['type']]['name'] ) ;
+		//switch ($this->card_types[$topcard['type']]['name'] ) 
+		//{
+		//	case "explore1":
+	
+		
+		
 		$this->gamestate->nextState("playermove");
 		
 	}

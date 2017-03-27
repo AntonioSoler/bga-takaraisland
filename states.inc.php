@@ -78,7 +78,7 @@ $machinestates = array(
 		"args" => "argPlayerMoves",
 		"possibleactions" => array( "movetile", "rentsword" ),
         "updateGameProgression" => true,
-        "transitions" => array( "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "dig" => 12, "playermove"=>3  ) 
+        "transitions" => array( "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "playermove"=>3  ) 
     ),
 	
 	 4 => array(

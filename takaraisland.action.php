@@ -70,6 +70,20 @@
 		self::ajaxResponse();    
 	}
 	
+	public function dig()
+    {
+		self::setAjaxMode();	
+		$this->game->dig();
+		self::ajaxResponse();    
+	}
+	
+	public function survey()
+    {
+		self::setAjaxMode();	
+		$this->game->survey();
+		self::ajaxResponse();    
+	}
+	
 	 public function movetile()
     {
 		self::setAjaxMode();
