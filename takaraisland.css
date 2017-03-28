@@ -639,6 +639,32 @@ transform: rotate(0deg);
     position: relative;
     display: inline-block;
 }
+.bigcoin {
+    width: 44px;
+    height: 44px;
+    z-index: 100;
+    background-image: url(img/coin.png);
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+}
+.spining{	
+	animation: spin 1s infinite;
+	-webkit-animation: spin 1s infinite;
+	transform: rotate(1deg);
+}
+
+/* Standard syntax */
+@keyframes spin {
+	from{transform: rotate(1deg)}	
+	to {transform: rotate(359deg) }
+}
+
+@-webkit-keyframes spin {	
+	from{transform: rotate(1deg)}	
+	to {transform: rotate(359deg) }
+	}
+
 .xpcounter {
     width: 30px;
     height: 30px;

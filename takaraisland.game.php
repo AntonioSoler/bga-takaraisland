@@ -264,6 +264,10 @@ class takaraisland extends Table
 		
         $result['cards'] = self::getCollectionFromDb( $sql );
 		
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' AND card_status=1 ORDER BY card_location_arg";
+		
+        $result['visiblecards'] = self::getCollectionFromDb( $sql );
+		
 		/*
 		$sql = "SELECT player_tent FROM player WHERE player_id='$current_player_id'";
         $result['tent'] = self::getUniqueValueFromDB( $sql );  //only you can see your tent
@@ -393,7 +397,12 @@ class takaraisland extends Table
 				}
 				break;
 			case "diveC":
-				
+				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 1 Kara Gold for visiting "The Dive"' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'amount' => 1 ,  
+					'source' => "diveC"
+					) );
 				$this->gamestate->nextState( 'playermove' );
 				break;
 			case "counterC":
@@ -427,7 +436,8 @@ class takaraisland extends Table
 	$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
 	//var_dump( $topcard );
 	$card=self::getObjectFromDB( "SELECT * FROM cards WHERE card_id=".$topcard['id'] );
-	
+	$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcard['id'];
+			self::DbQuery( $sql );
 	self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs a card on the excavation site: ${sitenr}' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
@@ -457,6 +467,8 @@ class takaraisland extends Table
 		if ( ($thiscard['type'] == '14' ) || ($thiscard['type'] == '2' ) ) 
 		{
 			$sql = "UPDATE player set player_gold = player_gold + 2 WHERE Player_id = $player_id";
+			self::DbQuery( $sql );
+			$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$thiscard['id'];
 			self::DbQuery( $sql );
 			self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 Kara Gold for detecting a rockfall in the survey' ), array(
 					'player_id' => $player_id,

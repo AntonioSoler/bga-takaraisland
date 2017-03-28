@@ -153,7 +153,7 @@ function (dojo, declare) {
 			dojo.connect( $('button_deck5'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck6'), 'onclick', this, 'browseGatherDeck' );
 			
-			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );
+			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );  // FOR TEST!!!
 			
 			dojo.connect( $('dice'), 'onclick', this, 'rolldice' ); // FOR TEST!!!!
 
@@ -162,6 +162,13 @@ function (dojo, declare) {
 				var thistoken = this.gamedatas.tokens[i];
 				this.placetokens(thistoken);
             }
+			
+			for( var i in this.gamedatas.visiblecards )
+            {
+				var thiscard = this.gamedatas.visiblecards[i];
+				this.flipcard(thiscard, true);
+            }
+			
 
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3>&#128481; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
@@ -604,22 +611,22 @@ function (dojo, declare) {
 
 		giveGold: function ( source, destination ,amount) 
 		{
-			var animspeed=300;
+			var animspeed=200;
 			for (var i = 1 ; i<= amount ; i++)
 			{
-				this.slideTemporaryObjectAndIncCounter( '<div class="coin spining"></div>', 'page-content', source, destination, 500 , animspeed );
-				animspeed += 300;
+				this.slideTemporaryObjectAndIncCounter( '<div class="bigcoin spining"></div>', 'page-content', source, destination, 1000 , animspeed );
+				animspeed += 200;
 			}
         },
 		
 		payGold: function ( source, destination ,amount) 
 		{
-			var animspeed=300;
+			var animspeed=200;
 			for (var i = 1 ; i<= amount ; i++)
 			{
 				dojo.byId(source).innerHTML=eval(dojo.byId(source).innerHTML) - 1;
-				this.slideTemporaryObject( '<div class="coin spining"></div>', 'page-content', source, destination, 500 , animspeed );
-				animspeed += 300;
+				this.slideTemporaryObject( '<div class="bigcoin spining"></div>', 'page-content', source, destination, 1000 , animspeed );
+				animspeed += 200;
 			}
         },
 		
@@ -899,7 +906,7 @@ function (dojo, declare) {
         {
             console.log( 'notif_playergetgold' );
             console.log( notif );
-   
+            this.gamedatas.players[notif.args.player_id]+=notif.args.amount;
 			this.giveGold ( notif.args.source , "goldcount_p"+notif.args.player_id, notif.args.amount );
         },			
 		
