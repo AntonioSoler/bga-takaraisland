@@ -155,7 +155,7 @@ function (dojo, declare) {
 			
 			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );  // FOR TEST!!!
 			
-			dojo.connect( $('dice'), 'onclick', this, 'rolldice' ); // FOR TEST!!!!
+			
 
 			for( var i in this.gamedatas.tokens )
             {
@@ -245,32 +245,42 @@ function (dojo, declare) {
 			    
 			    if (this.isCurrentPlayerActive() )
 				{
-					dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
-					var list = dojo.query('#TH_' +this.getActivePlayerId() +' .playertile');
+					list =dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
+					
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
 					}
-					
+				$('diceresult').class=null;
+			    $('dice').class=null;	
 					
 				}
 			break;
-			case 'endturn':
-			    
-			    this.slideToObjectRelative ("sword","swordholder");
-				list=dojo.query( '.playable .playertile' );
-				for (var i = 0; i < list.length; i++)
+			
+				
+            case 'endturn':
+			    if (this.isCurrentPlayerActive() )
 				{
-					var thiselement = list[i].id;
-					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+					
+					list=dojo.query( '#workersC #tile_'+this.getActivePlayerId() +'_3' ).addClass( 'borderpulse' ) ;
+					for (var i = 0; i < list.length; i++)
+					{
+						var thiselement = list[i];
+						this.recruitcon= dojo.connect(thiselement, 'onclick' , this, 'recruit')
+					}
+					
+					list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
+					if ( list.length > 0 )
+					
+					{
+						dojo.addClass("HospitalC",'borderpulse' ) ;
+						this.gameconnections.push( dojo.connect($("HospitalC"), 'onclick' , this, 'payhospital'))
+					}
 					
 				}
-			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
-			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
-                break; 
-				
-            case 'dummmy':
+			
+			
                 break;
 		    
            
@@ -292,6 +302,22 @@ function (dojo, declare) {
 		    case 'playermove':
 			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
                 break;	
+				
+			case 'endturn':
+			    
+			    this.slideToObjectRelative ("sword","swordholder");
+				list=dojo.query( '.playable .playertile' );
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;
+					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+					
+				}
+				dojo.forEach(this.gameconnections, dojo.disconnect);
+			    dojo.query(".borderpulse").removeClass("borderpulse");
+			    this.gameconnections=[];
+			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
+                break; 	
 
             case 'dummmy':
                 break;
@@ -323,7 +349,12 @@ function (dojo, declare) {
                     
 					this.addActionButton( 'viewdone_button', _("Done"), 'viewdone' ); 
                     break;
-/*               
+					
+				 case 'endturn':
+					this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
+					break;
+					
+				/*              
                  Example:
  
                  case 'myGameState':
@@ -361,18 +392,18 @@ function (dojo, declare) {
 			_("Gallery: this card gives Kara Gold when digged"),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
 			_("Experience: this card gives XP points when digged" ),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
 			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Gallery: this card gives Kara Gold when digged"),
 			_("Experience: this card gives XP points when digged" ),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
 			_("Experience: this card gives XP points when digged" ),
 			_("Gallery: this card gives Kara Gold when digged"),
 			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
@@ -418,12 +449,12 @@ function (dojo, declare) {
 				}
 		},
 		
-		rolldice : function(thetoken) {
+		rolldice : function(r) {
 			dojo.toggleClass("dice",'rolled');
 			if(dojo.hasClass("dice", "rolled"))
 				{var audio = new Audio(g_gamethemeurl+'sound/roll.mp3');
 				audio.play();
-				r=Math.floor((Math.random() * 6 ) + 1);
+				//r=Math.floor((Math.random() * 6 ) + 1);
 				diceresult ="num"+r;	
 				dojo.replaceClass("diceresult",diceresult);
 			}
@@ -510,7 +541,7 @@ function (dojo, declare) {
 			this.slideToObjectRelative ("expert"+thetoken.type_arg, thetoken.location);
 			if (thetoken.location_arg==1) 
 			{
-				dojo.toggleClass("expert"+thetoken.type_arg , "flipped", true);
+				dojo.toggleClass("expert"+thetoken.type_arg , "visible", true);
 			}
 		},
 		
@@ -798,6 +829,53 @@ function (dojo, declare) {
 			
         },
 		
+		recruit: function( evt )
+        {
+			//dojo.stopEvent( evt );
+			if( ! this.checkAction( 'recruit' ) )
+            {   return; }
+			dojo.removeClass( 'tile_'+this.getActivePlayerId()+'_3','borderpulse' ) ;
+			dojo.disconnect(this.recruitcon);
+			
+			if( this.checkAction( 'recruit' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=5 )  )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/recruit.html", {
+                }, this, function( result ) {} );
+            }
+			else
+			{
+				this.showMessage  ( _("You cannot afford to recruit a new adventurer..."), "info")
+			}
+			
+        },
+		
+		payhospital: function( evt )
+        {
+			//dojo.stopEvent( evt );
+			if( ! this.checkAction( 'payhospital' ) )
+            {   return; }
+			list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
+			if ( list.length == 0 )
+			
+			{
+				dojo.removeClass("HospitalC",'borderpulse' ) ;
+				dojo.forEach(this.gameconnections, dojo.disconnect);
+			    this.gameconnections=[];
+				this.showMessage  ( _("You have no more adventurers in the Hospital..."), "info")
+				
+			}
+			else if( this.checkAction( 'payhospital' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=2 )  )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/payhospital.html", {
+                }, this, function( result ) {} );
+            }
+			else
+			{
+				this.showMessage  ( _("You cannot afford to pay Hospital fee..."), "info")
+			}
+			
+        },
+		
 		dig: function( evt )
         {
 			//dojo.stopEvent( evt );
@@ -898,6 +976,12 @@ function (dojo, declare) {
 			dojo.subscribe('playergetxp', this, "notif_playergetxp");
             this.notifqueue.setSynchronous('playergetxp', 1000);
 			
+			dojo.subscribe('rolldice', this, "notif_rolldice");
+            this.notifqueue.setSynchronous('rolldice', 3500);
+			
+			dojo.subscribe('placewound', this, "notif_placewound");
+            this.notifqueue.setSynchronous('placewound', 1000);
+			
 			dojo.subscribe('tableWindow', this, "notif_finalScore");
             this.notifqueue.setSynchronous('tableWindow', 5000);
             // 
@@ -967,7 +1051,7 @@ function (dojo, declare) {
             console.log( 'notif_removecard' );
             console.log( notif );
 			
-            this.slideToObjectAndDestroy (notif.args.tile_id, notif.args.destination,1500)
+            this[notif.args.deck].removeFromStockById (notif.args.tile_id, notif.args.destination)
         },
 		
 		notif_playergetxp: function( notif )
@@ -979,7 +1063,25 @@ function (dojo, declare) {
 			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id);
         },
 		
+		notif_rolldice: function( notif )
+        {
+            console.log( 'notif_rolldice' );
+			
+            console.log( notif );
+           
+			$('diceresult').class=null;
+			$('dice').class=null;
+			
+			this.rolldice(notif.args.result);
+        },
 		
+		notif_placewound: function( notif )
+        {
+			console.log( 'notif_placewound' );
+			
+            console.log( notif );
+			this.placewound(notif.args.token);
+		},
 		notif_finalScore: function (notif) 
 		{
             console.log('**** Notification : finalScore');

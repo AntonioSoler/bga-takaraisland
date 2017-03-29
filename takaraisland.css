@@ -220,6 +220,7 @@ transition: transform 1.5s;
   border-style: solid;
   border-color: #ffb00f;
   transform: rotate(10deg);
+  display: flex;
 }
 
 .hospitalthumb{
@@ -255,28 +256,6 @@ transition: transform 1.5s;
   background-position: bottom left;
 }
 
-
-
-#HospitalC div:nth-child(1) {
-    z-index:1!important;
-	top:0px!important;
-	left:220px!important;
-}
-#HospitalC div:nth-child(2) {
-    z-index:2!important;
-	top:80px!important;
-	left:0px!important;
-}
-#HospitalC div:nth-child(3) {
-    z-index:3!important;
-	top:80px!important;
-	left:240px!important;
-}
-#HospitalC div:nth-child(4) {
-    z-index:4!important;
-	top:0px!important;
-	left:0px!important;
-}
 
 #WaitingroomC {
   border: 0px;
@@ -437,7 +416,7 @@ transform: rotate(0deg);
   background-image:url('img/browse.gif');
 }
 
-.deckholder .deck {
+.deckholder .deck>:nth-child(2) {
     box-shadow: 12px 10px 5px 4px rgba(0, 0, 0, 0.72);
 }
 

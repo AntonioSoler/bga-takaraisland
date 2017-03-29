@@ -107,10 +107,24 @@
 		self::ajaxResponse();    
 	}	
 	
-	 public function pass()
+	 public function recruit()
     {
 		self::setAjaxMode();
-		$this->game->pass();
+		$this->game->recruit();
+		self::ajaxResponse();    
+	}
+	
+	public function payhospital()
+    {
+		self::setAjaxMode();
+		$this->game->payhospital();
+		self::ajaxResponse();    
+	}
+	
+	 public function finish()
+    {
+		self::setAjaxMode();
+		$this->game->finish();
 		self::ajaxResponse();    
 	}
 

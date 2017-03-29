@@ -77,16 +77,16 @@ $machinestates = array(
 		"action" => "stplayermove",
 		"possibleactions" => array( "movetile", "rentsword" ),
         "updateGameProgression" => true,
-        "transitions" => array( "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "playermove"=>3  ) 
+        "transitions" => array( "playermove" => 3 , "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "fight" => 11 ) 
     ),
 	
 	 4 => array(
         "name" => "endturn",  //  pay hospital and hire new recruit
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
-		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or pass'),
+		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or '),
 		"action" => "stendturn",
-		"possibleactions" => array( "payhospital", "recruit", 'pass' ),
+		"possibleactions" => array( "payhospital", "recruit", 'viewdone' ),
         "updateGameProgression" => false,
         "transitions" => array("" => 2) //
     ),
@@ -126,7 +126,7 @@ $machinestates = array(
         "name" => "browsecards",  // 
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is inspecting the cards from the survey of this site'),
-		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, reveal discovered monsters if wanted and press done when finished.'),
+		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, reveal discovered monsters if wanted and when finished press:'),
 		"possibleactions" => array( "revealmonster","viewdone"),
 		"args" => "argMonsterpresent",
         "updateGameProgression" => false,
@@ -140,7 +140,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} are sending an adventurer to an Excavation site'),
 		"possibleactions" => array( "dig","survey"),
         "updateGameProgression" => false,
-        "transitions" => array( "dig" => 12 , "fight" => 11 , "browsecards" => 8  ) //
+        "transitions" => array( "dig" => 12 ,  "browsecards" => 8  ) //
     ),
     
 	10 => array(
