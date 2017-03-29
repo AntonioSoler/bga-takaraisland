@@ -82,7 +82,7 @@ $machinestates = array(
 	
 	 4 => array(
         "name" => "endturn",  //  pay hospital and hire new recruit
-        "type" => "game",
+        "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
 		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or pass'),
 		"action" => "stendturn",
@@ -170,7 +170,7 @@ $machinestates = array(
         "type" => "game",
         "action" => "stdig",
         "updateGameProgression" => true,
-        "transitions" => array( "playermove" => 3 , "fight" => 11 , "gettreasure" =>10)
+        "transitions" => array( "playermove" => 3  , "gettreasure" =>10)
     ),
 		
     90 => array(

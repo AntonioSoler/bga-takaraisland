@@ -124,18 +124,17 @@ transition: transform 1.5s;
 
 #sword {
   width: 49px;
-  height: 100px;
+  height: 110px;
   position: absolute;
   transition: transform 1.5s;
   z-index: 100;
   background-image: url('img/sword.png');
   transform: rotate(0deg);
-  
 }
 
 .card {
-  width:155px;
-  height:205px;
+  width: 150px;
+  height: 200px;
   transition: transform 1s ease-out;
 }
 	
@@ -430,6 +429,7 @@ transform: rotate(0deg);
   width: 99%;
   height: 200px;
   position: absolute;
+  border-radius: 8%;
 }
 
 .deckholder .deck:hover .buttondiv {  
@@ -437,8 +437,12 @@ transform: rotate(0deg);
   background-image:url('img/browse.gif');
 }
 
-.deck div:last-child {
-    box-shadow: 15px 10px 8px 0px rgba(6, 6, 6, 0.61);
+.deckholder .deck {
+    box-shadow: 12px 10px 5px 4px rgba(0, 0, 0, 0.72);
+}
+
+.tablecards .deck .card{
+    box-shadow: 5px 4px 4px 1px rgba(0, 0, 0, 0.72);
 }
 
 

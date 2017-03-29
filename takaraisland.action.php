@@ -84,6 +84,13 @@
 		self::ajaxResponse();    
 	}
 	
+	public function revealmonster()
+    {
+		self::setAjaxMode();	
+		$this->game->revealmonster();
+		self::ajaxResponse();    
+	}
+	
 	public function survey()
     {
 		self::setAjaxMode();	

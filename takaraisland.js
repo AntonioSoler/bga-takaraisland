@@ -163,13 +163,6 @@ function (dojo, declare) {
 				this.placetokens(thistoken);
             }
 			
-			for( var i in this.gamedatas.visiblecards )
-            {
-				var thiscard = this.gamedatas.visiblecards[i];
-				this.flipcard(thiscard, true);
-            }
-			
-
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3>&#128481; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
 				
@@ -198,7 +191,7 @@ function (dojo, declare) {
 			_( " THE DIVE:  <hr>  <b> The local pub of the ilsand. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
 			
 			this.addTooltipHtml("counter",  "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point." )+"</div>", "" );
+			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point. <p><b> XP tokens adquired on the Counter cannot be sold back </b>" )+"</div>", "" );
 			
 			this.addTooltipHtml("expertsC",  "<div class='tooltipimage' ><img src='"+ g_gamethemeurl +"img/expert_front.jpg'  height='100' width='75' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE DOCKS:  <hr>  <b> A player can send here 1 Adventurer per turn to hire an Specialist.<p> The Specialists can perform special operations depending on the type. <p> The Specialist card is moved to the player's board <p> A the end of the turn  the Specialist has to rest for another turn: this card fliped faced down. <p> Faced down Specialists are returned to the docks at the end of the next turn." )+"</div>", "" );
@@ -215,6 +208,12 @@ function (dojo, declare) {
 			this.addTooltipToClass("coin", "Kara Gold","");
 			
             this.setupNotifications();
+			
+			for( var i in this.gamedatas.visiblecards )
+            {
+				var thiscard = this.gamedatas.visiblecards[i];
+				this.flipcard(thiscard, true);
+            }
 
             console.log( "Ending game setup" );
         },
@@ -358,7 +357,33 @@ function (dojo, declare) {
 			ypos= -200*(Math.floor( (card_art ) / image_items_per_row ));
 			position= xpos+"px "+ ypos+"px ";
 			dojo.style(card.location+'_item_card_'+card.id+"_back" , "background-position", position);
-
+			cardtooltips =["",
+			_("Gallery: this card gives Kara Gold when digged"),
+			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
+			_("Experience: this card gives XP points when digged" ),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Gallery: this card gives Kara Gold when digged"),
+			_("Experience: this card gives XP points when digged" ),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
+			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
+			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospotal" ),
+			_("Experience: this card gives XP points when digged" ),
+			_("Gallery: this card gives Kara Gold when digged"),
+			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Drake: a POWEFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points"),
+			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points")]
+			
+			this.addTooltip(card.location+'_item_card_'+card.id+"_back", cardtooltips[card.type] ,"");
+			
 			if (visible) 
 				{
 				dojo.toggleClass( card.location+'_item_card_'+card.id, "visible", true);
@@ -608,6 +633,12 @@ function (dojo, declare) {
             dojo.style(token, "position", null);
         },
 		////////////////////////////////////////////////
+		
+		giveXp: function ( source, player ,amount , thetoken_id) 
+		{
+				dojo.byId("xpcount_p"+player).innerHTML=eval(dojo.byId("xpcount_p"+player).innerHTML) + amount;
+				this["xpstore_"+player].addToStockWithId( amount ,thetoken_id, source );
+		},
 
 		giveGold: function ( source, destination ,amount) 
 		{
@@ -720,7 +751,7 @@ function (dojo, declare) {
         {
             // Stop this event propagation
 			
-            dojo.stopEvent( evt );
+            //dojo.stopEvent( evt );
 			if( ! this.checkAction( 'movetile' ) )
             {   return; }
 
@@ -749,22 +780,27 @@ function (dojo, declare) {
 
 		rentsword: function( evt )
         {
-			dojo.stopEvent( evt );
+			//dojo.stopEvent( evt );
 			if( ! this.checkAction( 'rentsword' ) )
             {   return; }
 			dojo.removeClass( 'swordholder','borderpulse' ) ;
 			dojo.disconnect(this.swordconnection);
 			this.swordconnection=null;
-			if( this.checkAction( 'rentsword' ) )    // Check that this action is possible at this moment
+			if( this.checkAction( 'rentsword' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=3 )  )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/rentsword.html", {
                 }, this, function( result ) {} );
-            }	
+            }
+			else
+			{
+				this.showMessage  ( _("You cannot afford to rent the sword..."), "info")
+			}
+			
         },
 		
 		dig: function( evt )
         {
-			dojo.stopEvent( evt );
+			//dojo.stopEvent( evt );
 			if( ! this.checkAction( 'dig' ) )
             {  return; }
 			
@@ -777,7 +813,7 @@ function (dojo, declare) {
 		
 		survey: function( evt )
         {
-			dojo.stopEvent( evt );
+			//dojo.stopEvent( evt );
 			if( ! this.checkAction( 'survey' ) )
             {  return; }
 			
@@ -790,7 +826,7 @@ function (dojo, declare) {
 		
 		revealmonster: function( evt )
         {
-			dojo.stopEvent( evt );
+			//dojo.stopEvent( evt );
 			if( ! this.checkAction( 'revealmonster' ) )
             {  return; }
 			
@@ -804,7 +840,7 @@ function (dojo, declare) {
 		
 		viewdone: function( evt )
         {
-			dojo.stopEvent( evt );
+			//dojo.stopEvent( evt );
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
 			
@@ -839,23 +875,31 @@ function (dojo, declare) {
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
             dojo.subscribe( 'movetoken', this, "notif_movetoken" );
-			this.notifqueue.setSynchronous( 'playCard', 2000 );
+			this.notifqueue.setSynchronous( 'movetoken', 1000 );
+			
 			dojo.subscribe( 'activatesword', this, "notif_activatesword" );
-            this.notifqueue.setSynchronous( 'activatesword', 0 );
+            this.notifqueue.setSynchronous( 'activatesword', 500 );
+			
 			dojo.subscribe('revealcard', this, "notif_revealcard");
-            this.notifqueue.setSynchronous('revealcard', 3000);
+            this.notifqueue.setSynchronous('revealcard', 2000);
+			
 			dojo.subscribe('browsecards', this, "notif_browsecards");
             this.notifqueue.setSynchronous('browsecards', 3000);
 			
-			dojo.subscribe('playergetgold', this, "notif_playergetgold");
-            this.notifqueue.setSynchronous('playergetgold', 2000);
+			dojo.subscribe('playerpaysgold', this, "notif_playerpaysgold");
+            this.notifqueue.setSynchronous('playerpaysgold', 1000);
 			
-			dojo.subscribe('playerexploring', this, "notif_playerexploring");
-            this.notifqueue.setSynchronous('playerexploring', 1000);
-			dojo.subscribe('stcleanpockets', this, "notif_stcleanpockets");
-            this.notifqueue.setSynchronous('stcleanpockets', 4000);
+			dojo.subscribe('playergetgold', this, "notif_playergetgold");
+            this.notifqueue.setSynchronous('playergetgold', 1000);
+			
+			dojo.subscribe( 'removecard', this, "notif_removecard" );
+			this.notifqueue.setSynchronous( 'removecard', 2000 );
+			
+			dojo.subscribe('playergetxp', this, "notif_playergetxp");
+            this.notifqueue.setSynchronous('playergetxp', 1000);
+			
 			dojo.subscribe('tableWindow', this, "notif_finalScore");
-            this.notifqueue.setSynchronous('tableWindow', 8000);
+            this.notifqueue.setSynchronous('tableWindow', 5000);
             // 
         },  
         
@@ -906,152 +950,35 @@ function (dojo, declare) {
         {
             console.log( 'notif_playergetgold' );
             console.log( notif );
-            this.gamedatas.players[notif.args.player_id]+=notif.args.amount;
+            this.gamedatas.players[notif.args.player_id]['gold']+=notif.args.amount;
 			this.giveGold ( notif.args.source , "goldcount_p"+notif.args.player_id, notif.args.amount );
         },			
 		
-		notif_playerleaving: function( notif )
+		notif_playerpaysgold: function( notif )
         {
-            console.log( 'notif_playerleaving' );
-			notif.args=this.notifqueue.playerNameFilterGame(notif.args);
+            console.log( 'notif_playerpaysgold' );
             console.log( notif );
-			this.placeVotecard ( notif.args.thisid , "Leave" );
-			this.addTooltipToClass( "votecardLeave", _( "This player has voted to return to camp and has stored his gems in the tent" ), "" );
-            var animspeed=0;
-			gems = dojo.byId("gem_field_"+notif.args.thisid).innerHTML
-			if ( gems >=1 )
-			{
-				for ( var g=1 ; g<=gems  ; g++ )
-				{
-					if (this.gamedatas.current_player_id == notif.args.thisid) 
-						{
-						this.slideTemporaryObjectAndIncCounter ( '<div class="gem spining"></div>', 'page-content', "gem_field_"+notif.args.thisid , "tent_"+notif.args.thisid , 500 , animspeed );
-						}
-					else 
-						{
-						this.slideTemporaryObject( '<div class="gem spining"></div>', 'page-content', "gem_field_"+notif.args.thisid , "tent_"+notif.args.thisid, 500 , animspeed );
-						}
-					animspeed += 300;
-				}
-			}
+            this.gamedatas.players[notif.args.player_id]['gold']+=notif.args.amount;
+			this.payGold ( "goldcount_p"+notif.args.player_id, notif.args.destination , notif.args.amount );
+        },	
+		
+		notif_removecard: function( notif )
+        {
+            console.log( 'notif_removecard' );
+            console.log( notif );
 			
-			if ( notif.args.gems >=1 )
-			{	
-				animspeed=0;
-				gemarray=dojo.query('[id^=tablecards_] > *');
-				for ( var g=0 ; g<= notif.args.gems-1  ; g++ )
-				{   
-			        try {    //Surrounding this with a TRY-CATCH because there is a race condition, if the user presses F5 during this process the gamedatas would give us 0 gems on the cards to pick.
-					    pickedgem=gemarray[g];
-						source=pickedgem.parentElement.id
-					    dojo.destroy( pickedgem.id );
-						
-						if (this.gamedatas.current_player_id == notif.args.thisid) 
-							{
-							this.slideTemporaryObjectAndIncCounter ( '<div class="gem spining"></div>', 'page-content', source , "tent_"+notif.args.thisid , 500 , animspeed );
-							}
-						else 
-							{
-							this.slideTemporaryObject( '<div class="gem spining"></div>', 'page-content', source , "tent_"+notif.args.thisid , 500 , animspeed );
-							}
-						animspeed += 300;
-					}
-					catch(err) {}
-					
-				}
-			}
-			dojo.byId("gem_field_"+notif.args.thisid).innerHTML = 0 ;
+            this.slideToObjectAndDestroy (notif.args.tile_id, notif.args.destination,1500)
         },
 		
-		notif_playerexploring: function( notif )
+		notif_playergetxp: function( notif )
         {
-            console.log( 'notif_playerexploring' );
-			notif.args=this.notifqueue.playerNameFilterGame(notif.args);
+            console.log( 'notif_playergetxp' );
             console.log( notif );
-			this.placeVotecard ( notif.args.thisid , "Explore" );			
+            this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;
 			
-			this.addTooltipToClass( "votecardExplore", _( "This player has voted to continue exploring" ), "" );
+			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id);
         },
 		
-		notif_artifactspicked: function( notif )
-        {
-            console.log( 'notif_artifactspicked' );
-			notif.args=this.notifqueue.playerNameFilterGame(notif.args);
-            console.log( notif );
-			if ( notif.args.extra >0 )
-			{
-				animspeed = 0;
-				if (this.gamedatas.current_player_id == notif.args.thisid) 
-						{
-						this.slideTemporaryObjectAndIncCounter ( '<div class="gem spining"></div>', 'page-content', "field_"+notif.args.thisid , "tent_"+notif.args.thisid , 500 , animspeed );
-						}
-					else 
-						{
-						this.slideTemporaryObject( '<div class="gem spining"></div>', 'page-content', "field_"+notif.args.thisid , "tent_"+notif.args.thisid, 500 , animspeed );
-						}
-				animspeed += 300;
-			}	
-			for ( card_id in notif.args.cards )				
-			{    
-				this.moveCard ( notif.args.cards[card_id].id ,'field_'+notif.args.thisid , 1 );
-			}
-        },
-		
-		notif_stcleanpockets: function( notif )
-        {
-            console.log( 'notif_stcleanpockets' );
-            console.log( notif );
-			var card = notif.args.card_played;
-            
-			this.moveCard ( card.id ,'templePanel', 0);
-			dojo.query(".isartifact").addClass("animatedcard");
-			artifacts=document.getElementsByClassName("isartifact");
-			for (i=0 ; i< artifacts.length ; i++ )
-			    {
-					this.slideToObjectAndDestroy ( artifacts[i].id,'templePanel', 400 ,0);
-					dojo.place( "<div class='artifacticon removed'></div>" , 'templecard5' , "last");
-					this.addTooltipToClass( "removed", _( "This artifact was not picked by the explorers and now is lost forever in the temple" ), "" );
-				}	
-        },
-		
-        notif_ObtainGems: function( notif )
-        {
-            console.log( 'notif_ObtainGems' );
-            console.log( notif );
-			var card = notif.args.card_played;
-			for (i in notif.args.players)
-			{			
-				 this.moveGem ( "tablecards_item_tablecard_"+card.id , "gem_field_"+this.gamedatas.players[i].id , notif.args.gems )
-			}
-		    
-        },
-		notif_reshuffle: function( notif )
-        {
-            console.log( 'notif_reshuffle' );
-            console.log( notif );
-			dojo.query(".isartifact").addClass("animatedcard");
-			artifacts=document.getElementsByClassName("isartifact");
-			for (i=0 ; i< artifacts.length ; i++ )
-			    {
-					this.slideToObjectAndDestroy ( artifacts[i].id,'templePanel', 400 ,0);
-					dojo.place( "<div class='artifacticon removed'></div>" , 'templecard5' , "last");
-					this.addTooltipToClass( "removed", _( "This artifact was not picked by the explorers and now is lost forever in the temple" ), "" );
-				}
-			if (notif.args.iterations <=5 )
-			{
-				for (i in this.gamedatas.players )
-				{			
-					dojo.byId( "gem_field_"+this.gamedatas.players[i].id ).innerHTML=0;
-					this.placeVotecard ( this.gamedatas.players[i].id , "Back" )  
-				}
-				this.tablecards.removeAll();
-				
-				this.slideTemporaryObject( "<div  class='templecard t"+ notif.args.iterations +" on spining'></div>" , 'templePanel', 'templePanel', "templecard"+notif.args.iterations, 400, 0);  
-				dojo.addClass( "templecard"+notif.args.iterations ,"on")
-				dojo.byId("decksize").innerHTML=notif.args.cardsRemaining;
-			}
-			
-        },
 		
 		notif_finalScore: function (notif) 
 		{
