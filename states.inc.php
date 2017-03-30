@@ -144,11 +144,12 @@ $machinestates = array(
     ),
     
 	10 => array(
-        "name" => "gettreasure",  // 
+        "name" => "gettreasure",  
         "description" => clienttranslate('${actplayer} obtains a treasure'),
 		"descriptionmyturn" => clienttranslate('${you} obtain a treasure'),
-        "type" => "game",
+        "type" => "activeplayer",
         "action" => "sttreasure",
+		"possibleactions" => array( "choosereward"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 )
     ),

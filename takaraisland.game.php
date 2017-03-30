@@ -299,7 +299,7 @@ class takaraisland extends Table
         // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
 
         $result = 0;
-        $cardsDrawn = $this->cards->countCardsInLocation( 'discard' );
+        $cardsDrawn = $this->cards->countCardsInLocation( 'removed' );
 		$result = $cardsDrawn * 2 ;
         return ($result);
     }
@@ -800,7 +800,7 @@ class takaraisland extends Table
 			$wounds=self::getUniqueValueFromDB( "SELECT COUNT(*) c FROM tokens where card_location='deck".$sitenr."_item_card_".$topcard['id']."_back'" );		
 		} while ($life > $wounds);
 		
-		if ($life=$wounds)
+		if ( $wounds >= $life )
 		{   
 			self::DbQuery( "DELETE FROM tokens WHERE card_location ='deck".$sitenr."_item_card_".$topcard['id']."_back'");
 			self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} beats the ${monstername}.' ), array(
@@ -934,6 +934,16 @@ class takaraisland extends Table
 						break;
 			case "13":       // TREASURE
 			case "18":
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "card_". $topcard['id'],
+								'deck' => $topcard['location']
+								) );
+						$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+						self::DbQuery( $sql );
+						$this->gamestate->nextState("gettreasure");
 						
 						break;
 			case "2":       // ROCKFALL
@@ -1017,7 +1027,77 @@ class takaraisland extends Table
 		
 	}
 
-
+////////////////////////////////////////////////////////////////////////////
+	
+	function sttreasure()
+	{
+        
+		$player_id = self::getActivePlayerId();
+		$topcard=$this->treasures->getCardOnTop( 'deck' );
+		self::notifyAllPlayers( "fliptreasure", clienttranslate( '${player_name} reveals a treasure card ' ), array(
+				'player_id' => $player_id,
+				'player_name' => self::getActivePlayerName(),
+				'card' => $topcard
+					) );
+		
+		self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} obtain a treasure!!!' ), array(
+				'player_id' => $player_id,
+				'player_name' => self::getActivePlayerName(),
+				'destination' => "playercardstore_".$player_id,
+				'tile_id' => "treasure_". $topcard['id'],
+				'deck' => 'treasuredeck'
+					) );
+		$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+			self::DbQuery( $sql );
+		
+		switch ($topcard['type'] ) 
+		{
+			case  "1":  
+			case  "4":
+			case  "5":
+			case  "6":
+			case  "7":
+			case  "8":
+						
+							
+						$xp=$this->treasure_types[$topcard['type']]['xp'];
+						$gold=$this->treasure_types[$topcard['type']]['gold'];
+						
+						if ($gold>0)
+						{
+							self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );
+							self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} Kara Gold' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'amount' => $gold,
+								'source' => "playercardstore_".$player_id
+								) );
+						}
+						if ($xp>0)
+						{
+							self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
+							$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
+							self::DbQuery( $sql );
+							$token_id=self::DbGetLastId();
+							self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'amount' => $xp,
+								'source' => "playercardstore_".$player_id,
+								'token_id' => $token_id
+								) );
+						}	
+						break;
+			case  "2":     
+			case  "3": 
+			
+						break;
+		}					
+		
+		$this->gamestate->nextState();
+		
+	}
+	
 ////////////////////////////////////////////////////////////////////////////
 
     function displayScores()

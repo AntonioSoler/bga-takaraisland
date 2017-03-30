@@ -82,6 +82,8 @@
   height: 738px;
   background-image: url('img/board.jpg');
   position:relative;
+  box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
+  background-color: white;
 }
 
 #campswrapper {
@@ -609,6 +611,7 @@ transform: rotate(0deg);
   position: relative;
   margin: 10px;
   display: inline;
+  box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
 }
 .cp_board{
   display: inline-flex;
@@ -630,6 +633,8 @@ transform: rotate(0deg);
     background-size: cover;
     position: relative;
     display: inline-block;
+    border-radius: 50%;
+       box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
 }
 .spining{	
 	animation: spin 1s infinite;
@@ -697,9 +702,9 @@ transform: rotate(0deg);
 .playerswordholder {
   border: 0px;
   width: 60px;
-  height: 14px;
+  height: 104px;
   top: 0px;
-  left: 225px;
+  left: 246px;
   position: absolute;
   border-style: solid;
   border-color: #c0dd00;
@@ -719,8 +724,8 @@ transform: rotate(0deg);
 }
 .xpstore {
   border: 0px;
-  width: 210px;
-  height: 50px;
+  width: 230px;
+  height: 51px;
   top:20px;
   left: 0px;
   position: absolute;

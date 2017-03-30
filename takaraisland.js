@@ -80,13 +80,13 @@ function (dojo, declare) {
 				this[decks[i]].jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\"></div><div id=\"${id}_back\" class=\"card-back\"></div>";
 			}
 			
-			this.treasures = new ebg.stock();
-			this.treasures.create( this, $("treasuredeck"), this.cardwidth, this.cardheight );
-			this.treasures.image_items_per_row = 3;
-			this.treasures.setSelectionMode( 0 );
-			this.treasures.item_margin = 0;
-			this.treasures.setOverlap( 0.05 , 0 );
-			this.treasures.jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card treasure\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\" ></div><div id=\"${id}_back\" class=\"card-back\"></div>";
+			this.treasuredeck = new ebg.stock();
+			this.treasuredeck.create( this, $("treasuredeck"), this.cardwidth, this.cardheight );
+			this.treasuredeck.image_items_per_row = 3;
+			this.treasuredeck.setSelectionMode( 0 );
+			this.treasuredeck.item_margin = 0;
+			this.treasuredeck.setOverlap( 0.05 , 0 );
+			this.treasuredeck.jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card treasure\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\" ></div><div id=\"${id}_back\" class=\"card-back\"></div>";
 
 			
 			for (  i in gamedatas.players ) 
@@ -142,8 +142,8 @@ function (dojo, declare) {
 			for( var i in this.gamedatas.treasures )
             {		
 				var card = this.gamedatas.treasures[i];
-				this.treasures.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
-				this.treasures.addToStockWithId( card.id , "treasure_"+card.id  )
+				this.treasuredeck.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
+				this.treasuredeck.addToStockWithId( card.id , "treasure_"+card.id  )
             }
 			
 			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
@@ -252,8 +252,8 @@ function (dojo, declare) {
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
 					}
-				$('diceresult').class=null;
-			    $('dice').class=null;	
+					
+					
 					
 				}
 			break;
@@ -319,7 +319,9 @@ function (dojo, declare) {
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
                 break; 	
 
-            case 'dummmy':
+            case 'fight':
+				dojo.replaceClass('diceresult','no');
+			    dojo.replaceClass('dice','no');
                 break;
             }               
         }, 
@@ -425,43 +427,36 @@ function (dojo, declare) {
 				}
 		},
 		
-		fliptreasure: function ( sourceclick,card, visible )
+		fliptreasure: function ( card, visible )
 		{
 			image_items_per_row=3;
+			//card_id= target_id.replace(/\D+/g, "");  //Regex to remove all chars but numbers
 			
-			var target = sourceclick.target || sourceclick.srcElement;
-			target_id=target.id;
-			card_id= target_id.replace(/\D+/g, "");  //Regex to remove all chars but numbers
-			
-			xpos= -150*((card_id )% image_items_per_row );
-			ypos= -200*(Math.floor( (card_id  ) / image_items_per_row ));
+			xpos= -150*((card.type )% image_items_per_row );
+			ypos= -200*(Math.floor( (card.type  ) / image_items_per_row ));
 			position= xpos+"px "+ ypos+"px ";
 			
-			dojo.style('treasuredeck_item_treasure_'+card_id +'_back', "background-position", position);
-            this.slideToObjectRelative ('treasuredeck_item_treasure_'+card_id , "reward",1000,1000);
+			dojo.style('treasuredeck_item_treasure_'+card.id +'_back', "background-position", position);
+            this.slideToObjectRelative ('treasuredeck_item_treasure_'+card.id , "reward",1000,1000);
 			if (visible) 
 				{
-				dojo.toggleClass('treasuredeck_item_treasure_'+card_id , "visible", true);
+				dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "visible", true);
 				}		
 			else
 				{
-				dojo.toggleClass('treasuredeck_item_treasure_'+card_id, "flipped", true);
+				dojo.toggleClass('treasuredeck_item_treasure_'+card.id, "flipped", true);
 				}
 		},
 		
 		rolldice : function(r) {
-			dojo.toggleClass("dice",'rolled');
-			if(dojo.hasClass("dice", "rolled"))
-				{var audio = new Audio(g_gamethemeurl+'sound/roll.mp3');
+			    dojo.toggleClass("dice",'rolled');
+			
+				var audio = new Audio(g_gamethemeurl+'sound/roll.mp3');
 				audio.play();
 				//r=Math.floor((Math.random() * 6 ) + 1);
 				diceresult ="num"+r;	
 				dojo.replaceClass("diceresult",diceresult);
-			}
-			else
-			{
-				dojo.replaceClass("diceresult","")
-			}
+			
 		},
 		
 		selectadventurer : function(sourceclick) {
@@ -977,10 +972,13 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('playergetxp', 1000);
 			
 			dojo.subscribe('rolldice', this, "notif_rolldice");
-            this.notifqueue.setSynchronous('rolldice', 3500);
+            this.notifqueue.setSynchronous('rolldice', 4000);
 			
 			dojo.subscribe('placewound', this, "notif_placewound");
-            this.notifqueue.setSynchronous('placewound', 1000);
+            this.notifqueue.setSynchronous('placewound', 2000);
+			
+			dojo.subscribe('fliptreasure', this, "notif_fliptreasure");
+            this.notifqueue.setSynchronous('fliptreasure', 2000);
 			
 			dojo.subscribe('tableWindow', this, "notif_finalScore");
             this.notifqueue.setSynchronous('tableWindow', 5000);
@@ -1069,8 +1067,7 @@ function (dojo, declare) {
 			
             console.log( notif );
            
-			$('diceresult').class=null;
-			$('dice').class=null;
+			
 			
 			this.rolldice(notif.args.result);
         },
@@ -1078,10 +1075,21 @@ function (dojo, declare) {
 		notif_placewound: function( notif )
         {
 			console.log( 'notif_placewound' );
+			dojo.replaceClass('dice','no');
+			dojo.replaceClass('diceresult','no');
 			
             console.log( notif );
 			this.placewound(notif.args.token);
 		},
+		
+		notif_fliptreasure: function( notif )
+        {
+            console.log( 'notif_fliptreasure' );
+            console.log( notif );
+   
+			this.fliptreasure ( notif.args.card, true );
+        },	
+		
 		notif_finalScore: function (notif) 
 		{
             console.log('**** Notification : finalScore');
