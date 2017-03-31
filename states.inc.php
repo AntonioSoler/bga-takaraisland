@@ -65,8 +65,8 @@ $machinestates = array(
 		"description" => clienttranslate('a new turn starts...'),
         "type" => "game",
         "action" => "ststartturn",
-        "updateGameProgression" => true,
-        "transitions" => array( "playermove" => 3, "gameEndScoring" => 90 ) //game ends if  2 stones found or 4/5 decks are depleted
+        "updateGameProgression" => false,
+        "transitions" => array( "playermove" => 3 ) 
     ),
 
     3 => array(
@@ -76,19 +76,19 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
 		"action" => "stplayermove",
 		"possibleactions" => array( "movetile", "rentsword" ),
-        "updateGameProgression" => true,
-        "transitions" => array( "playermove" => 3 , "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "fight" => 11 ) 
+        "updateGameProgression" => true, //game ends if  2 stones found or 4/5 decks are depleted
+        "transitions" => array( "playermove" => 3 , "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "fight" => 11 , "gameEndScoring" => 90) 
     ),
 	
 	 4 => array(
         "name" => "endturn",  //  pay hospital and hire new recruit
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
-		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach or '),
+		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach, when done press:'),
 		"action" => "stendturn",
 		"possibleactions" => array( "payhospital", "recruit", 'viewdone' ),
         "updateGameProgression" => false,
-        "transitions" => array("" => 2) //
+        "transitions" => array("" => 13) //
     ),
 	
 	5 => array(
@@ -172,6 +172,16 @@ $machinestates = array(
         "action" => "stdig",
         "updateGameProgression" => true,
         "transitions" => array( "playermove" => 3  , "gettreasure" =>10)
+    ),
+	
+	13 => array(
+	    "name" => "finish",
+	    "description" => clienttranslate('${actplayer} is finishing the turn'),
+		"descriptionmyturn" => clienttranslate('${you} are finishing the turn'),
+        "type" => "activeplayer",
+        "action" => "stfinish",
+        "updateGameProgression" => true,
+        "transitions" => array( "" => 2 )
     ),
 		
     90 => array(

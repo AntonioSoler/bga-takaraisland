@@ -153,10 +153,6 @@ function (dojo, declare) {
 			dojo.connect( $('button_deck5'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck6'), 'onclick', this, 'browseGatherDeck' );
 			
-			this.addEventToClass ("treasure ", 'onclick' , 'fliptreasure' );  // FOR TEST!!!
-			
-			
-
 			for( var i in this.gamedatas.tokens )
             {
 				var thistoken = this.gamedatas.tokens[i];
@@ -252,13 +248,9 @@ function (dojo, declare) {
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
 					}
-					
-					
-					
 				}
-			break;
+				break;
 			
-				
             case 'endturn':
 			    if (this.isCurrentPlayerActive() )
 				{
@@ -279,10 +271,44 @@ function (dojo, declare) {
 					}
 					
 				}
-			
-			
-                break;
-		    
+				break;
+				
+		    case 'finish':
+			    
+			    list=dojo.query( '#WaitingroomC div[id^="tile_'+this.getActivePlayerId()+'"]') ;
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;
+					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+				}
+				list=dojo.query( '#HospitalC div[id^="tile_'+this.getActivePlayerId()+'"]') ;
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;
+					this.slideToObjectRelative ( thiselement , "WaitingroomC" ) ;
+				}
+				
+				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' .visible') ;
+				for (var i = 0; i < list.length; i++)
+				{
+					
+					var thiselement = list[i].id;  //expert1
+					dojo.toggleClass(thiselement, 'visible');
+					this.slideToObjectRelative ( thiselement , thiselement.substr(0, 6) + "holder" + thiselement.substr(6) ) ;
+				}
+				
+				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' div[id^="expert"]') ;
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;  //expert1
+					dojo.toggleClass(thiselement, 'visible');
+				}
+				
+				dojo.forEach(this.gameconnections, dojo.disconnect);
+			    dojo.query(".borderpulse").removeClass("borderpulse");
+			    this.gameconnections=[];
+			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
+                break; 		
            
             case 'dummmy':
                 break;
@@ -311,14 +337,13 @@ function (dojo, declare) {
 				{
 					var thiselement = list[i].id;
 					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
-					
 				}
 				dojo.forEach(this.gameconnections, dojo.disconnect);
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
                 break; 	
-
+			
             case 'fight':
 				dojo.replaceClass('diceresult','no');
 			    dojo.replaceClass('dice','no');
@@ -450,17 +475,20 @@ function (dojo, declare) {
 		
 		rolldice : function(r) {
 			    dojo.toggleClass("dice",'rolled');
-			
-				var audio = new Audio(g_gamethemeurl+'sound/roll.mp3');
-				audio.play();
-				//r=Math.floor((Math.random() * 6 ) + 1);
+			    if ( soundManager.bMuteSound == false)
+				{
+					var audio = new Audio(g_gamethemeurl+'img/roll.mp3');
+					audio.play();
+				}
+				/*playSound( 'die-roll' );*/
+				
 				diceresult ="num"+r;	
 				dojo.replaceClass("diceresult",diceresult);
 			
 		},
 		
 		selectadventurer : function(sourceclick) {
-			multilocations=["diveC","explore1","explore2","explore3","explore4","explore5","explore6"]
+			
 			var browseddeck = "";
 			var target = sourceclick.target || sourceclick.srcElement;
 			this.adventurer=target.id;
@@ -480,10 +508,16 @@ function (dojo, declare) {
 				dojo.toggleClass("counterC","borderpulse");
 				this.gameconnections.push ( dojo.connect( $("counterC"),'onclick',this,'playermovetile'));
 			}
-			for ( i in multilocations	)
+			dojo.toggleClass( 'diveC' ,"borderpulse");
+			this.gameconnections.push ( dojo.connect($('diveC') ,'onclick',this,'playermovetile'));
+			
+			for ( i=1 ; i<=6 ; i++ )
 			{	
-				dojo.toggleClass( multilocations[i] ,"borderpulse");
-				this.gameconnections.push ( dojo.connect($(multilocations[i]) ,'onclick',this,'playermovetile'));			
+				if ($('deck'+i).children.length > 1 )
+				{
+					dojo.toggleClass( 'explore'+i ,"borderpulse");
+					this.gameconnections.push ( dojo.connect($('explore'+i) ,'onclick',this,'playermovetile'));
+				}
 			}
 			},
 		
@@ -510,10 +544,27 @@ function (dojo, declare) {
 				case "9":
 				case "10":
 						this.moveexpert(thetoken);
+						break;
+				case "11":
+				case "12":
+						this.placestone(thetoken);
 						break; 
 			}
         },
 		
+		
+		placestone: function(thetoken) {
+		x =  -150 * ( thetoken.type - 8 ) ;  	
+		y = -600;
+		dojo.place(
+                this.format_block('jstpl_stonetoken', {
+                    id: thetoken.id ,
+					x : x,
+					y : y				
+                }), thetoken.location);
+		this.addTooltipToClass( "stonetoken", _( "Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points" ), "" );
+    
+		},
 		
 		placewound: function(thetoken) {
 		x = Math.floor(Math.random() * 50) + 50;  	
@@ -540,9 +591,7 @@ function (dojo, declare) {
 			}
 		},
 		
-		moveplayertile: function(thetoken) {
-			
-			
+		moveplayertile: function(thetoken) {		
 			this.slideToObjectRelative ("tile_"+thetoken.type_arg+"_"+thetoken.type, thetoken.location);			
 		},
 		
@@ -551,16 +600,13 @@ function (dojo, declare) {
 		},
 
 		browseGatherDeck : function(sourceclick,deck) {
-            
-			var browseddeck = "";
+    		var browseddeck = "";
 
 			if ( typeof deck == 'undefined')
 			{
-				
 				var target = sourceclick.target || sourceclick.srcElement;
 				deck = target.id.charAt(11);
 			}
-			
 			
 			if (dojo.byId("tablecards").children.length > 0 )
 			{
@@ -572,8 +618,7 @@ function (dojo, declare) {
 			if ( thisdeck==browseddeck) 
 			{
 				this[thisdeck].item_margin = 0;			
-				this[thisdeck].setOverlap( 0.5 , 0 );
-				
+				this[thisdeck].setOverlap( 0.5 , 0 );				
 				this.slideToObjectRelative (thisdeck, returndeck);			
 			}
 			else
@@ -583,16 +628,13 @@ function (dojo, declare) {
 		            this[browseddeck].item_margin = 0;	
 					this[browseddeck].setOverlap( 0.5 , 0 );
 					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
-				    
 					this.slideToObjectRelative (browseddeck, returndeck);
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
 				this[thisdeck].setOverlap( 100 , 0 );
-							
 			}
         },
-		
 		
 		attachToNewParentNoDestroy : function(mobile, new_parent) {
             if (mobile === null) {
@@ -687,7 +729,6 @@ function (dojo, declare) {
 			}
         },
 		
-		
 		slideToObjectAndDestroyAndIncCounter: function( mobile_obj , to, duration, delay ) 
 		{
 			var obj = dojo.byId(mobile_obj );
@@ -726,7 +767,6 @@ function (dojo, declare) {
 				target=this.param.shift();
 				dojo.byId(target).innerHTML=eval(dojo.byId(target).innerHTML) + 1;
 		}, 
-		
 		
         ///////////////////////////////////////////////////
         //// Player's action
@@ -950,6 +990,9 @@ function (dojo, declare) {
             dojo.subscribe( 'movetoken', this, "notif_movetoken" );
 			this.notifqueue.setSynchronous( 'movetoken', 1000 );
 			
+			dojo.subscribe( 'placestone', this, "notif_placestone" );
+			this.notifqueue.setSynchronous( 'placestone', 1000 );
+			
 			dojo.subscribe( 'activatesword', this, "notif_activatesword" );
             this.notifqueue.setSynchronous( 'activatesword', 500 );
 			
@@ -994,15 +1037,19 @@ function (dojo, declare) {
         {
             console.log( 'notif_movetoken' );
             console.log( notif );
-			
             this.slideToObjectRelative (notif.args.tile_id, notif.args.destination,1500)
         },
 		
+		notif_placestone: function( notif )
+        {
+            console.log( 'notif_placestone' );
+            console.log( notif );
+            this.placestone (notif.args.token)
+        },
 		notif_activatesword: function( notif )
         {
             console.log( 'notif_activatesword' );
             console.log( notif );
-			
             dojo.addClass( 'swordholder','borderpulse' ) ;
 			this.swordconnection= dojo.connect ( $('sword'),'onclick',this,'rentsword');
         },
@@ -1011,7 +1058,6 @@ function (dojo, declare) {
         {
             console.log( 'notif_revealcard' );
             console.log( notif );
-   
 			this.flipcard ( notif.args.card, true );
         },			
 		
@@ -1020,13 +1066,11 @@ function (dojo, declare) {
             console.log( 'notif_browsecards' );
             console.log( notif );         
 			this.browseGatherDeck ( null , notif.args.sitenr );
-		
 			for (i=0; i<notif.args.cards.length ; i++)
 			{	
 				this.flipcard ( notif.args.cards[i], false );
 			}
-			
-        },
+		},
 		
 		notif_playergetgold: function( notif )
         {
@@ -1048,27 +1092,21 @@ function (dojo, declare) {
         {
             console.log( 'notif_removecard' );
             console.log( notif );
-			
-            this[notif.args.deck].removeFromStockById (notif.args.tile_id, notif.args.destination)
+		    this[notif.args.deck].removeFromStockById (notif.args.tile_id, notif.args.destination)
         },
 		
 		notif_playergetxp: function( notif )
         {
             console.log( 'notif_playergetxp' );
             console.log( notif );
-            this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;
-			
+            this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;	
 			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id);
         },
 		
 		notif_rolldice: function( notif )
         {
             console.log( 'notif_rolldice' );
-			
             console.log( notif );
-           
-			
-			
 			this.rolldice(notif.args.result);
         },
 		
@@ -1076,8 +1114,7 @@ function (dojo, declare) {
         {
 			console.log( 'notif_placewound' );
 			dojo.replaceClass('dice','no');
-			dojo.replaceClass('diceresult','no');
-			
+			dojo.replaceClass('diceresult','no');			
             console.log( notif );
 			this.placewound(notif.args.token);
 		},
@@ -1086,7 +1123,6 @@ function (dojo, declare) {
         {
             console.log( 'notif_fliptreasure' );
             console.log( notif );
-   
 			this.fliptreasure ( notif.args.card, true );
         },	
 		

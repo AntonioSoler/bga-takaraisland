@@ -86,7 +86,9 @@
 	7  => array( 'name' => $this->resources["expert"         ], 'type_id' => 7  ),
 	8  => array( 'name' => $this->resources["expert"         ], 'type_id' => 8  ),
 	9  => array( 'name' => $this->resources["expert"         ], 'type_id' => 9  ),
-	10 => array( 'name' => $this->resources["expert"         ], 'type_id' => 10 )
+	10 => array( 'name' => $this->resources["expert"         ], 'type_id' => 10 ),
+	11 => array( 'name' => $this->resources["stone of legend"], 'type_id' => 11 ),
+	12 => array( 'name' => $this->resources["stone of legend"], 'type_id' => 12 )
 );
 
 

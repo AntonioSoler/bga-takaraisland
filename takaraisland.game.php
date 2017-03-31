@@ -713,13 +713,32 @@ class takaraisland extends Table
 	function stendturn()
 	{
 		$player_id = self::getActivePlayerId();
-		self::DbQuery( "UPDATE tokens SET card_location='TH_$player_id' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and ((card_location like 'explore%') or (card_location in ('diveC','counterC','expertsC'))) " );
+		self::DbQuery( "UPDATE tokens SET card_location='TH_$player_id' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and ((card_location like 'explore%') or (card_location in ('diveC','counterC','expertsC','WaitingroomC'))) " );
 		self::DbQuery( "UPDATE tokens SET card_location='swordholder' WHERE card_type='4'" );
-		
-		//$this->gamestate->nextState( );
+		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('workersC','HospitalC') and card_type_arg=$player_id";
+		$tiles = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
+		if ($tiles == 0 )
+		{
+			$this->gamestate->nextState( );
+		}
 		
 	}
 	
+	////////////////////////////////////////////////////////////////////////////
+	
+	function stfinish()
+	{
+		$player_id = self::getActivePlayerId();
+		self::DbQuery( "UPDATE tokens SET card_location='WaitingroomC' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and (card_location like 'HospitalC') " );
+		
+		self::DbQuery( "UPDATE tokens SET card_location=CONCAT('expertholder',card_type_arg ) , card_location_arg=0 WHERE card_type in ('7','8','9','10') and (card_location like 'playercardstore_$player_id') AND card_location_arg=1 " );
+		
+		self::DbQuery( "UPDATE tokens SET card_location_arg=1 WHERE card_type in ('7','8','9','10') and (card_location like 'playercardstore_$player_id') " );
+		
+			$this->gamestate->nextState( );
+		
+		
+	}
 	////////////////////////////////////////////////////////////////////////////
 	
 		
@@ -1019,6 +1038,28 @@ class takaraisland extends Table
 						break;
 			case "22":    // STONE OF LEGEND
 			case "23":
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} FINDS A STONE OF LEGEND!!!' ), array(
+							'player_id' => $player_id,
+							'player_name' => self::getActivePlayerName(),
+							'destination' => "playercardstore_".$player_id,
+							'tile_id' => "card_". $topcard['id'],
+							'deck' => $topcard['location']
+							) );
+						
+				        $sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+						self::DbQuery( $sql );
+						$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (". ( $topcard['type'] -11) .",0,'playercardstore_$player_id')";
+						self::DbQuery( $sql );
+						$token_id=self::DbGetLastId();
+						$thetoken=self::getObjectFromDB("SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg from tokens where card_id=$token_id");
+				
+						self::notifyAllPlayers( "placestone", clienttranslate( '${player_name} collects a Stone of Legend' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'token' => $thetoken
+								) );		
+						
+						self::incGameStateValue('stonesfound',1);
 						
 						break;
 		}					
