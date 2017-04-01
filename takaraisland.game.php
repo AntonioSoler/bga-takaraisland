@@ -417,7 +417,7 @@ class takaraisland extends Table
 				$this->gamestate->nextState( 'playermove' );
 				break;
 			case "counterC":
-				$this->gamestate->nextState( 'playermove' );
+				$this->gamestate->nextState( 'exchange' );
 				break;
 			case "expertsC":
 				$this->gamestate->nextState( 'playermove' );
@@ -584,6 +584,77 @@ class takaraisland extends Table
 		}
 	
     }
+	
+	function buy()
+    {
+	self::checkAction( 'buy' );
+	$player_id = self::getActivePlayerId();
+	if ( self::getGoldBalance($player_id) >=5 ) 
+		{
+		self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
+		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to the Counter' ), array(
+						'player_id' => $player_id,
+						'player_name' => self::getActivePlayerName(),
+						'amount' => 5 ,  
+						'destination' => "counterC"
+						) );	
+		$xp=2;
+		self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
+		$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location,card_location_arg) VALUES (6,$xp,'$player_id',1)";
+		self::DbQuery( $sql );
+		$token_id=self::DbGetLastId();
+
+		self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} buys 2 XP points at the Counter' ), array(
+				'player_id' => $player_id,
+				'player_name' => self::getActivePlayerName(),
+				'amount' => $xp,
+				'source' => "playercardstore_".$player_id,
+				'token_id' => $token_id ,
+				'NOSELL' =>  1
+				) );		
+		}
+	$this->gamestate->nextState( );
+    }
+	
+	function sell($token_id)
+    {
+	self::checkAction( 'sell' );
+	
+	$token=self::getObjectFromDB ("SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg from tokens WHERE card_id=$token_id");
+	$player_id = self::getActivePlayerId();
+	
+	
+	if (  ($token['type'] == 6) AND ($token['location'] == $player_id) AND ($token['location_arg']==0 ) ) 
+		{
+		
+		$gold=$token['type_arg']*5;
+		$xp=$token['type_arg'];
+		
+		self::DbQuery('DELETE FROM tokens where card_id='.$token_id);
+		self::notifyAllPlayers( "playersellxp", clienttranslate( '${player_name} sells a ${amount} XP token to the Counter' ), array(
+				'player_id' => $player_id,
+				'player_name' => self::getActivePlayerName(),
+				'amount' => $xp,
+				'source' => "xpstore_".$player_id,
+				'token_id' => $token_id 
+				) );
+		self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );	
+		self::notifyAllPlayers( "playergetsgold", clienttranslate( '${player_name} gets ${amount} Kara Gold from the Counter' ), array(
+						'player_id' => $player_id,
+						'player_name' => self::getActivePlayerName(),
+						'amount' => $gold ,  
+						'source' => "counterC"
+				) );	
+		}
+		else 
+		{
+			self::notifyAllPlayers( 'message', 'GAME ERROR: ${player_name} tried to sell an invalid XP token', array(
+							'player_name' => self::getActivePlayerName()
+							) );
+		}
+	$this->gamestate->nextState( );
+    }
+	
 	
 	function payhospital()
     {
@@ -992,7 +1063,7 @@ class takaraisland extends Table
 						}
 						else
 						{
-							self::notifyAllPlayers( 'message', '${player_name} sent a first adventurer to dig a rockfall on site ${sitenr} (2 adventurers required)', array(
+							self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sent a first adventurer to dig a rockfall on site ${sitenr} (2 adventurers required)'), array(
 							'player_name' => self::getActivePlayerName(),
 								'sitenr' => $sitenr
 						

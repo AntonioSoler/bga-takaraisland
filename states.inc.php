@@ -116,8 +116,8 @@ $machinestates = array(
         "name" => "exchange",  // 
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding whether to buy or sell xp '),
-		"descriptionmyturn" => clienttranslate('${you} have to select the xp tile that you want to sell or to buy an 2 XP tile for 5 Kara Gold '),
-		"possibleactions" => array( "sellxp","buyxp"),
+		"descriptionmyturn" => clienttranslate('${you} have to select to buy or to sell XP: '),
+		"possibleactions" => array( "sell","buy","viewdone"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),

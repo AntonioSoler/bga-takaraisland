@@ -98,6 +98,21 @@
 		self::ajaxResponse();    
 	}
 	
+	public function buy()
+    {
+		self::setAjaxMode();	
+		$this->game->buy();
+		self::ajaxResponse();    
+	}
+	
+	 public function sell()
+    {
+		self::setAjaxMode();
+		$token_id = self::getArg( "token_id", AT_posint, true );
+		$this->game->sell($token_id);
+		self::ajaxResponse();    
+	}	
+	
 	 public function movetile()
     {
 		self::setAjaxMode();

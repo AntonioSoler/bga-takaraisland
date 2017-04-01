@@ -764,7 +764,7 @@ background-image: url('img/ffa500.jpg');
 	width:60px;
 	height:60px;
 	border-radius: 50%;
-	/* position: absolute; */
+	z-index: 11;
 	margin-right: -15px;
 	z-index=100 !important;
 	border: 0px;

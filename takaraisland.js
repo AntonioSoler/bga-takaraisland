@@ -224,8 +224,8 @@ function (dojo, declare) {
         onEnteringState: function( stateName, args )
         {
             console.log( 'Entering state: '+stateName );
-            
-            switch( stateName )
+			
+			switch( stateName )
             {
             
             /* Example:
@@ -248,6 +248,18 @@ function (dojo, declare) {
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
 					}
+				}
+				break;
+				
+			case 'exchange':
+			    
+			    if (this.isCurrentPlayerActive() )
+				{
+					thisplayerid=this.getActivePlayerId();
+					thisstore="xpstore_"+thisplayerid;
+					this[thisstore].setSelectionMode( 1 );
+					
+					dojo.addClass( thisstore, 'borderpulse' ) ;
 				}
 				break;
 			
@@ -342,7 +354,18 @@ function (dojo, declare) {
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
-                break; 	
+                break;
+			
+			case 'exchange':
+			    
+			    if (this.isCurrentPlayerActive() )
+				{
+					thisplayerid=this.getActivePlayerId();
+					thisstore="xpstore_"+thisplayerid;
+					this[thisstore].setSelectionMode( 0 );
+					
+					dojo.removeClass( thisstore,'borderpulse' ) ;
+				}
 			
             case 'fight':
 				dojo.replaceClass('diceresult','no');
@@ -366,15 +389,17 @@ function (dojo, declare) {
                     this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
 					this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
                     break;
-              
+              case 'exchange':
+                    this.addActionButton( 'buy_button', _('Buy 2XP token for 5 Kara gold  '), 'buy' );
+					this.addActionButton( 'sell_button', _('Sell selected XP token'), 'sell' );
+					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+                    break;
                 case 'browsecards':
-				    
 				    if ( args.monsterpresent == 1 )
 					{
 						this.addActionButton( 'revealmonster_button', _('Reveal monsters for 2 Kara Gold'), 'revealmonster' );
 					}	
-                    
-					this.addActionButton( 'viewdone_button', _("Done"), 'viewdone' ); 
+                   this.addActionButton( 'viewdone_button', _("Done"), 'viewdone' ); 
                     break;
 					
 				 case 'endturn':
@@ -581,6 +606,10 @@ function (dojo, declare) {
 		
 		placexptoken: function(thetoken) {
 			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
+			if (thetoken.location_arg == 1)
+			{
+				dojo.addClass("xpstore_"+thetoken.location+"_item_"+thetoken.id, "NOSELL")
+			}
 		},
 		
 		moveexpert: function(thetoken) {
@@ -702,10 +731,14 @@ function (dojo, declare) {
         },
 		////////////////////////////////////////////////
 		
-		giveXp: function ( source, player ,amount , thetoken_id) 
+		giveXp: function ( source, player ,amount , thetoken_id, NOSELL) 
 		{
 				dojo.byId("xpcount_p"+player).innerHTML=eval(dojo.byId("xpcount_p"+player).innerHTML) + amount;
 				this["xpstore_"+player].addToStockWithId( amount ,thetoken_id, source );
+				if (NOSELL == 1)
+				{
+					dojo.addClass("xpstore_"+player+"_item_"+thetoken_id, "NOSELL")
+				}
 		},
 
 		giveGold: function ( source, destination ,amount) 
@@ -817,7 +850,7 @@ function (dojo, declare) {
         {
             // Stop this event propagation
 			
-            //dojo.stopEvent( evt );
+            dojo.stopEvent( evt );
 			if( ! this.checkAction( 'movetile' ) )
             {   return; }
 
@@ -846,7 +879,7 @@ function (dojo, declare) {
 
 		rentsword: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'rentsword' ) )
             {   return; }
 			dojo.removeClass( 'swordholder','borderpulse' ) ;
@@ -866,7 +899,7 @@ function (dojo, declare) {
 		
 		recruit: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'recruit' ) )
             {   return; }
 			dojo.removeClass( 'tile_'+this.getActivePlayerId()+'_3','borderpulse' ) ;
@@ -886,7 +919,7 @@ function (dojo, declare) {
 		
 		payhospital: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'payhospital' ) )
             {   return; }
 			list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
@@ -913,7 +946,7 @@ function (dojo, declare) {
 		
 		dig: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'dig' ) )
             {  return; }
 			
@@ -926,7 +959,7 @@ function (dojo, declare) {
 		
 		survey: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'survey' ) )
             {  return; }
 			
@@ -939,7 +972,7 @@ function (dojo, declare) {
 		
 		revealmonster: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'revealmonster' ) )
             {  return; }
 			
@@ -953,13 +986,55 @@ function (dojo, declare) {
 		
 		viewdone: function( evt )
         {
-			//dojo.stopEvent( evt );
+			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
 			
 			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/viewdone.html", {
+                }, this, function( result ) {} );
+            }	
+        },
+		
+		buy: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'buy' ) )
+            {  return; }
+			
+			if( this.checkAction( 'buy' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=5 )  )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/buy.html", {
+                }, this, function( result ) {} );
+            }
+			else
+			{
+				this.showMessage  ( _("You cannot afford to buy XP..."), "info")
+			}	
+        },
+		
+		sell: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'sell' ) )
+            {  return; }
+		    
+			token=this['xpstore_'+this.getActivePlayerId()].getSelectedItems();
+			if (token.length < 1) 
+			{
+				this.showMessage  ( _("You have to select one of your XP tokens to sell"), "info");
+				return;
+			}
+			if ( dojo.hasClass('xpstore_'+this.getActivePlayerId()+"_item_"+token[0].id,'NOSELL'))
+			{
+				this.showMessage  ( _("You cannot sell XP tokens adquired at the Counter"), "info");
+				return;
+			}	
+			if( this.checkAction( 'sell' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/sell.html", {
+					token_id:token[0].id
                 }, this, function( result ) {} );
             }	
         },
@@ -1013,6 +1088,9 @@ function (dojo, declare) {
 			
 			dojo.subscribe('playergetxp', this, "notif_playergetxp");
             this.notifqueue.setSynchronous('playergetxp', 1000);
+			
+			dojo.subscribe('playersellxp', this, "notif_playersellxp");
+            this.notifqueue.setSynchronous('playersellxp', 1000);
 			
 			dojo.subscribe('rolldice', this, "notif_rolldice");
             this.notifqueue.setSynchronous('rolldice', 4000);
@@ -1100,8 +1178,16 @@ function (dojo, declare) {
             console.log( 'notif_playergetxp' );
             console.log( notif );
             this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;	
-			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id);
+			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id, notif.args.NOSELL);
         },
+		
+		notif_playersellxp: function( notif )
+        {
+            console.log( 'notif_playersellxp' );
+            console.log( notif );
+            this.gamedatas.players[notif.args.player_id]['xp']-=notif.args.amount;
+			this[notif.args.source].removeFromStockById (notif.args.token_id, 'counterC')
+		},
 		
 		notif_rolldice: function( notif )
         {
