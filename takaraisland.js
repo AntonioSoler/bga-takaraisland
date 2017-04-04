@@ -680,7 +680,7 @@ function (dojo, declare) {
 				this[thisdeck].item_margin = 0;			
 				this[thisdeck].setOverlap( 0.5 , 0 );				
 				this.slideToObjectRelative (thisdeck, returndeck);
-				if (this.expertpicked == 1)
+				if (this.expertpicked == 4)
 				{
 					this[thisdeck].setSelectionMode (0);
 				}	
@@ -694,14 +694,14 @@ function (dojo, declare) {
 					this[browseddeck].setOverlap( 0.5 , 0 );
 					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
 					this.slideToObjectRelative (browseddeck, returndeck);
-					if (this.expertpicked == 1)
+					if (this.expertpicked == 4)
 					{
 						this[browseddeck].setSelectionMode (0);
 					}	
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
-				if (this.expertpicked == 1)
+				if (this.expertpicked == 4)
 					{
 						this[thisdeck].apparenceBorderWidth="2px";
 						this[thisdeck].setSelectionMode (1);
@@ -1184,22 +1184,23 @@ function (dojo, declare) {
 			{	
 		        debugger;
 				selecteddeck=$(tablecards).children[0].id;
-				
 				token=this[selecteddeck].getSelectedItems();
-				if (token.length < 1) 
+				thetoken=0;
+				if (token.length > 1)
 				{
-					this.showMessage  ( _("You have to select one of your XP tokens to sell"), "info");
+					thetoken=token[0].id;
+				}
+				if ((token.length < 1) && (this.expertpicked == 4) ) 
+				{
+					this.showMessage  ( _("You have to select the cards for the Soothsayer"), "info");
 					return;
 				}
-				if ( dojo.hasClass('xpstore_'+this.getActivePlayerId()+"_item_"+token[0].id,'NOSELL'))
-				{
-					this.showMessage  ( _("You cannot sell XP this token at the Counter"), "info");
-					return;
-				}	
-				if( this.checkAction( 'sell' ) )    // Check that this action is possible at this moment
+				
+				if( this.checkAction( 'selectcards' ) )    // Check that this action is possible at this moment
 				{            
-					this.ajaxcall( "/takaraisland/takaraisland/sell.html", {
-						token_id:token[0].id
+					this.ajaxcall( "/takaraisland/takaraisland/selectcards.html", {
+						token_id:thetoken,
+						deckpicked:selecteddeck
 					}, this, function( result ) {} );
 				}
             }	

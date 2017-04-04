@@ -134,8 +134,8 @@
     {
 		self::setAjaxMode();
 		$expertpicked = self::getArg( "deckpicked", AT_alphanum, true );
-		$cards = self::getArg( "cards", AT_numberlist, false );
-		$this->game->selectcards($deckpicked,explode(',', $cards));
+		$token_id = self::getArg( "token_id", AT_posint, false );
+		$this->game->selectcards($deckpicked,$token_id);
 		self::ajaxResponse();    
 	}
 	
