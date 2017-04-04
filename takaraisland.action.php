@@ -130,6 +130,14 @@
 		self::ajaxResponse();    
 	}
 	
+	 public function selectcards()
+    {
+		self::setAjaxMode();
+		$expertpicked = self::getArg( "deckpicked", AT_alphanum, true );
+		$cards = self::getArg( "cards", AT_numberlist, false );
+		$this->game->selectcards($deckpicked,explode(',', $cards));
+		self::ajaxResponse();    
+	}
 	
 	 public function recruit()
     {

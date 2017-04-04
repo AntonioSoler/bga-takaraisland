@@ -110,7 +110,7 @@ $machinestates = array(
 		"possibleactions" => array( "selectcards"),
 		"args" => "argExpertpicked",
         "updateGameProgression" => false,
-        "transitions" => array( "" => 3 ) //
+        "transitions" => array( "" => 8 ) //
     ),
 
     7 => array(
@@ -127,7 +127,7 @@ $machinestates = array(
         "name" => "browsecards",  // 
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is inspecting the cards from the survey of this site'),
-		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, reveal discovered monsters if wanted and when finished press:'),
+		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, and when finished press:'),
 		"possibleactions" => array( "revealmonster","viewdone"),
 		"args" => "argMonsterpresent",
         "updateGameProgression" => false,

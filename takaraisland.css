@@ -435,7 +435,7 @@ transform: rotate(0deg);
 }
 
 .tablecards .deck .card{
-    box-shadow: 5px 4px 4px 1px rgba(0, 0, 0, 0.72);
+    /* box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
 }
 
 
@@ -550,6 +550,12 @@ transform: rotate(0deg);
 	max-width: 300px;
     cursor: pointer;
 }
+
+.stockitem_selected{
+	box-shadow: -155px 0px 0px 5px rgb(229, 42, 42), 0px 0px 0px 5px rgb(229, 30, 30), 155px 0px 0px 5px rgb(229, 40, 40);
+	z-index: 0 !important;
+	border: 0px !important;
+	}
 
 .tooltipimage * { position: relative 
 !important;}

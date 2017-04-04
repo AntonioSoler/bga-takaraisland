@@ -78,6 +78,7 @@ function (dojo, declare) {
 				this[decks[i]].item_margin = 0;
 				this[decks[i]].setOverlap( 0.5 , 0 );
 				this[decks[i]].jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\"></div><div id=\"${id}_back\" class=\"card-back\"></div>";
+                this[decks[i]].setSelectionAppearance( 'class' );				
 			}
 			
 			this.treasuredeck = new ebg.stock();
@@ -104,29 +105,14 @@ function (dojo, declare) {
 				for ( var c = 0; c < 8; c++) 
 				{
 					this[thisstore].addItemType( tarray[c] , 0 , g_gamethemeurl+'img/xp.png', c );
-				}
-				/*tileholder="TH_"+thisplayerid;
-				this[tileholder] = new ebg.stock();
-				this[tileholder].create( this, $(tileholder), 60 , 60);
-				this[tileholder].image_items_per_row = 4;
-				this[tileholder].setSelectionMode( 0 );
-				this[tileholder].setOverlap( 0 , 0 );
-                this[tileholder].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem playertile\" style=\"width:${width}px;height:${height}px;z-index:${position};background-image:url('${image}');border-radius:50%;\"></div>";
-				
-				colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };	
-				
-				for ( var c = 0; c <= 2; c++) 
-				{
-					this[tileholder].addItemType( c+1 , 0 , g_gamethemeurl+'img/playertiles.png', c * 4 +colortiles["h"+this.gamedatas.players[i].color] );
-					this[tileholder].addToStockWithId( c+1 , c+1  )
-				}*/
-				
+				}		
 			}
-			
+						
             for( var i in this.gamedatas.cards )
             { 
 				var thisdeck = this.gamedatas.cards[i].location;
 				var card = this.gamedatas.cards[i];
+				
 				this[thisdeck].addItemType( card.id, card.location_arg, g_gamethemeurl+'img/cards.jpg', card.type_arg-1 );
 				this[thisdeck].addToStockWithId( card.id , "card_"+card.id  );
 				
@@ -174,26 +160,26 @@ function (dojo, declare) {
 			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
-			this.addTooltipHtml("sword",  "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("sword", "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE MAGIC SWORD:  <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
 			
-			this.addTooltipHtml("HospitalC",  "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("HospitalC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
-			this.addTooltipHtml("WaitingroomC",  "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("WaitingroomC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
-			this.addTooltipHtml("thedive",  "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("thedive", "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE DIVE:  <hr>  <b> The local pub of the ilsand. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
 			
-			this.addTooltipHtml("counter",  "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("counter", "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point. <p><b> XP tokens adquired on the Counter cannot be sold back </b>" )+"</div>", "" );
 			
-			this.addTooltipHtml("expertsC",  "<div class='tooltipimage' ><img src='"+ g_gamethemeurl +"img/expert_front.jpg'  height='100' width='75' ></div> </div> <div  class='tooltipmessage'> "  +
+			this.addTooltipHtml("expertsC", "<div class='tooltipimage' ><img src='"+ g_gamethemeurl +"img/expert_front.jpg'  height='100' width='75' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE DOCKS:  <hr>  <b> A player can send here 1 Adventurer per turn to hire an Specialist.<p> The Specialists can perform special operations depending on the type. <p> The Specialist card is moved to the player's board <p> A the end of the turn  the Specialist has to rest for another turn: this card fliped faced down. <p> Faced down Specialists are returned to the docks at the end of the next turn." )+"</div>", "" );
 			
-			this.addTooltipHtml("workersC",  "<div class='tooltipimage  beachthumb'></div> <div  class='tooltipmessage'> "  +
-			_( " THE BEACH:  <hr>  <b> At the end of the turn a player can hire an extra Adventurer for 5 Kara gold.<p> The new Adventurer  tile is then moved to the player's board. <p> This can only be done once in the game." )+"</div>", "" );
+			this.addTooltipHtml("workersC", "<div class='tooltipimage  beachthumb'></div> <div  class='tooltipmessage'> "  +
+			_( " THE BEACH:  <hr>  <b> At the end of the turn</b> a player can hire an extra Adventurer for 5 Kara gold.<p> The new Adventurer tile is then moved to the player's board. <p> This can only be done once in the game." )+"</div>", "" );
 			
 			this.addTooltip("explore1", "Excavation site 1","");
 			this.addTooltip("explore2", "Excavation site 2","");
@@ -252,11 +238,17 @@ function (dojo, declare) {
 				break;
 				
 			case 'hireexpert':
-			    debugger;
+			    dojo.forEach(this.gameconnections, dojo.disconnect);
+				dojo.query(".borderpulse").removeClass("borderpulse");
+				this.gameconnections=[];
+				if (this.myDlg)	
+					{ 
+					this.myDlg.hide() ;
+					this.myDlg.destroyRecursive() ;
+					}
 			    if (this.isCurrentPlayerActive() )
 				{
 					list =dojo.query( '.expertholder .card' ).addClass( 'borderpulse' ) ;
-					
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
@@ -280,22 +272,18 @@ function (dojo, declare) {
             case 'endturn':
 			    if (this.isCurrentPlayerActive() )
 				{
-					
 					list=dojo.query( '#workersC #tile_'+this.getActivePlayerId() +'_3' ).addClass( 'borderpulse' ) ;
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
 						this.recruitcon= dojo.connect(thiselement, 'onclick' , this, 'recruit')
 					}
-					
 					list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
 					if ( list.length > 0 )
-					
 					{
 						dojo.addClass("HospitalC",'borderpulse' ) ;
 						this.gameconnections.push( dojo.connect($("HospitalC"), 'onclick' , this, 'payhospital'))
 					}
-					
 				}
 				break;
 				
@@ -317,7 +305,6 @@ function (dojo, declare) {
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' .visible') ;
 				for (var i = 0; i < list.length; i++)
 				{
-					
 					var thiselement = list[i].id;  //expert1
 					dojo.toggleClass(thiselement, 'visible');
 					this.slideToObjectRelative ( thiselement , thiselement.substr(0, 6) + "holder" + thiselement.substr(6) ) ;
@@ -381,16 +368,24 @@ function (dojo, declare) {
 					dojo.removeClass( thisstore,'borderpulse' ) ;
 				}
 				break;
-			case 'pickexpert': 	
+			case 'hireexpert': 	
 				dojo.forEach(this.gameconnections, dojo.disconnect);
 				dojo.query(".borderpulse").removeClass("borderpulse");
 				this.gameconnections=[];
-				if (this.myDlg)	{ this.myDlg.hide() }
+				if (this.myDlg)	
+					{ 
+					this.myDlg.hide() ;
+					this.myDlg.destroyRecursive() ;
+					}
 				break;
             case 'fight':
 				dojo.replaceClass('diceresult','no');
 			    dojo.replaceClass('dice','no');
                 break;
+				
+			case 'sendexpert':
+			    this.expertpicked=0;
+				break;
             }               
         }, 
 
@@ -430,6 +425,18 @@ function (dojo, declare) {
 					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
                     break;
 					
+				 case 'sendexpert':
+				    this.expertpicked=args.expertpicked;
+				    if ( this.expertpicked == 4 )
+					{
+						this.addActionButton( 'selectcards_button', _('Show me selected cards'), 'selectcards' );
+					}	
+                    else						
+					{
+						this.addActionButton( 'selectcards_button', _('Select this deck'), 'selectcards' ); 
+					}
+                    break;
+					
 				/*              
                  Example:
  
@@ -455,7 +462,8 @@ function (dojo, declare) {
             script.
         
         */
-                
+          
+				  
 		flipcard: function ( card, visible )
 		{
 			image_items_per_row=7;
@@ -627,7 +635,7 @@ function (dojo, declare) {
 		},
 		
 		placexptoken: function(thetoken) {
-			//debugger;
+			
 			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
 			if (thetoken.location_arg == 1)
 			{
@@ -671,7 +679,12 @@ function (dojo, declare) {
 			{
 				this[thisdeck].item_margin = 0;			
 				this[thisdeck].setOverlap( 0.5 , 0 );				
-				this.slideToObjectRelative (thisdeck, returndeck);			
+				this.slideToObjectRelative (thisdeck, returndeck);
+				if (this.expertpicked == 1)
+				{
+					this[thisdeck].setSelectionMode (0);
+				}	
+				
 			}
 			else
 			{   
@@ -681,9 +694,18 @@ function (dojo, declare) {
 					this[browseddeck].setOverlap( 0.5 , 0 );
 					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
 					this.slideToObjectRelative (browseddeck, returndeck);
+					if (this.expertpicked == 1)
+					{
+						this[browseddeck].setSelectionMode (0);
+					}	
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
+				if (this.expertpicked == 1)
+					{
+						this[thisdeck].apparenceBorderWidth="2px";
+						this[thisdeck].setSelectionMode (1);
+					}
 				this[thisdeck].setOverlap( 100 , 0 );
 			}
         },
@@ -943,45 +965,44 @@ function (dojo, declare) {
 							}
 							break;
 				case 'expert2':
-						 // Create the new dialog. You should store the handler in a member variable to access it later
-							 this.myDlg = new dijit.Dialog({ title: _("What specialist do want you to impersonate for +2 extra Kara gold?"), style: "width: 1000px" });
-							 
-							 // Create the HTML of my dialog. 
-							 // The best practice here is to use Javascript templates
-							 var html = "<div id='im_miner' class='tooltipimage'><div class='card expertcardfront expert1' ></div>"+
-							            _("THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
-										"&nbsp;<div id='im_arch'  class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
-										_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
-										"&nbsp;<div id='im_sooth' class='tooltipimage'><div class='card expertcardfront expert4' ></div>"+
-										_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
-										
-							 // Show the dialog
-							 this.myDlg.attr("content", html );
-							 this.myDlg.show(); 
-							//debugger;
+							// Create the new dialog. You should store the handler in a member variable to access it later
+							this.myDlg = new dijit.Dialog({ title: _("What specialist do want you to impersonate for +2 extra Kara gold?"), style: "width: 1000px" , closable:false });
+							this.myDlg.autofocus = false;
+							this.myDlg.refocus = false;
+							// Create the HTML of my dialog. 
+
+							var html = "<div id='im_miner' class='tooltipimage'><div class='card expertcardfront expert1' ></div>"+
+									_("THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
+									"&nbsp;<div id='im_arch'  class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
+									_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
+									"&nbsp;<div id='im_sooth' class='tooltipimage'><div class='card expertcardfront expert4' ></div>"+
+									_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
+									
+							// Show the dialog
+							this.myDlg.attr("content", html );
+							this.myDlg.show(); 
+							
 							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
-										   evt.preventDefault();
-										   this.myDlg.hide();
-										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
-												 expertpicked:'expert10'								 
-											}, this, function( result ) {} );
-										   
-									   } );
+							   evt.preventDefault();
+							   this.myDlg.hide();
+							   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+									 expertpicked:'expert10'								 
+								}, this, function( result ) {} );
+							} );
 							dojo.connect( $('im_arch'), 'onclick', this, function(evt){
-										   evt.preventDefault();
-										   this.myDlg.hide();
-										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
-												 expertpicked:'expert30'								 
-											}, this, function( result ) {} );
-										   
-									   } );
+								   evt.preventDefault();
+								   this.myDlg.hide();
+								   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+										 expertpicked:'expert30'								 
+									}, this, function( result ) {} );
+								} );
 							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
-										   evt.preventDefault();
-										   this.myDlg.hide();
-										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
-												 expertpicked:'expert40'								 
-											}, this, function( result ) {} );
-									   } );
+								   evt.preventDefault();
+								   this.myDlg.hide();
+								   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+										 expertpicked:'expert40'								 
+									}, this, function( result ) {} );
+							   } );
 							break;
 				
 				case 'expert3':
@@ -1152,6 +1173,41 @@ function (dojo, declare) {
 					token_id:token[0].id
                 }, this, function( result ) {} );
             }	
+        },
+		
+		selectcards: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'selectcards' ) )
+            {  return; }
+		    if ( $(tablecards).children.length > 0 )
+			{	
+		        debugger;
+				selecteddeck=$(tablecards).children[0].id;
+				
+				token=this[selecteddeck].getSelectedItems();
+				if (token.length < 1) 
+				{
+					this.showMessage  ( _("You have to select one of your XP tokens to sell"), "info");
+					return;
+				}
+				if ( dojo.hasClass('xpstore_'+this.getActivePlayerId()+"_item_"+token[0].id,'NOSELL'))
+				{
+					this.showMessage  ( _("You cannot sell XP this token at the Counter"), "info");
+					return;
+				}	
+				if( this.checkAction( 'sell' ) )    // Check that this action is possible at this moment
+				{            
+					this.ajaxcall( "/takaraisland/takaraisland/sell.html", {
+						token_id:token[0].id
+					}, this, function( result ) {} );
+				}
+            }	
+			else
+			{
+				this.showMessage  ( _("You have to spread one deck to select it first"), "info");
+					return;
+			}
         },
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications
