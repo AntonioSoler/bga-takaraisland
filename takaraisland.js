@@ -163,16 +163,16 @@ function (dojo, declare) {
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3> &dagger; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
 				
 			this.addTooltipHtml("expert1",  "<div class='tooltipimage'><div class='card expertcardfront expert1' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <h3> &#10010; </h3> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
+			_( " THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the original price ot the selected speciallist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE ARCHEOLOGIST:  <hr>  Reveals the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
-			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'</div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE SOOTHSAYER:  <hr>  Reveals 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'></div> </div> <div  class='tooltipmessage'> "  +
+			_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("sword",  "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE MAGIC SWORD:  <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
@@ -247,6 +247,20 @@ function (dojo, declare) {
 					{
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
+					}
+				}
+				break;
+				
+			case 'hireexpert':
+			    debugger;
+			    if (this.isCurrentPlayerActive() )
+				{
+					list =dojo.query( '.expertholder .card' ).addClass( 'borderpulse' ) ;
+					
+					for (var i = 0; i < list.length; i++)
+					{
+						var thiselement = list[i];
+						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'pickexpert'))
 					}
 				}
 				break;
@@ -366,7 +380,13 @@ function (dojo, declare) {
 					
 					dojo.removeClass( thisstore,'borderpulse' ) ;
 				}
-			
+				break;
+			case 'pickexpert': 	
+				dojo.forEach(this.gameconnections, dojo.disconnect);
+				dojo.query(".borderpulse").removeClass("borderpulse");
+				this.gameconnections=[];
+				if (this.myDlg)	{ this.myDlg.hide() }
+				break;
             case 'fight':
 				dojo.replaceClass('diceresult','no');
 			    dojo.replaceClass('dice','no');
@@ -389,7 +409,7 @@ function (dojo, declare) {
                     this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
 					this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
                     break;
-              case 'exchange':
+				case 'exchange':
                     this.addActionButton( 'buy_button', _('Buy 2XP token for 5 Kara gold  '), 'buy' );
 					this.addActionButton( 'sell_button', _('Sell selected XP token'), 'sell' );
 					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
@@ -405,6 +425,10 @@ function (dojo, declare) {
 				 case 'endturn':
 					this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
 					break;
+				 
+				 case 'pickexpert':
+					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+                    break;
 					
 				/*              
                  Example:
@@ -514,7 +538,6 @@ function (dojo, declare) {
 		
 		selectadventurer : function(sourceclick) {
 			
-			var browseddeck = "";
 			var target = sourceclick.target || sourceclick.srcElement;
 			this.adventurer=target.id;
 			dojo.toggleClass(this.adventurer,"tileselected");
@@ -549,7 +572,6 @@ function (dojo, declare) {
 		placetokens : function(thetoken) {
             switch (thetoken.type)
 			{
-				
 				case "1":
 				case "2":
 				case "3": 
@@ -605,6 +627,7 @@ function (dojo, declare) {
 		},
 		
 		placexptoken: function(thetoken) {
+			//debugger;
 			this["xpstore_"+thetoken.location].addToStockWithId(thetoken.type_arg,thetoken.id );
 			if (thetoken.location_arg == 1)
 			{
@@ -897,6 +920,98 @@ function (dojo, declare) {
 			
         },
 		
+		pickexpert : function(sourceclick) {
+			dojo.stopEvent( sourceclick );
+			if( ! this.checkAction( 'pickexpert' ) )
+            {   return; }
+		
+			var target = sourceclick.target || sourceclick.srcElement;
+			expertpicked=sourceclick.currentTarget.id;
+			
+			switch (expertpicked)
+			{
+				case 'expert1':
+							if( this.gamedatas.players[this.getActivePlayerId()]['gold']>=5   )    // Miner
+							{            
+								this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+									 expertpicked:expertpicked								 
+								}, this, function( result ) {} );
+							}
+							else
+							{
+								this.showMessage  ( _("You cannot afford to hire this Specialist..."), "info")
+							}
+							break;
+				case 'expert2':
+						 // Create the new dialog. You should store the handler in a member variable to access it later
+							 this.myDlg = new dijit.Dialog({ title: _("What specialist do want you to impersonate for +2 extra Kara gold?"), style: "width: 1000px" });
+							 
+							 // Create the HTML of my dialog. 
+							 // The best practice here is to use Javascript templates
+							 var html = "<div id='im_miner' class='tooltipimage'><div class='card expertcardfront expert1' ></div>"+
+							            _("THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
+										"&nbsp;<div id='im_arch'  class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
+										_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
+										"&nbsp;<div id='im_sooth' class='tooltipimage'><div class='card expertcardfront expert4' ></div>"+
+										_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
+										
+							 // Show the dialog
+							 this.myDlg.attr("content", html );
+							 this.myDlg.show(); 
+							//debugger;
+							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
+										   evt.preventDefault();
+										   this.myDlg.hide();
+										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+												 expertpicked:'expert10'								 
+											}, this, function( result ) {} );
+										   
+									   } );
+							dojo.connect( $('im_arch'), 'onclick', this, function(evt){
+										   evt.preventDefault();
+										   this.myDlg.hide();
+										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+												 expertpicked:'expert30'								 
+											}, this, function( result ) {} );
+										   
+									   } );
+							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
+										   evt.preventDefault();
+										   this.myDlg.hide();
+										   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+												 expertpicked:'expert40'								 
+											}, this, function( result ) {} );
+									   } );
+							break;
+				
+				case 'expert3':
+							if( this.gamedatas.players[this.getActivePlayerId()]['gold']>=2   )    // Archeologist
+							{            
+								this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+									 expertpicked:expertpicked
+								}, this, function( result ) {} );
+							}
+							else
+							{
+								this.showMessage  ( _("You cannot afford to hire this Specialist..."), "info")
+							}
+								
+							break;
+				case 'expert4':
+							if( this.gamedatas.players[this.getActivePlayerId()]['gold']>=3   )    // Sothsayer
+							{            
+								this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
+									 expertpicked:expertpicked
+								}, this, function( result ) {} );
+							}
+							else
+							{
+								this.showMessage  ( _("You cannot afford to hire this Specialist..."), "info")
+							}
+							break;	
+			}
+		},
+		
 		recruit: function( evt )
         {
 			dojo.stopEvent( evt );
@@ -1028,7 +1143,7 @@ function (dojo, declare) {
 			}
 			if ( dojo.hasClass('xpstore_'+this.getActivePlayerId()+"_item_"+token[0].id,'NOSELL'))
 			{
-				this.showMessage  ( _("You cannot sell XP tokens adquired at the Counter"), "info");
+				this.showMessage  ( _("You cannot sell XP this token at the Counter"), "info");
 				return;
 			}	
 			if( this.checkAction( 'sell' ) )    // Check that this action is possible at this moment
@@ -1136,6 +1251,10 @@ function (dojo, declare) {
         {
             console.log( 'notif_revealcard' );
             console.log( notif );
+			if (($(tablecards).children.length < 1  ) || ($(tablecards).children["0"].id != "deck"+notif.args.sitenr))
+			{
+				this.browseGatherDeck ( null , notif.args.sitenr );
+			}
 			this.flipcard ( notif.args.card, true );
         },			
 		
@@ -1143,7 +1262,10 @@ function (dojo, declare) {
         {
             console.log( 'notif_browsecards' );
             console.log( notif );         
-			this.browseGatherDeck ( null , notif.args.sitenr );
+			if (($(tablecards).children.length < 1 ) || ($(tablecards).children["0"].id != "deck"+notif.args.sitenr))
+			{
+				this.browseGatherDeck ( null , notif.args.sitenr );
+			}
 			for (i=0; i<notif.args.cards.length ; i++)
 			{	
 				this.flipcard ( notif.args.cards[i], false );

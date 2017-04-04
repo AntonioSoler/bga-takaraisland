@@ -122,6 +122,15 @@
 		self::ajaxResponse();    
 	}	
 	
+	 public function pickexpert()
+    {
+		self::setAjaxMode();
+		$expertpicked = self::getArg( "expertpicked", AT_alphanum, true );
+		$this->game->pickexpert($expertpicked);
+		self::ajaxResponse();    
+	}
+	
+	
 	 public function recruit()
     {
 		self::setAjaxMode();

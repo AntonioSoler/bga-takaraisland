@@ -98,16 +98,17 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} need to decide what Specialist you want to hire '),
 		"possibleactions" => array( "pickexpert"),
         "updateGameProgression" => false,
-        "transitions" => array( "" => 6  ) //
+        "transitions" => array( "sendexpert" => 6 , "playermove" => 3 ) //
     ),
 
 
     6 => array(
-        "name" => "sendexpert",  // 
+        "name" => "sendexpert",  
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
 		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
 		"possibleactions" => array( "selectcards"),
+		"args" => "argExpertpicked",
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),
