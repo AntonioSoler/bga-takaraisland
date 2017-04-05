@@ -307,7 +307,7 @@ function (dojo, declare) {
 				{
 					var thiselement = list[i].id;  //expert1
 					dojo.toggleClass(thiselement, 'visible');
-					this.slideToObjectRelative ( thiselement , thiselement.substr(0, 6) + "holder" + thiselement.substr(6) ) ;
+					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ) ;
 				}
 				
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' div[id^="expert"]') ;
@@ -426,6 +426,7 @@ function (dojo, declare) {
                     break;
 					
 				 case 'sendexpert':
+				 
 				    this.expertpicked=args.expertpicked;
 				    if ( this.expertpicked == 4 )
 					{
@@ -981,7 +982,7 @@ function (dojo, declare) {
 							// Show the dialog
 							this.myDlg.attr("content", html );
 							this.myDlg.show(); 
-							
+							                                       //todo check gold
 							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
 							   evt.preventDefault();
 							   this.myDlg.hide();
@@ -996,7 +997,7 @@ function (dojo, declare) {
 										 expertpicked:'expert30'								 
 									}, this, function( result ) {} );
 								} );
-							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
+							dojo.connect( $('im_sooth'), 'onclick', this, function(evt){
 								   evt.preventDefault();
 								   this.myDlg.hide();
 								   this.ajaxcall( "/takaraisland/takaraisland/pickexpert.html", {
@@ -1182,13 +1183,14 @@ function (dojo, declare) {
             {  return; }
 		    if ( $(tablecards).children.length > 0 )
 			{	
-		        debugger;
+		        
 				selecteddeck=$(tablecards).children[0].id;
 				token=this[selecteddeck].getSelectedItems();
 				thetoken=0;
-				if (token.length > 1)
+				if (token.length >= 1)
 				{
-					thetoken=token[0].id;
+					thetoken=token[0].id.split('_')[1] ;
+					this[selecteddeck].setSelectionMode(0);
 				}
 				if ((token.length < 1) && (this.expertpicked == 4) ) 
 				{

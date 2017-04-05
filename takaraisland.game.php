@@ -108,13 +108,13 @@ class takaraisland extends Table
 		self::initStat( 'player', 'stones_found' , 0 );  // Init a player statistics (for all players)
 		
         // setup the initial game situation here
-
+        self::DbQuery( "UPDATE player set player_gold = 100" );   // TEST!!!
         self::setGameStateInitialValue( 'stonesfound', 0 ); // Stones of legend found
         self::setGameStateInitialValue( 'playermoves', 0 ); // number of movements done by the player (sword can be only the 1st)
 		self::setGameStateInitialValue( 'currentsite', 0 ); // Current focused site for dig / survey / fight / expert
-		self::setGameStateInitialValue( 'monsterpresent', 0 );
-		self::setGameStateInitialValue( 'expertpicked', 0 );
-
+		self::setGameStateInitialValue( 'monsterpresent', 0 ); //Monster present in the survey results
+		self::setGameStateInitialValue( 'expertpicked', 0 ); //Nr of the expert picked / impersonated
+        
         $cards = array();
         foreach( $this->treasure_types as $cardType)
         {
@@ -336,6 +336,16 @@ class takaraisland extends Table
         return ($result);
     }
 	
+	function getXPBalance($player_id)
+    {
+        //Compute and return the game progression
+        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
+
+        $result = 0;
+        $sql = "SELECT player_xp from player where player_id=". $player_id;
+		$result = self::getUniqueValueFromDB( $sql ) ;
+        return ($result);
+    }
 	
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
@@ -537,7 +547,7 @@ class takaraisland extends Table
 				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 Kara Gold for detecting a rockfall in the survey' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
-						'amount' => 2 ,  //deck1_item_card_3
+						'amount' => 2 , 
 						'source' => $thiscard['location']."_item_card_". $thiscard['id']
 						) );		
 			}
@@ -657,6 +667,162 @@ class takaraisland extends Table
 	$this->gamestate->nextState( );
     }
 	
+	function selectcards($deckpicked,$token_id)
+    {
+	self::checkAction( 'selectcards' );
+	$player_id = self::getActivePlayerId();
+	$expertpicked=self::getGameStateValue( 'expertpicked' );
+	switch ($expertpicked) 
+		{  
+		case 1:
+				$topcards=$this->cards->getCardsOnTop( 2, $deckpicked );
+				for  ($i=0 ; $i < sizeof($topcards) ; $i++ )
+				{
+					$card=self::getObjectFromDB( "SELECT * FROM cards WHERE card_id=".$topcards[$i]['id'] );
+					$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcards[$i]['id'];
+							self::DbQuery( $sql );
+					self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} uses the Miner to dig a card on the excavation site: ${sitenr}' ), array(
+						'player_id' => $player_id,
+						'player_name' => self::getActivePlayerName(),
+						'sitenr' => substr( $deckpicked ,-1),
+						'card' => $topcards[$i]
+						) );
+					switch ($topcards[$i]['type'] ) 
+					{
+						case  "1":  //GALLERIES
+						case  "7":
+						case "17":
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallerie card with the Miner.' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'destination' => "playercardstore_".$player_id,
+									'tile_id' => "card_". $topcards[$i]['id'],
+									'deck' => $topcards[$i]['location']
+									) );
+								break;
+						case  "4":     //GO HOSPITAL
+						case  "9": 
+						case "15":
+						case "3":       //GET EXP
+						case "8":
+						case "16":
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs an XP card.' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'destination' => "playercardstore_".$player_id,
+									'tile_id' => "card_". $topcards[$i]['id'],
+									'deck' => $topcards[$i]['location']
+									) );
+								$xp=$this->card_types[$topcards[$i]['type']]['xp'];
+								self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
+								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
+								self::DbQuery( $sql );
+								$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
+								self::DbQuery( $sql );
+								$token_id=self::DbGetLastId();
+								self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+										'player_id' => $player_id,
+										'player_name' => self::getActivePlayerName(),
+										'amount' => $xp,
+										'source' => "playercardstore_".$player_id,
+										'token_id' => $token_id
+										) );		
+								break;
+						case "13":       // TREASURE
+						case "18":
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
+										'player_id' => $player_id,
+										'player_name' => self::getActivePlayerName(),
+										'destination' => "playercardstore_".$player_id,
+										'tile_id' => "card_". $topcards[$i]['id'],
+										'deck' => $topcards[$i]['location']
+										) );
+								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
+								self::DbQuery( $sql );
+								self::sttreasure(true);
+								break;
+						case "2":       // ROCKFALL
+						case "14":
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'destination' => "playercardstore_".$player_id,
+									'tile_id' => "card_". $topcards[$i]['id'],
+									'deck' => $topcards[$i]['location']
+									) );
+								break;
+						case "5":        //MONSTER
+						case "6":
+						case "10":
+						case "11":
+						case "12":
+						case "19":
+						case "20":
+						case "21":
+								$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcards[$i]['id'];
+									self::DbQuery( $sql );
+									self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digged into a monster in site: ${sitenr} and the Miner runs home' ), array(
+											'player_id' => $player_id,
+											'player_name' => self::getActivePlayerName(),
+											'sitenr' => substr( $deckpicked ,-1),
+											'card' => $topcard
+											) );
+								break 2;   // BREAK 2 !!!
+						case "22":    // STONE OF LEGEND
+						case "23":
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} FINDS A STONE OF LEGEND!!!' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'destination' => "playercardstore_".$player_id,
+									'tile_id' => "card_". $topcards[$i]['id'],
+									'deck' => $topcards[$i]['location']
+									) );
+								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
+								self::DbQuery( $sql );
+								$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (". ( $topcards[$i]['type'] -11) .",0,'playercardstore_$player_id')";
+								self::DbQuery( $sql );
+								$token_id=self::DbGetLastId();
+								$thetoken=self::getObjectFromDB("SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg from tokens where card_id=$token_id");
+						
+								self::notifyAllPlayers( "placestone", clienttranslate( '${player_name} collects a Stone of Legend' ), array(
+										'player_id' => $player_id,
+										'player_name' => self::getActivePlayerName(),
+										'token' => $thetoken
+										) );		
+								
+								self::incGameStateValue('stonesfound',1);
+								break;
+					}
+				}
+				$this->gamestate->nextState('playermove');
+				break;
+			case 3:
+				$topcards=$this->cards->getCardsOnTop( 5 , $deckpicked );
+				self::setGameStateValue('monsterpresent' ,0 );
+				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Archeologist on the survey of Excavation site: ${sitenr}' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'sitenr' => substr( $deckpicked ,-1),
+								'cards' => $topcards
+								) );
+				$this->gamestate->nextState( 'browsecards' );
+			    break;
+			case 4:
+				$sql="SELECT card_location_arg from cards WHERE card_id=$token_id";
+				$result = self::getUniqueValueFromDB( $sql ) ;
+				$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like '$deckpicked' AND card_location_arg in ( $result , $result +1 , $result -1 )";
+				$topcards=self::getObjectListFromDB( $sql );
+				self::setGameStateValue('monsterpresent' ,0 );
+				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Soothsayer on the survey of Excavation site: ${sitenr}' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'sitenr' => substr( $deckpicked ,-1),
+								'cards' => $topcards
+								) );
+				$this->gamestate->nextState( 'browsecards' );
+			    break;	
+		}
+	}
 	
 	function pickexpert($expertpicked)
     {
@@ -667,136 +833,135 @@ class takaraisland extends Table
 	
 	switch ($expertpicked) 
 		{  
-			case "expert1":
-			            $sql = "SELECT card_location from tokens where card_type='7'";
-		                $result = self::getUniqueValueFromDB( $sql ) ;
-						if ( self::getGoldBalance($player_id) >=5 AND $result=="expertholder1" ) 
-						{
-						self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
-						self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to hire the Miner' ), array(
-										'player_id' => $player_id,
-										'player_name' => self::getActivePlayerName(),
-										'amount' => 5 ,  
-										'destination' => "expertholder1"
-										) );
-						
-						$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='7' LIMIT 1";
-						self::DbQuery( $sql );
-						
-						self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Miner.' ), array(
+		case "expert1":
+					$sql = "SELECT card_location from tokens where card_type='7'";
+					$result = self::getUniqueValueFromDB( $sql ) ;
+					if ( self::getGoldBalance($player_id) >=5 AND $result=="expertholder1" ) 
+					{
+					self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to hire the Miner' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
-									'destination' => "playercardstore_".$player_id,
-									'tile_id' => "expert1"
+									'amount' => 5 ,  
+									'destination' => "expertholder1"
 									) );
-							
-						}
-			            self::setGameStateValue( 'expertpicked', 1 );
-						$this->gamestate->nextState('sendexpert');
-						break;
-			case "expert10":$gold=7;
-							$impersonated=  $this->token_types[7]['name'];
-							self::setGameStateValue( 'expertpicked', 1 );
-				
-			case "expert30": if ($impersonated=="")
-							{
-							$gold=4;
-							$impersonated=  $this->token_types[9]['name'];
-							self::setGameStateValue( 'expertpicked', 3 );
-							}
-			case "expert40": if ($impersonated=="")
-							{
-							$gold=5;
-							$impersonated=  $this->token_types[10]['name'];
-							self::setGameStateValue( 'expertpicked', 4 );
-							}
-							
-						$sql = "SELECT card_location from tokens where card_type='8'";
-		                $result = self::getUniqueValueFromDB( $sql ) ;
-						if ( self::getGoldBalance($player_id) >= $gold  AND $result=="expertholder2" ) 
+					
+					$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='7' LIMIT 1";
+					self::DbQuery( $sql );
+					
+					self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Miner.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert1"
+								) );
+					}
+					self::setGameStateValue( 'expertpicked', 1 );
+					$this->gamestate->nextState('sendexpert');
+					break;
+		case "expert10":$gold=7;
+						$impersonated= clienttranslate('The Miner');
+						self::setGameStateValue( 'expertpicked', 1 );
+			
+		case "expert30": if ($impersonated=="")
 						{
-						self::DbQuery( "UPDATE player set player_gold = player_gold - $gold WHERE Player_id = $player_id" );	
-						self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays ${amount} Kara Gold to hire the Impersonator acting as ${impersonated}' ), array(
-										'player_id' => $player_id,
-										'player_name' => self::getActivePlayerName(),
-										'amount' => $gold ,  
-										'destination' => "expertholder2",
-										'impersonated' => $impersonated
-										) );
+						$gold=4;
+						$impersonated= clienttranslate('The Archeologist');
+						self::setGameStateValue( 'expertpicked', 3 );
+						}
+		case "expert40": if ($impersonated=="")
+						{
+						$gold=5;
+						$impersonated= clienttranslate('The Soothsayer');
+						self::setGameStateValue( 'expertpicked', 4 );
+						}
 						
-						$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='8' LIMIT 1";
-						self::DbQuery( $sql );
-						
-						self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Impersonator acting as ${impersonated}' ), array(
+					$sql = "SELECT card_location from tokens where card_type='8'";
+					$result = self::getUniqueValueFromDB( $sql ) ;
+					if ( self::getGoldBalance($player_id) >= $gold  AND $result=="expertholder2" ) 
+					{
+					self::DbQuery( "UPDATE player set player_gold = player_gold - $gold WHERE Player_id = $player_id" );	
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays ${amount} Kara Gold to hire the Impersonator acting as ${impersonated}' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
-									'destination' => "playercardstore_".$player_id,
-									'tile_id' => "expert2",
+									'amount' => $gold ,  
+									'destination' => "expertholder2",
 									'impersonated' => $impersonated
 									) );
-							
-						}
-			            
-						$this->gamestate->nextState('sendexpert');
-			
-						break;
-			case "expert3":
-						$sql = "SELECT card_location from tokens where card_type='9'";
-		                $result = self::getUniqueValueFromDB( $sql ) ;
-						if ( self::getGoldBalance($player_id) >=2  AND $result=="expertholder3" ) 
-						{
-						self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
-						self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 Kara Gold to hire the Archeologist' ), array(
-										'player_id' => $player_id,
-										'player_name' => self::getActivePlayerName(),
-										'amount' => 2 ,  
-										'destination' => "expertholder3"
-										) );
+					
+					$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='8' LIMIT 1";
+					self::DbQuery( $sql );
+					
+					self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Impersonator acting as ${impersonated}' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert2",
+								'impersonated' => $impersonated
+								) );
 						
-						$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='9' LIMIT 1";
-						self::DbQuery( $sql );
-						
-						self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Archeologist.' ), array(
+					}
+					
+					$this->gamestate->nextState('sendexpert');
+		
+					break;
+		case "expert3":
+					$sql = "SELECT card_location from tokens where card_type='9'";
+					$result = self::getUniqueValueFromDB( $sql ) ;
+					if ( self::getGoldBalance($player_id) >=2  AND $result=="expertholder3" ) 
+					{
+					self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 Kara Gold to hire the Archeologist' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
-									'destination' => "playercardstore_".$player_id,
-									'tile_id' => "expert3"
+									'amount' => 2 ,  
+									'destination' => "expertholder3"
 									) );
-							
-						}
-			            self::setGameStateValue( 'expertpicked', 3 );
-						$this->gamestate->nextState('sendexpert');
-						break;
+					
+					$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='9' LIMIT 1";
+					self::DbQuery( $sql );
+					
+					self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Archeologist.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert3"
+								) );
+						
+					}
+					self::setGameStateValue( 'expertpicked', 3 );
+					$this->gamestate->nextState('sendexpert');
+					break;
+		
 			
-				
-			case "expert4":
-						$sql = "SELECT card_location from tokens where card_type='10'";
-		                $result = self::getUniqueValueFromDB( $sql ) ;
-						if ( self::getGoldBalance($player_id) >=3  AND $result=="expertholder4" ) 
-						{
-						self::DbQuery( "UPDATE player set player_gold = player_gold - 3 WHERE Player_id = $player_id" );	
-						self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 Kara Gold to hire the Soothsayer' ), array(
-										'player_id' => $player_id,
-										'player_name' => self::getActivePlayerName(),
-										'amount' => 3 ,  
-										'destination' => "expertholder4"
-										) );
-						
-						$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='10' LIMIT 1";
-						self::DbQuery( $sql );
-						
-						self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Soothsayer.' ), array(
+		case "expert4":
+					$sql = "SELECT card_location from tokens where card_type='10'";
+					$result = self::getUniqueValueFromDB( $sql ) ;
+					if ( self::getGoldBalance($player_id) >=3  AND $result=="expertholder4" ) 
+					{
+					self::DbQuery( "UPDATE player set player_gold = player_gold - 3 WHERE Player_id = $player_id" );	
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 Kara Gold to hire the Soothsayer' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
-									'destination' => "playercardstore_".$player_id,
-									'tile_id' => "expert4"
+									'amount' => 3 ,  
+									'destination' => "expertholder4"
 									) );
-							
-						}
-			            self::setGameStateValue( 'expertpicked', 3 );
-						$this->gamestate->nextState('sendexpert');
-						break;
-			
+					
+					$sql="UPDATE tokens SET card_location='playercardstore_".$player_id."' WHERE card_type='10' LIMIT 1";
+					self::DbQuery( $sql );
+					
+					self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} hires the Soothsayer.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert4"
+								) );
+						
+					}
+					self::setGameStateValue( 'expertpicked', 4 );
+					$this->gamestate->nextState('sendexpert');
+					break;
+		
 		}
     }
 	
@@ -922,12 +1087,20 @@ class takaraisland extends Table
 				self::notifyPlayer($player_id, "activatesword", "" , array() );	
 			}
 			
+			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
+			if (( $emptydecks == 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2)
+			{
+				$this->gamestate->nextState( 'gameEndScoring' );
+			}
+			
 			$sql = "SELECT COUNT(*) from tokens where card_location = 'TH_$player_id'";
 			$availableAdventurers = self::getUniqueValueFromDB( $sql );
 			if ( $availableAdventurers < 1 )
 			{
 				$this->gamestate->nextState( 'endturn' );
 			}
+			
+				
 			
 	}
 	////////////////////////////////////////////////////////////////////////////
@@ -1290,7 +1463,7 @@ class takaraisland extends Table
 
 ////////////////////////////////////////////////////////////////////////////
 	
-	function sttreasure()
+	function sttreasure($callback = false)
 	{
         
 		$player_id = self::getActivePlayerId();
@@ -1360,8 +1533,10 @@ class takaraisland extends Table
 						break;
 		}					
 		
-		$this->gamestate->nextState();
-		
+		if ($callback!=true)
+		{
+			$this->gamestate->nextState();
+		}
 	}
 	
 ////////////////////////////////////////////////////////////////////////////
@@ -1374,8 +1549,8 @@ class takaraisland extends Table
         
         //left hand col
         $table[0][] = array( 'str' => ' ', 'args' => array(), 'type' => 'header');
-        $table[1][] = $this->resources["gems"    ];
-        $table[2][] = $this->resources["artifacts"  ];
+        $table[1][] = $this->resources["gold"    ];
+        $table[2][] = $this->resources["experience"  ];
         
 		$table[3][] = array( 'str' => '<span class=\'score\'>Score</span>', 'args' => array(), 'type' => '');
 
@@ -1385,16 +1560,16 @@ class takaraisland extends Table
                                  'args' => array( 'player_name' => $player['player_name'] ),
                                  'type' => 'header'
                                );
-            $table[1][] = $this->getGemsPlayer( $player_id, 'tent' );
-            $table[2][] = $this->cards->countCardsInLocation( $player['player_id']);
+            $table[1][] = $this->getGoldBalance (  $player_id );
+            $table[2][] = $this->getXPBalance (  $player_id );
 
-            $gems = $this->getGemsPlayer( $player_id, 'tent' ) ;
-			$artifacts = $this->cards->countCardsInLocation( $player_id );
+            $gold = $this->getGoldBalance (  $player_id );
+			$XP = $this->getXPBalance (  $player_id );
 			
-			$score = $gems + 5 * $artifacts ;
+			$score_aux = floor( $gold / 10  ) + $XP ;
 			
-			self::setStat( $gems , "gems_number", $player_id );
-			self::setStat( $artifacts , "artifacts_number", $player_id );
+			self::setStat( $gold , "gold_number", $player_id );
+			self::setStat( $XP , "xp_number", $player_id );
 			
 			$sql = "UPDATE player SET player_score = ".$score." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
@@ -1407,7 +1582,7 @@ class takaraisland extends Table
                                  'type' => ''
                                );
         }
-		self::setStat( self::getGameStateValue( 'artifactspicked') , "artifacts_drawn" );
+		
 
         $this->notifyAllPlayers( "tableWindow", '', array(
             "id" => 'finalScoring',

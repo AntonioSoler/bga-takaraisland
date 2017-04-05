@@ -110,7 +110,7 @@ $machinestates = array(
 		"possibleactions" => array( "selectcards"),
 		"args" => "argExpertpicked",
         "updateGameProgression" => false,
-        "transitions" => array( "" => 8 ) //
+        "transitions" => array( "browsecards" => 8 , "gettreasure" => 10 , "playermove" => 3 ) //
     ),
 
     7 => array(

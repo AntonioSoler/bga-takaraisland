@@ -133,7 +133,7 @@
 	 public function selectcards()
     {
 		self::setAjaxMode();
-		$expertpicked = self::getArg( "deckpicked", AT_alphanum, true );
+		$deckpicked = self::getArg( "deckpicked", AT_alphanum, true );
 		$token_id = self::getArg( "token_id", AT_posint, false );
 		$this->game->selectcards($deckpicked,$token_id);
 		self::ajaxResponse();    
