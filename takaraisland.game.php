@@ -347,6 +347,16 @@ class takaraisland extends Table
         return ($result);
     }
 	
+	function getStoneBalance($player_id)
+    {
+        //Compute and return the game progression
+        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
+
+        $result = 0;
+        $sql = "SELECT Count(*) from tokens where card_type in ('12','13' ) AND card_location='playercardstore_$player_id' ";
+		$result = self::getUniqueValueFromDB( $sql ) ;
+        return ($result);
+    }
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 //////////// 
@@ -699,6 +709,8 @@ class takaraisland extends Table
 									'tile_id' => "card_". $topcards[$i]['id'],
 									'deck' => $topcards[$i]['location']
 									) );
+								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
+								self::DbQuery( $sql );	
 								break;
 						case  "4":     //GO HOSPITAL
 						case  "9": 
@@ -750,6 +762,8 @@ class takaraisland extends Table
 									'tile_id' => "card_". $topcards[$i]['id'],
 									'deck' => $topcards[$i]['location']
 									) );
+								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
+								self::DbQuery( $sql );	
 								break;
 						case "5":        //MONSTER
 						case "6":
@@ -765,7 +779,7 @@ class takaraisland extends Table
 											'player_id' => $player_id,
 											'player_name' => self::getActivePlayerName(),
 											'sitenr' => substr( $deckpicked ,-1),
-											'card' => $topcard
+											'card' => $topcards[$i]
 											) );
 								break 2;   // BREAK 2 !!!
 						case "22":    // STONE OF LEGEND
@@ -1088,7 +1102,7 @@ class takaraisland extends Table
 			}
 			
 			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
-			if (( $emptydecks == 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2)
+			if (( $emptydecks == 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2))
 			{
 				$this->gamestate->nextState( 'gameEndScoring' );
 			}
@@ -1551,8 +1565,8 @@ class takaraisland extends Table
         $table[0][] = array( 'str' => ' ', 'args' => array(), 'type' => 'header');
         $table[1][] = $this->resources["gold"    ];
         $table[2][] = $this->resources["experience"  ];
-        
-		$table[3][] = array( 'str' => '<span class=\'score\'>Score</span>', 'args' => array(), 'type' => '');
+        $table[3][] = $this->resources["stone of legend"];
+		$table[4][] = array( 'str' => '<span class=\'Points\'>Points</span>', 'args' => array(), 'type' => '');
 
         foreach( $players as $player_id => $player )
         {
@@ -1560,27 +1574,28 @@ class takaraisland extends Table
                                  'args' => array( 'player_name' => $player['player_name'] ),
                                  'type' => 'header'
                                );
-            $table[1][] = $this->getGoldBalance (  $player_id );
-            $table[2][] = $this->getXPBalance (  $player_id );
+            
 
             $gold = $this->getGoldBalance (  $player_id );
 			$XP = $this->getXPBalance (  $player_id );
+			$score = $this->getStoneBalance (  $player_id );
 			
-			$score_aux = floor( $gold / 10  ) + $XP ;
+			$table[1][] = $gold;
+            $table[2][] = $XP;
+			$table[3][] = $score;
 			
-			self::setStat( $gold , "gold_number", $player_id );
-			self::setStat( $XP , "xp_number", $player_id );
+			$score_aux = floor( $gold / 5  ) + $XP ;
+			
+			//self::setStat( $gold , "gold_number", $player_id );
+			//self::setStat( $XP , "xp_number", $player_id );
 			
 			$sql = "UPDATE player SET player_score = ".$score." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
 			
-			$sql = "UPDATE player SET player_score_aux = ".$this->cards->countCardsInLocation( $player['player_id'])." WHERE player_id=".$player['player_id'];
+			$sql = "UPDATE player SET player_score_aux = ".$score_aux." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
 				
-            $table[3][] = array( 'str' => '<span class=\'score\'>${player_score}</span>',
-                                 'args' => array( 'player_score' => $score ),
-                                 'type' => ''
-                               );
+            $table[4][] = $score_aux ;
         }
 		
 

@@ -256,7 +256,18 @@ function (dojo, declare) {
 					}
 				}
 				break;
+            case 'sendexpert':
+			    dojo.forEach(this.gameconnections, dojo.disconnect);
+				dojo.query(".borderpulse").removeClass("borderpulse");
+				this.gameconnections=[];
 				
+			    if ((this.isCurrentPlayerActive()) && (dojo.byId("tablecards").children.length > 0) && (this.expertpicked == 4 ) )
+				{
+					browseddeck=dojo.byId("tablecards").children[0].id;
+					this[browseddeck].setSelectionMode (1);
+				}
+				break;			
+			
 			case 'exchange':
 			    
 			    if (this.isCurrentPlayerActive() )
@@ -289,7 +300,8 @@ function (dojo, declare) {
 				
 		    case 'finish':
 			    
-			    list=dojo.query( '#WaitingroomC div[id^="tile_'+this.getActivePlayerId()+'"]') ;
+			    
+				list=dojo.query( '#WaitingroomC div[id^="tile_'+this.getActivePlayerId()+'"]') ;
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;
@@ -301,26 +313,28 @@ function (dojo, declare) {
 					var thiselement = list[i].id;
 					this.slideToObjectRelative ( thiselement , "WaitingroomC" ) ;
 				}
-				
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' .visible') ;
 				for (var i = 0; i < list.length; i++)
 				{
-					var thiselement = list[i].id;  //expert1
+					var thiselement = list[i].id; 
 					dojo.toggleClass(thiselement, 'visible');
+					console.log("*** returning expert"+thiselement);
 					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ) ;
-				}
-				
-				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' div[id^="expert"]') ;
-				for (var i = 0; i < list.length; i++)
-				{
-					var thiselement = list[i].id;  //expert1
-					dojo.toggleClass(thiselement, 'visible');
 				}
 				
 				dojo.forEach(this.gameconnections, dojo.disconnect);
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
+				debugger;
+				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' > div[id^="expert"]') ;
+				for (var i = 0; i < list.length; i++)
+				{
+					var thiselement = list[i].id;  //expert1
+					dojo.toggleClass(thiselement, 'visible');
+				}
+				
+				
                 break; 		
            
             case 'dummmy':
@@ -685,7 +699,6 @@ function (dojo, declare) {
 				{
 					this[thisdeck].setSelectionMode (0);
 				}	
-				
 			}
 			else
 			{   
