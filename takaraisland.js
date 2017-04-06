@@ -326,7 +326,7 @@ function (dojo, declare) {
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
-				debugger;
+				
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' > div[id^="expert"]') ;
 				for (var i = 0; i < list.length; i++)
 				{

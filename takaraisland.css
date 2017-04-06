@@ -71,6 +71,8 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   perspective: 2000px;
+  padding: 10px;
+  margin: 1px;
 }
 .goldcounter {
 	font-family: "Roboto", Arial, sans-serif;
@@ -100,8 +102,10 @@
 }
 
 #table_wrap {
+  margin: 15px;
   border: 0px;
-  width: 100%;
+  width: 98%;
+  height: 420px;
   position: relative;
   display: flex;
 }
@@ -681,6 +685,26 @@ transform: rotate(0deg);
     display: inline-block;
 }
 
+.xplog {
+    width: 15px;
+    height: 15px;
+    margin: 1px;
+    background-image: url(img/xpicon.png);
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+}
+
+.goldlog {
+    width: 15px;
+    height: 15px;
+    margin: 1px;
+    background-image: url(img/coin.png);
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+}
+
 .playertileholder {
   border: 0px;
   width: 60px;
@@ -818,7 +842,7 @@ background-image: url('img/ffa500.jpg');
 
 .whiteblock {
     border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.29);
+    background-color: rgba(243, 239, 220, 0);
 }
 
 #playareaup {

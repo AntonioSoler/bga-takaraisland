@@ -190,7 +190,7 @@ $machinestates = array(
         "name" => "gameEndScoring",
         "type" => "game",
         "action" => "stGameEndScoring",
-        "updateGameProgression" => false,
+        "updateGameProgression" => true,
         "transitions" => array( "" => 99 )
     ),
     

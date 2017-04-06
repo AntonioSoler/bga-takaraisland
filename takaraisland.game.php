@@ -353,7 +353,7 @@ class takaraisland extends Table
         // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
 
         $result = 0;
-        $sql = "SELECT Count(*) from tokens where card_type in ('12','13' ) AND card_location='playercardstore_$player_id' ";
+        $sql = "SELECT Count(*) from tokens where card_type in ('11','12' ) AND card_location='playercardstore_$player_id' ";
 		$result = self::getUniqueValueFromDB( $sql ) ;
         return ($result);
     }
@@ -430,7 +430,7 @@ class takaraisland extends Table
 			case "diveC":
 				$sql = "UPDATE player set player_gold = player_gold + 1 WHERE Player_id = $player_id";
 				self::DbQuery( $sql );
-				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 1 Kara Gold for visiting "The Dive"' ), array(
+				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 1 <div class="goldlog"></div> for visiting "The Dive"' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'amount' => 1 ,  
@@ -454,7 +454,7 @@ class takaraisland extends Table
 	if (( self::getGameStateValue ('playermoves') == 1) AND ( self::getGoldBalance($player_id) >=3 ) ) 
 		{
 		self::DbQuery( "UPDATE player set player_gold = player_gold - 3 WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 Kara Gold to the forge' ), array(
+		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 <div class="goldlog"></div> to the forge' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => 3 ,  
@@ -496,7 +496,7 @@ class takaraisland extends Table
 		}
 		$sql = "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id";
 		self::DbQuery( $sql );
-		self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 Kara Gold per monster detected in the survey' ), array(
+		self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 <div class="goldlog"></div> per monster detected in the survey' ), array(
 			'player_id' => $player_id,
 			'player_name' => self::getActivePlayerName(),
 			'amount' => $gold ,  //deck1_item_card_3
@@ -554,7 +554,7 @@ class takaraisland extends Table
 						'sitenr' => $sitenr ,
 						'card' => $thiscard
 						) );
-				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 Kara Gold for detecting a rockfall in the survey' ), array(
+				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets 2 <div class="goldlog"></div> for detecting a rockfall in the survey' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => 2 , 
@@ -589,7 +589,7 @@ class takaraisland extends Table
 	if ( self::getGoldBalance($player_id) >=5 ) 
 		{
 		self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to hire a new adventurer' ), array(
+		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to hire a new adventurer' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => 5 ,  
@@ -614,7 +614,7 @@ class takaraisland extends Table
 	if ( self::getGoldBalance($player_id) >=5 ) 
 		{
 		self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to the Counter' ), array(
+		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to the Counter' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => 5 ,  
@@ -626,7 +626,7 @@ class takaraisland extends Table
 		self::DbQuery( $sql );
 		$token_id=self::DbGetLastId();
 
-		self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} buys 2 XP points at the Counter' ), array(
+		self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} buys 2 <div class="xplog"></div> points at the Counter' ), array(
 				'player_id' => $player_id,
 				'player_name' => self::getActivePlayerName(),
 				'amount' => $xp,
@@ -661,7 +661,7 @@ class takaraisland extends Table
 				'token_id' => $token_id 
 				) );
 		self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playergetsgold", clienttranslate( '${player_name} gets ${amount} Kara Gold from the Counter' ), array(
+		self::notifyAllPlayers( "playergetsgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> from the Counter' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => $gold ,  
@@ -732,7 +732,7 @@ class takaraisland extends Table
 								$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
 								self::DbQuery( $sql );
 								$token_id=self::DbGetLastId();
-								self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+								self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} <div class="xplog"></div> points' ), array(
 										'player_id' => $player_id,
 										'player_name' => self::getActivePlayerName(),
 										'amount' => $xp,
@@ -853,7 +853,7 @@ class takaraisland extends Table
 					if ( self::getGoldBalance($player_id) >=5 AND $result=="expertholder1" ) 
 					{
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
-					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 Kara Gold to hire the Miner' ), array(
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to hire the Miner' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'amount' => 5 ,  
@@ -895,7 +895,7 @@ class takaraisland extends Table
 					if ( self::getGoldBalance($player_id) >= $gold  AND $result=="expertholder2" ) 
 					{
 					self::DbQuery( "UPDATE player set player_gold = player_gold - $gold WHERE Player_id = $player_id" );	
-					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays ${amount} Kara Gold to hire the Impersonator acting as ${impersonated}' ), array(
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays ${amount} <div class="goldlog"></div> to hire the Impersonator acting as ${impersonated}' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'amount' => $gold ,  
@@ -925,7 +925,7 @@ class takaraisland extends Table
 					if ( self::getGoldBalance($player_id) >=2  AND $result=="expertholder3" ) 
 					{
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
-					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 Kara Gold to hire the Archeologist' ), array(
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 <div class="goldlog"></div> to hire the Archeologist' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'amount' => 2 ,  
@@ -954,7 +954,7 @@ class takaraisland extends Table
 					if ( self::getGoldBalance($player_id) >=3  AND $result=="expertholder4" ) 
 					{
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 3 WHERE Player_id = $player_id" );	
-					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 Kara Gold to hire the Soothsayer' ), array(
+					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 <div class="goldlog"></div> to hire the Soothsayer' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'amount' => 3 ,  
@@ -987,7 +987,7 @@ class takaraisland extends Table
 	if ( self::getGoldBalance($player_id) >=2 ) 
 		{
 		self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 Kara Gold to the Hospital' ), array(
+		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 <div class="goldlog"></div> to the Hospital' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => 2 ,  
@@ -1098,7 +1098,7 @@ class takaraisland extends Table
 			
 			if ( self::getGameStateValue('playermoves') == 1 )
 			{
-				self::notifyPlayer($player_id, "activatesword", "" , array() );	
+				self::notifyPlayer($player_id, "activatesword", clienttranslate( '${player_name} starts a new turn' ) , array( 'player_name' => self::getActivePlayerName() ) );	
 			}
 			
 			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
@@ -1106,16 +1106,15 @@ class takaraisland extends Table
 			{
 				$this->gamestate->nextState( 'gameEndScoring' );
 			}
-			
-			$sql = "SELECT COUNT(*) from tokens where card_location = 'TH_$player_id'";
-			$availableAdventurers = self::getUniqueValueFromDB( $sql );
-			if ( $availableAdventurers < 1 )
+			else 
 			{
-				$this->gamestate->nextState( 'endturn' );
-			}
-			
-				
-			
+				$sql = "SELECT COUNT(*) from tokens where card_location = 'TH_$player_id'";
+				$availableAdventurers = self::getUniqueValueFromDB( $sql );
+				if ( $availableAdventurers < 1 )
+				{
+					$this->gamestate->nextState( 'endturn' );
+				}
+			}		
 	}
 	////////////////////////////////////////////////////////////////////////////
 	function stendturn()
@@ -1246,7 +1245,7 @@ class takaraisland extends Table
 				$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 				self::DbQuery( $sql );
 	
-				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} Kara Gold' ), array(
+				self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div>' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'amount' => $gold,
@@ -1262,7 +1261,7 @@ class takaraisland extends Table
 				self::DbQuery( $sql );
 				$token_id=self::DbGetLastId();
 		
-				self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+				self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} <div class="xplog"></div> points' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'amount' => $xp,
@@ -1305,7 +1304,7 @@ class takaraisland extends Table
 				        $sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
 				
-						self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} Kara Gold for digging a gallerie card' ), array(
+						self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> for digging a gallerie card' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'amount' => $gold,
@@ -1335,7 +1334,7 @@ class takaraisland extends Table
 						self::DbQuery( $sql );
 						$token_id=self::DbGetLastId();
 				
-						self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+						self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} <div class="xplog"></div> points' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'amount' => $xp,
@@ -1390,7 +1389,7 @@ class takaraisland extends Table
 							$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 							self::DbQuery( $sql );
 					
-							self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} Kara Gold for digging a rockfall ( 2 x visible rockfalls)' ), array(
+							self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> for digging a rockfall ( 2 x visible rockfalls)' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'amount' => $gold,
@@ -1514,7 +1513,7 @@ class takaraisland extends Table
 						if ($gold>0)
 						{
 							self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );
-							self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} Kara Gold' ), array(
+							self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div>' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'amount' => $gold,
@@ -1531,7 +1530,7 @@ class takaraisland extends Table
 							$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
 							self::DbQuery( $sql );
 							$token_id=self::DbGetLastId();
-							self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} XP points' ), array(
+							self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} <div class="xplog"></div> points' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'amount' => $xp,
@@ -1620,7 +1619,7 @@ class takaraisland extends Table
 
         $this->displayScores();
     
-        $this->gamestate->nextState('');
+        $this->gamestate->nextState();
     }
 
 //////////////////////////////////////////////////////////////////////////////
