@@ -1771,8 +1771,8 @@ class takaraisland extends Table
 		
 		$sql = "SELECT COUNT(*) FROM cards WHERE card_location like 'removed' ";
         $cardsplayed = self::getUniqueValueFromDB( $sql );
-		self::setStat( self::getGameStateValue('stones_found') , "stones_found" );
-		self::setStat( 54 - $cardsPlayed , "cards_digged" );
+		self::setStat( self::getGameStateValue('stonesfound') , "stones_found" );
+		self::setStat( 54 - $cardsplayed , "cards_digged" );
     
         $this->gamestate->nextState();
     }

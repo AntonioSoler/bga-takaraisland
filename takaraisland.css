@@ -133,7 +133,7 @@ transition: transform 1.5s;
   height: 110px;
   position: absolute;
   transition: transform 1.5s;
-  z-index: 100;
+  z-index: 100 !important;
   background-image: url('img/sword.png');
   transform: rotate(0deg);
 }
@@ -433,13 +433,16 @@ transform: rotate(0deg);
 }
 
 .deckholder .deck>:nth-child(2) {
-    box-shadow: 12px 10px 5px 4px rgba(0, 0, 0, 0.72);
+    box-shadow: 9px 12px 7px 3px rgba(0, 0, 0, 0.72);
 }
 
-.tablecards .deck .card{
-    /* box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
+.tablecards .deck .card-front{
+    box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
 }
 
+.tablecards .deck .card-back{
+    box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
+}
 
 .tablecards .deck:hover .buttondiv {  
   display: block;
@@ -528,7 +531,8 @@ transform: rotate(0deg);
   margin-right: -23%;
   padding: 0px;
   border-radius: 8%;
-  z-index: 100 !important;
+  z-index: 90 !important;
+  box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.51);
 }
 
 .expert1 {
@@ -555,7 +559,7 @@ transform: rotate(0deg);
 }
 
 .stockitem_selected{
-	box-shadow: -155px 0px 0px 5px rgb(229, 42, 42), 0px 0px 0px 5px rgb(229, 30, 30), 155px 0px 0px 5px rgb(229, 40, 40);
+	box-shadow: -155px 0px 0px 10px #c0dd00, 0px 0px 0px 10px #c0dd00, 155px 0px 0px 10px #c0dd00;
 	z-index: 0 !important;
 	border: 0px !important;
 	}
@@ -1029,7 +1033,7 @@ background-image: url('img/ffa500.jpg');
 }
 
 #wrapperdice {
-    z-index: 90;
+    z-index: 120;
     position: absolute;
     width: 950px;
     height: 1px;
