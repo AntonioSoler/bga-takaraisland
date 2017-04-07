@@ -1167,7 +1167,7 @@ class takaraisland extends Table
 			}
 			
 			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
-			if (( $emptydecks == 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2))
+			if (( $emptydecks >= 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2))
 			{
 				$this->gamestate->nextState( 'gameEndScoring' );
 			}
@@ -1714,7 +1714,7 @@ class takaraisland extends Table
         $table[1][] = $this->resources["gold"    ];
         $table[2][] = $this->resources["experience"  ];
         $table[3][] = $this->resources["stone of legend"];
-		$table[4][] = clienttranslate(' Score = ( XP + ( Gold / 5 )) ');
+		$table[4][] = clienttranslate(' Score =  XP + ( Gold / 5 ) + Stones * 10 ');
 
         foreach( $players as $player_id => $player )
         {
@@ -1726,25 +1726,39 @@ class takaraisland extends Table
 
             $gold = $this->getGoldBalance (  $player_id );
 			$XP = $this->getXPBalance (  $player_id );
-			$score = $this->getStoneBalance (  $player_id );
-			
-			$table[1][] = $gold;
-            $table[2][] = $XP;
-			$table[3][] = $score;
-			
-			$score_aux = floor( $gold / 5  ) + $XP ;
+			$stones = $this->getStoneBalance (  $player_id );
 			
 			self::setStat( $gold , "gold", $player_id );
 			self::setStat( $XP , "experience", $player_id );
-			self::setStat( $score , "stones_found", $player_id );
+			self::setStat( $stones , "stones_found", $player_id );
+			
+			if ( self::getGameStateValue('stonesfound') < 2 )
+			{
+				$stones=0;				
+			}
+			
+			$table[1][] = $gold;
+            $table[2][] = $XP;
+			$table[3][] = $stones;
+						
+			$score = floor( $gold / 5  ) + $XP + $stones * 10  ;
+			$score_aux=$score;
+			
+			$table[4][] = $score_aux ;
+			
+			if ($stones==2)
+			{
+			 	$score = 1000 ;
+			}
+			
 			
 			$sql = "UPDATE player SET player_score = ".$score." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
 			
-			$sql = "UPDATE player SET player_score_aux = ".$score_aux." WHERE player_id=".$player['player_id'];
+			$sql = "UPDATE player SET player_score_aux = ".$XP." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
 				
-            $table[4][] = $score_aux ;
+            
         }
 		
 
@@ -1772,7 +1786,7 @@ class takaraisland extends Table
 		$sql = "SELECT COUNT(*) FROM cards WHERE card_location like 'removed' ";
         $cardsplayed = self::getUniqueValueFromDB( $sql );
 		self::setStat( self::getGameStateValue('stonesfound') , "stones_found" );
-		self::setStat( 54 - $cardsplayed , "cards_digged" );
+		self::setStat( $cardsplayed , "cards_digged" );
     
         $this->gamestate->nextState();
     }

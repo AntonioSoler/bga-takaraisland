@@ -52,6 +52,7 @@ function (dojo, declare) {
             console.log( "Starting game setup" );
             this.param=new Array();
 			this.gameconnections=new Array();
+			this.recuitcon==new Array();
 			this.swordconnection=null;
 			
             // Setting up player boards
@@ -287,7 +288,7 @@ function (dojo, declare) {
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
-						this.recruitcon= dojo.connect(thiselement, 'onclick' , this, 'recruit')
+						this.recruitcon.push=( dojo.connect(thiselement, 'onclick' , this, 'recruit'));
 					}
 					list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
 					if ( list.length > 0 )
@@ -366,8 +367,10 @@ function (dojo, declare) {
 					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
 				}
 				dojo.forEach(this.gameconnections, dojo.disconnect);
+				dojo.forEach(this.recruitcon, dojo.disconnect);
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
+				this.recruitcon=[];
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
                 break;
 			

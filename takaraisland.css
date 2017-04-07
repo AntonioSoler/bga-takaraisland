@@ -394,7 +394,7 @@ border-radius: 8%;
     border-style: solid;
     border-color: #ff0f40;
     transform-style: preserve-3d;
-	z-index: 100;
+    z-index: 100;
 }
 
 #treasurereward .card { 
@@ -1047,8 +1047,8 @@ background-image: url('img/ffa500.jpg');
 
 .borderpulse {
     cursor: pointer;
-	animation: pulse 2s ease infinite;
-	z-index: 1;
+    animation: pulse 2s ease infinite;
+    z-index: 200 !important;
 }
 
 @keyframes pulse {

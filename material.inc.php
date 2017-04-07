@@ -44,7 +44,7 @@
 	"idol"            => clienttranslate('idol'),
 	"skull"           => clienttranslate('skull'),
 	"score_window_title" => clienttranslate('FINAL SCORE'),
-	"win_condition" => clienttranslate('The player with the two stones wins, if 2 players have 1 stone the xp points are the tie breaker')
+	"win_condition" => clienttranslate('The player with the 2 stones wins. If 2 players have 1 stone all players compare points. If only one stone was found it does not score')
 );
 
  //
