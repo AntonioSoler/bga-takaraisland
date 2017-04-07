@@ -102,13 +102,14 @@ class takaraisland extends Table
         
 		self::initStat( 'table', 'cards_digged', 0 );    // Init a table statistics
         self::initStat( 'table', 'stones_found', 0 );
-		self::initStat( 'player', 'cards_digged' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'cards_digged_player' , 0 );  // Init a player statistics (for all players)
 		self::initStat( 'player', 'gold' , 0 );  // Init a player statistics (for all players)
 		self::initStat( 'player', 'experience' , 0 );  // Init a player statistics (for all players)
 		self::initStat( 'player', 'stones_found' , 0 );  // Init a player statistics (for all players)
 		
         // setup the initial game situation here
-        self::DbQuery( "UPDATE player set player_gold = 100" );   // TEST!!!
+        // self::DbQuery( "UPDATE player set player_gold = 100" );   // TEST!!!
+		
         self::setGameStateInitialValue( 'stonesfound', 0 ); // Stones of legend found
         self::setGameStateInitialValue( 'playermoves', 0 ); // number of movements done by the player (sword can be only the 1st)
 		self::setGameStateInitialValue( 'currentsite', 0 ); // Current focused site for dig / survey / fight / expert
@@ -702,6 +703,7 @@ class takaraisland extends Table
 						case  "1":  //GALLERIES
 						case  "7":
 						case "17":
+						        self::incStat (1,"cards_digged_player",$player_id);
 								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallerie card with the Miner.' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
@@ -718,6 +720,7 @@ class takaraisland extends Table
 						case "3":       //GET EXP
 						case "8":
 						case "16":
+								self::incStat (1,"cards_digged_player",$player_id);
 								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs an XP card.' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
@@ -742,6 +745,7 @@ class takaraisland extends Table
 								break;
 						case "13":       // TREASURE
 						case "18":
+						        self::incStat (1,"cards_digged_player",$player_id);
 								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
 										'player_id' => $player_id,
 										'player_name' => self::getActivePlayerName(),
@@ -755,6 +759,7 @@ class takaraisland extends Table
 								break;
 						case "2":       // ROCKFALL
 						case "14":
+								self::incStat (1,"cards_digged_player",$player_id);
 								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
@@ -773,6 +778,7 @@ class takaraisland extends Table
 						case "19":
 						case "20":
 						case "21":
+								self::incStat (1,"cards_digged_player",$player_id);
 								$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcards[$i]['id'];
 									self::DbQuery( $sql );
 									self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digged into a monster in site: ${sitenr} and the Miner runs home' ), array(
@@ -784,6 +790,7 @@ class takaraisland extends Table
 								break 2;   // BREAK 2 !!!
 						case "22":    // STONE OF LEGEND
 						case "23":
+								self::incStat (1,"cards_digged_player",$player_id);
 								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} FINDS A STONE OF LEGEND!!!' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
@@ -1227,6 +1234,7 @@ class takaraisland extends Table
 		
 		if ( $wounds >= $life )
 		{   
+			self::incStat (1,"cards_digged_player",$player_id);
 			self::DbQuery( "DELETE FROM tokens WHERE card_location ='deck".$sitenr."_item_card_".$topcard['id']."_back'");
 			self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} beats the ${monstername}.' ), array(
 				'player_id' => $player_id,
@@ -1292,6 +1300,7 @@ class takaraisland extends Table
 			case  "1":  //GALLERIES
 			case  "7":
 			case "17":
+						self::incStat (1,"cards_digged_player",$player_id);
 						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallerie card.' ), array(
 							'player_id' => $player_id,
 							'player_name' => self::getActivePlayerName(),
@@ -1319,6 +1328,7 @@ class takaraisland extends Table
 			case "3":       //GET EXP
 			case "8":
 			case "16":
+						self::incStat (1,"cards_digged_player",$player_id);
 						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs an XP card.' ), array(
 							'player_id' => $player_id,
 							'player_name' => self::getActivePlayerName(),
@@ -1359,6 +1369,7 @@ class takaraisland extends Table
 						break;
 			case "13":       // TREASURE
 			case "18":
+						self::incStat (1,"cards_digged_player",$player_id);
 						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
@@ -1376,6 +1387,7 @@ class takaraisland extends Table
 						$advcount=self::getUniqueValueFromDB( "SELECT COUNT(*) FROM tokens where card_location='explore$sitenr'" );
 						if ($advcount >= 2) 
 						{
+							self::incStat (1,"cards_digged_player",$player_id);
 							self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
@@ -1444,6 +1456,7 @@ class takaraisland extends Table
 						break;
 			case "22":    // STONE OF LEGEND
 			case "23":
+						self::incStat (1,"cards_digged_player",$player_id);
 						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} FINDS A STONE OF LEGEND!!!' ), array(
 							'player_id' => $player_id,
 							'player_name' => self::getActivePlayerName(),
@@ -1603,13 +1616,28 @@ class takaraisland extends Table
 								'source' => "playercardstore_".$player_id,
 								'token_id' => $token_id
 								) );
+							
+							self::sttreasure(true);	
 						}
-						
-						self::sttreasure(true);
-			
 						break;
-			case  "2": 
-			
+			case  "2":   
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} treasure card is a ${cardname} !' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "treasure_". $topcard['id'],
+								'deck' => 'treasuredeck',
+								'cardname' => $cardname
+									) );
+						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+						self::DbQuery( $sql );
+						
+						/*self::notifyPlayer( $player_id, "choosereward", clienttranslate( '${player_name} : These are the cards detected by the Archeologist on the survey of Excavation site: ${sitenr}' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'sitenr' => substr( $deckpicked ,-1),
+								'cards' => $topcards
+								) );*/
 			
 						break;
 		}					
@@ -1633,7 +1661,7 @@ class takaraisland extends Table
         $table[1][] = $this->resources["gold"    ];
         $table[2][] = $this->resources["experience"  ];
         $table[3][] = $this->resources["stone of legend"];
-		$table[4][] = array( 'str' => '<span class=\'Points\'>Points</span>', 'args' => array(), 'type' => '');
+		$table[4][] = clienttranslate(' Score = ( XP + ( Gold / 5 )) ');
 
         foreach( $players as $player_id => $player )
         {
@@ -1653,8 +1681,9 @@ class takaraisland extends Table
 			
 			$score_aux = floor( $gold / 5  ) + $XP ;
 			
-			//self::setStat( $gold , "gold_number", $player_id );
-			//self::setStat( $XP , "xp_number", $player_id );
+			self::setStat( $gold , "gold", $player_id );
+			self::setStat( $XP , "experience", $player_id );
+			self::setStat( $score , "stones_found", $player_id );
 			
 			$sql = "UPDATE player SET player_score = ".$score." WHERE player_id=".$player['player_id'];
             self::DbQuery( $sql );
@@ -1686,6 +1715,11 @@ class takaraisland extends Table
         //stats first
 
         $this->displayScores();
+		
+		$sql = "SELECT COUNT(*) FROM cards WHERE card_location like 'removed' ";
+        $cardsplayed = self::getUniqueValueFromDB( $sql );
+		self::setStat( self::getGameStateValue('stones_found') , "stones_found" );
+		self::setStat( 54 - $cardsPlayed , "cards_digged" );
     
         $this->gamestate->nextState();
     }

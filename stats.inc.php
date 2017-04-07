@@ -76,7 +76,7 @@ $stats_type = array(
     // Statistics existing for each player
     "player" => array(
 
-        "cards_digged" => array("id"=> 12,
+        "cards_digged_player" => array("id"=> 12,
                     "name" => totranslate("Number of cards digged (while exploring) "),
                     "type" => "int" ),
         
@@ -87,6 +87,7 @@ $stats_type = array(
         "experience" => array("id"=> 14,
                     "name" => totranslate("Experience collected at the end of the game"),
                     "type" => "int" ),
+					
 		"stones_found" => array("id"=> 15,
                     "name" => totranslate("Number of Stones of Legend found"),
                     "type" => "int" ),			
