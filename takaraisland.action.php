@@ -111,6 +111,14 @@
 		$token_id = self::getArg( "token_id", AT_posint, true );
 		$this->game->sell($token_id);
 		self::ajaxResponse();    
+	}
+	
+	public function choosereward()
+    {
+		self::setAjaxMode();
+		$reward = self::getArg( "reward", AT_posint, true );
+		$this->game->choosereward($reward);
+		self::ajaxResponse();    
 	}	
 	
 	 public function movetile()

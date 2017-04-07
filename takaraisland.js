@@ -451,7 +451,16 @@ function (dojo, declare) {
 						this.addActionButton( 'selectcards_button', _('Select this deck'), 'selectcards' ); 
 					}
                     break;
+				
+				case 'playermove':
+				   				   
+				    if ( this.getActivePlayerId() == args.mapowner )
+					{
+						this.addActionButton( 'reward_1', _('get 5 Kara Gold for the Map'), 'choosereward' );
 					
+						this.addActionButton( 'reward_2', _('get 2 XP for the Map'), 'choosereward' ); 
+					}
+                    break;	
 				/*              
                  Example:
  
@@ -560,7 +569,7 @@ function (dojo, declare) {
 		},
 		
 		selectadventurer : function(sourceclick) {
-			
+			dojo.stopEvent( sourceclick );
 			var target = sourceclick.target || sourceclick.srcElement;
 			this.adventurer=target.id;
 			dojo.toggleClass(this.adventurer,"tileselected");
@@ -903,7 +912,25 @@ function (dojo, declare) {
         },        
         
         */
-		
+		choosereward: function( evt )
+        {
+            // Stop this event propagation
+			
+            dojo.stopEvent( evt );
+			if( ! this.checkAction( 'choosereward' ) )
+            {   return; }
+
+            // Get the cliqued pos and Player field ID
+            var reward = evt.currentTarget.id.split('_')[1];
+			dojo.destroy("reward_1");
+			dojo.destroy("reward_2");
+            if( this.checkAction( 'choosereward' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/choosereward.html", {
+                    reward:reward
+                }, this, function( result ) {} );
+            }            
+        },    
 
 		playermovetile: function( evt )
         {

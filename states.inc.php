@@ -75,7 +75,8 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
 		"descriptionmyturn" => clienttranslate('${you} you need to decide where to send your adventurers'),
 		"action" => "stplayermove",
-		"possibleactions" => array( "movetile", "rentsword" ),
+		"possibleactions" => array( "movetile", "rentsword", "choosereward" ),
+		"args" => "argMapowner",
         "updateGameProgression" => true, //game ends if  2 stones found or 4/5 decks are depleted
         "transitions" => array( "playermove" => 3 , "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "fight" => 11 , "gameEndScoring" => 90) 
     ),
@@ -109,7 +110,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
 		"possibleactions" => array( "selectcards"),
 		"args" => "argExpertpicked",
-        "updateGameProgression" => false,
+        "updateGameProgression" => true,
         "transitions" => array( "browsecards" => 8 , "gettreasure" => 10 , "playermove" => 3 ) //
     ),
 
@@ -150,8 +151,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} obtain a treasure'),
         "type" => "activeplayer",
         "action" => "sttreasure",
-		"possibleactions" => array( "choosereward"),
-        "updateGameProgression" => false,
+		"updateGameProgression" => false,
         "transitions" => array( "" => 3 )
     ),
 	
@@ -161,7 +161,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} are fighting a monster'),
         "type" => "game",
         "action" => "stfight",
-        "updateGameProgression" => false,
+        "updateGameProgression" => true,
         "transitions" => array( "" => 3 )
     ),
 	

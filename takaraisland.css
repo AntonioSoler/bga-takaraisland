@@ -377,9 +377,6 @@ border-radius: 8%;
     transform-style: preserve-3d;
     left: 680px;
     top: 270px;
-    border-style: solid;
-    border-color: #ff0f40;
-    /* transform: rotate(-90deg); */
 }
 #treasuredeck .card {
   transform-style: preserve-3d;
@@ -397,6 +394,7 @@ border-radius: 8%;
     border-style: solid;
     border-color: #ff0f40;
     transform-style: preserve-3d;
+	z-index: 100;
 }
 
 #treasurereward .card { 

@@ -35,8 +35,8 @@ class takaraisland extends Table
 				"playermoves"   => 12,
 				"currentsite"   => 13,
 				"monsterpresent" => 14,
-				"expertpicked" => 15
-				
+				"expertpicked" => 15,
+				"mapowner" => 16
 				
             //    "my_second_global_variable" => 11,
             //      ...
@@ -115,7 +115,8 @@ class takaraisland extends Table
 		self::setGameStateInitialValue( 'currentsite', 0 ); // Current focused site for dig / survey / fight / expert
 		self::setGameStateInitialValue( 'monsterpresent', 0 ); //Monster present in the survey results
 		self::setGameStateInitialValue( 'expertpicked', 0 ); //Nr of the expert picked / impersonated
-        
+        self::setGameStateInitialValue( 'mapowner', 0 ); // Player_id of the map card owner
+		
         $cards = array();
         foreach( $this->treasure_types as $cardType)
         {
@@ -446,6 +447,57 @@ class takaraisland extends Table
 				$this->gamestate->nextState( 'hireexpert' );
 				break;
 		}
+    }
+	
+	function choosereward($reward)
+    {
+        $mapowner = self::getGameStateValue( 'mapowner' );
+		$player_id = self::getActivePlayerId();
+		$gold=5;
+		$xp=2;
+		if ( $mapowner == $player_id )
+		{
+			self::setGameStateValue( 'mapowner',0 );
+			switch ($reward)
+			{
+				case 1:
+						
+						
+						self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );
+						self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> for using the Map' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'amount' => $gold,
+								'source' => "playercardstore_".$player_id
+								) );
+						break;
+				case 2:		
+						$NOSELL=0;
+						
+						self::DbQuery( "UPDATE player set player_xp = player_xp + ( $xp ) WHERE Player_id = $player_id" );
+						$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
+						self::DbQuery( $sql );
+						$token_id=self::DbGetLastId();
+						self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} gets ${amount} <div class="xplog"></div> points for using the Map' ), array(
+							'player_id' => $player_id,
+							'player_name' => self::getActivePlayerName(),
+							'amount' => $xp,
+							'source' => "playercardstore_".$player_id,
+							'token_id' => $token_id,
+							'NOSELL' => $NOSELL
+							) );
+			
+				
+				
+						break;
+				case 0:
+				
+			}
+		
+		}
+		
+			
+        
     }
 
     function rentsword()
@@ -1063,6 +1115,12 @@ class takaraisland extends Table
         );
     }
 	
+	function argMapowner()
+    {
+        return array(
+            'mapowner' => self::getGameStateValue( 'mapowner' )
+        );
+    }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state actions
@@ -1575,11 +1633,12 @@ class takaraisland extends Table
 									'monstername' => $monstername
 									) );	
 							}
-							else     // Player injured -> go to hospital
+							else     //  Mimic chest escapes
 							{
 								self::notifyAllPlayers( "message", clienttranslate( '${player_name} fails to defeat the ${monstername}' ), array(
 									'player_id' => $player_id,
-									'player_name' => self::getActivePlayerName()
+									'player_name' => self::getActivePlayerName(),
+									'monstername' => $monstername
 									) );
 								;
 								break;
@@ -1621,7 +1680,7 @@ class takaraisland extends Table
 						}
 						break;
 			case  "2":   
-						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} treasure card is a ${cardname} !' ), array(
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} treasure card is a ${cardname}! ' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'destination' => "playercardstore_".$player_id,
@@ -1631,14 +1690,8 @@ class takaraisland extends Table
 									) );
 						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
-						
-						/*self::notifyPlayer( $player_id, "choosereward", clienttranslate( '${player_name} : These are the cards detected by the Archeologist on the survey of Excavation site: ${sitenr}' ), array(
-								'player_id' => $player_id,
-								'player_name' => self::getActivePlayerName(),
-								'sitenr' => substr( $deckpicked ,-1),
-								'cards' => $topcards
-								) );*/
-			
+						self::setGameStateValue ('mapowner',$player_id);
+									
 						break;
 		}					
 		if ($callback!=true)
