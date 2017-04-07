@@ -1286,7 +1286,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('placewound', 2000);
 			
 			dojo.subscribe('fliptreasure', this, "notif_fliptreasure");
-            this.notifqueue.setSynchronous('fliptreasure', 2000);
+            this.notifqueue.setSynchronous('fliptreasure', 3000);
 			
 			dojo.subscribe('tableWindow', this, "notif_finalScore");
             this.notifqueue.setSynchronous('tableWindow', 5000);

@@ -1486,16 +1486,8 @@ class takaraisland extends Table
 				'player_name' => self::getActivePlayerName(),
 				'card' => $topcard
 					) );
+		$cardname=  $this->treasure_types[$topcard['type']]['name'];
 		
-		self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} obtain a treasure!!!' ), array(
-				'player_id' => $player_id,
-				'player_name' => self::getActivePlayerName(),
-				'destination' => "playercardstore_".$player_id,
-				'tile_id' => "treasure_". $topcard['id'],
-				'deck' => 'treasuredeck'
-					) );
-		$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
-			self::DbQuery( $sql );
 		
 		switch ($topcard['type'] ) 
 		{
@@ -1505,7 +1497,16 @@ class takaraisland extends Table
 			case  "6":
 			case  "7":
 			case  "8":
-						
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} treasure card is a ${cardname} !' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "treasure_". $topcard['id'],
+								'deck' => 'treasuredeck',
+								'cardname' => $cardname
+									) );
+						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+						self::DbQuery( $sql );
 							
 						$xp=$this->treasure_types[$topcard['type']]['xp'];
 						$gold=$this->treasure_types[$topcard['type']]['gold'];
@@ -1522,6 +1523,7 @@ class takaraisland extends Table
 						}
 						if ($xp!=0)
 						{
+							$NOSELL=0;
 							if ($xp < 0 )
 							{
 								$NOSELL=1;
@@ -1538,18 +1540,84 @@ class takaraisland extends Table
 								'token_id' => $token_id,
 								'NOSELL' => $NOSELL
 								) );
-						}	
+						}
+						
 						break;
-			case  "2":     
-			case  "3": 
+			case  "3":     
+						$life=2;
+						$monstername=$cardname;
+						$wounds=0;
+						do {
+							$result=mt_rand (1,6);
+							self::notifyAllPlayers( "rolldice", "" , array(	'result' => $result  ) );
+							if ($result<5)   // dice sword  -> place wound
+							{ 
+								self::DbQuery( "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (5,0,'treasuredeck_item_treasure_".$topcard['id']."_back')");
+								$token_id=self::DbGetLastId();
+								$thetoken=self::getObjectFromDB("SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg from tokens where card_id=$token_id");
+								self::notifyAllPlayers( "placewound", clienttranslate( '${player_name} hits ${monstername} with the sword. The ${monstername} takes a wound.' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'token' => $thetoken,
+									'monstername' => $monstername
+									) );	
+							}
+							else     // Player injured -> go to hospital
+							{
+								self::notifyAllPlayers( "message", clienttranslate( '${player_name} fails to defeat the ${monstername}' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName()
+									) );
+								;
+								break;
+							} 
+							$wounds=self::getUniqueValueFromDB( "SELECT COUNT(*) c FROM tokens where card_location='treasuredeck_item_treasure_".$topcard['id']."_back'" );		
+						} while ($life > $wounds);
+						self::DbQuery( "DELETE FROM tokens WHERE card_location ='treasuredeck_item_treasure_".$topcard['id']."_back'");
+							self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} fight with the ${cardname} ends.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "treasure_". $topcard['id'],
+								'deck' => 'treasuredeck',
+								'cardname' => $cardname
+									) );
+								
+							$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
+						    self::DbQuery( $sql );
+							
+						if ( $wounds >= $life )
+						{   
+							
+							$xp=2;
+							self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
+								
+							$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location) VALUES (6,$xp,'$player_id')";
+							self::DbQuery( $sql );
+							$token_id=self::DbGetLastId();
+					
+							self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} wins and gets ${amount} <div class="xplog"></div> points and another treasure card.' ), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'amount' => $xp,
+								'source' => "playercardstore_".$player_id,
+								'token_id' => $token_id
+								) );
+						}
+						
+						self::sttreasure(true);
+			
+						break;
+			case  "2": 
+			
 			
 						break;
 		}					
-		
 		if ($callback!=true)
 		{
 			$this->gamestate->nextState();
-		}
+		}	
+		
 	}
 	
 ////////////////////////////////////////////////////////////////////////////

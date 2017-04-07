@@ -95,10 +95,10 @@
  $this->treasure_types = array(
 	1  => array( 'name' => $this->resources["tablet"        ], 'type_id' =>  1, 'isMonster' => 0, 'gold' =>  0, 'xp'=>  8, 'life'=> 0 ),
 	2  => array( 'name' => $this->resources["map"           ], 'type_id' =>  2, 'isMonster' => 0, 'gold' =>  5, 'xp'=>  2, 'life'=> 0 ),
-	3  => array( 'name' => $this->resources["mimichest"     ], 'type_id' =>  3, 'isMonster' => 1, 'gold' =>  0, 'xp'=>  2, 'life'=> 0 ),
-	4  => array( 'name' => $this->resources["gold"          ], 'type_id' =>  4, 'isMonster' => 0, 'gold' => 10, 'xp'=>  0, 'life'=> 1 ),
-	5  => array( 'name' => $this->resources["idol"          ], 'type_id' =>  5, 'isMonster' => 0, 'gold' =>  0, 'xp'=>  4, 'life'=> 1 ),
-	6  => array( 'name' => $this->resources["skull"         ], 'type_id' =>  6, 'isMonster' => 0, 'gold' => 20, 'xp'=> -2, 'life'=> 1 ),
+	3  => array( 'name' => $this->resources["mimichest"     ], 'type_id' =>  3, 'isMonster' => 1, 'gold' =>  0, 'xp'=>  2, 'life'=> 2 ),
+	4  => array( 'name' => $this->resources["gold"          ], 'type_id' =>  4, 'isMonster' => 0, 'gold' => 10, 'xp'=>  0, 'life'=> 0 ),
+	5  => array( 'name' => $this->resources["idol"          ], 'type_id' =>  5, 'isMonster' => 0, 'gold' =>  0, 'xp'=>  4, 'life'=> 0 ),
+	6  => array( 'name' => $this->resources["skull"         ], 'type_id' =>  6, 'isMonster' => 0, 'gold' => 20, 'xp'=> -2, 'life'=> 0 ),
 	7  => array( 'name' => $this->resources["idol"          ], 'type_id' =>  7, 'isMonster' => 0, 'gold' =>  0, 'xp'=>  4, 'life'=> 0 ),
 	8  => array( 'name' => $this->resources["idol"          ], 'type_id' =>  8, 'isMonster' => 0, 'gold' =>  0, 'xp'=>  4, 'life'=> 0 )
 	); 
