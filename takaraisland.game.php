@@ -756,7 +756,7 @@ class takaraisland extends Table
 						case  "7":
 						case "17":
 						        self::incStat (1,"cards_digged_player",$player_id);
-								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallerie card with the Miner.' ), array(
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallery card with the Miner.' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
@@ -1359,7 +1359,7 @@ class takaraisland extends Table
 			case  "7":
 			case "17":
 						self::incStat (1,"cards_digged_player",$player_id);
-						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallerie card.' ), array(
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a gallery card.' ), array(
 							'player_id' => $player_id,
 							'player_name' => self::getActivePlayerName(),
 							'destination' => "playercardstore_".$player_id,
@@ -1489,7 +1489,7 @@ class takaraisland extends Table
 						
 						$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcard['id'];
 							self::DbQuery( $sql );
-							self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digged into a monster in site: ${sitenr}' ), array(
+							self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs into a monster in site: ${sitenr}' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'sitenr' => $sitenr ,

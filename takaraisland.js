@@ -150,10 +150,10 @@ function (dojo, declare) {
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3> &dagger; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
 				
 			this.addTooltipHtml("expert1",  "<div class='tooltipimage'><div class='card expertcardfront expert1' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
+			_( " THE MINER:  <hr>  Permits to dig 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected speciallist +2 Kara gold." )+"</div>", "" );
+			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
@@ -520,7 +520,7 @@ function (dojo, declare) {
 			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
 			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Drake: a POWEFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Drake: a POWERFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points"),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points")]
 			

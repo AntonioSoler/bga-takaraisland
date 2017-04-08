@@ -389,8 +389,8 @@ border-radius: 8%;
     width: 151px;
     height: 201px;
     position: absolute;
-    left: 872px;
-    top: 257px;
+    right: 1px;
+    top: 265px;
     border-style: solid;
     border-color: #ff0f40;
     transform-style: preserve-3d;
@@ -584,7 +584,7 @@ transform: rotate(0deg);
 }
 #deckholder3 {
  left: 860px;
-  top: 20px;
+ top: 10px;
 }
 #deckholder4 {
  left: 510px;
@@ -597,7 +597,7 @@ transform: rotate(0deg);
 }
 #deckholder6 {
  left: 860px;
- top: 510px;
+ top: 520px;
 }
 #explore1 {
  left: 510px;
@@ -609,7 +609,7 @@ transform: rotate(0deg);
 }
 #explore3 {
  left: 860px;
-  top: 230px;
+ top: 220px;
 }
 
 #explore4 {
@@ -622,7 +622,7 @@ transform: rotate(0deg);
 }
 #explore6 {
  left: 860px;
- top: 440px;
+ top: 450px;
 }
 .playercamp {
   width: 380px;
@@ -704,7 +704,7 @@ transform: rotate(0deg);
     background-image: url(img/coin.png);
     background-size: cover;
     position: relative;
-    display: inline-block;
+    display: -webkit-inline-box;
 }
 
 .playertileholder {

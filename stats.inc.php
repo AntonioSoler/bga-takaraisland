@@ -53,7 +53,7 @@ $stats_type = array(
     "table" => array(
 
         "cards_digged" => array("id"=> 10,
-                    "name" => totranslate("Number of cards digged by all players"),
+                    "name" => totranslate("Number of cards dug by all players"),
                     "type" => "int" ),
 		"stones_found" => array("id"=> 11,
                     "name" => totranslate("Number of Stones of Legend found"),
