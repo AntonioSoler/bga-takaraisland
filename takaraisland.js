@@ -153,7 +153,7 @@ function (dojo, declare) {
 			_( " THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the original price ot the selected speciallist +2 Kara gold." )+"</div>", "" );
+			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected speciallist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
@@ -165,13 +165,13 @@ function (dojo, declare) {
 			_( " THE MAGIC SWORD:  <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
 			
 			this.addTooltipHtml("HospitalC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the recovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("WaitingroomC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("thedive", "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE DIVE:  <hr>  <b> The local pub of the ilsand. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
+			_( " THE DIVE:  <hr>  <b> The local pub of the island. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
 			
 			this.addTooltipHtml("counter", "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point. <p><b> XP tokens adquired on the Counter cannot be sold back </b>" )+"</div>", "" );
@@ -500,24 +500,24 @@ function (dojo, declare) {
 			position= xpos+"px "+ ypos+"px ";
 			dojo.style(card.location+'_item_card_'+card.id+"_back" , "background-position", position);
 			cardtooltips =["",
-			_("Gallery: this card gives Kara Gold when digged"),
+			_("Gallery: this card gives Kara Gold when dug"),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
-			_("Experience: this card gives XP points when digged" ),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
+			_("Experience: this card gives XP points when dug" ),
+			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
 			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Gallery: this card gives Kara Gold when digged"),
-			_("Experience: this card gives XP points when digged" ),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
+			_("Gallery: this card gives Kara Gold when dug"),
+			_("Experience: this card gives XP points when dug" ),
+			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
+			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
-			_("Experience: this card gives XP points when digged but the adventurer will be injured and will go to Hospital" ),
-			_("Experience: this card gives XP points when digged" ),
-			_("Gallery: this card gives Kara Gold when digged"),
-			_("Treasure: this card gives a treasure from the treasure deck when digged" ),
+			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
+			_("Experience: this card gives XP points when dug" ),
+			_("Gallery: this card gives Kara Gold when dug"),
+			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
 			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
 			_("Drake: a POWEFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
@@ -657,7 +657,7 @@ function (dojo, declare) {
 					x : x,
 					y : y
                 }), thetoken.location);
-		this.addTooltipToClass( "woundtoken", _( "This monster has received a wound and now it has one life point less" ), "" );
+		this.addTooltipToClass( "woundtoken", _( "This monster has received a wound and now it has one less life point" ), "" );
     
 		},
 		
@@ -1010,7 +1010,7 @@ function (dojo, declare) {
 							break;
 				case 'expert2':
 							// Create the new dialog. You should store the handler in a member variable to access it later
-							this.myDlg = new dijit.Dialog({ title: _("What specialist do want you to impersonate for +2 extra Kara gold?"), style: "width: 1000px" , closable:false });
+							this.myDlg = new dijit.Dialog({ title: _("What specialist do you want to impersonate for +2 extra Kara gold?"), style: "width: 1000px" , closable:false });
 							this.myDlg.autofocus = false;
 							this.myDlg.refocus = false;
 							// Create the HTML of my dialog. 
@@ -1208,7 +1208,7 @@ function (dojo, declare) {
 			}
 			if ( dojo.hasClass('xpstore_'+this.getActivePlayerId()+"_item_"+token[0].id,'NOSELL'))
 			{
-				this.showMessage  ( _("You cannot sell XP this token at the Counter"), "info");
+				this.showMessage  ( _("You cannot sell this XP token at the Counter"), "info");
 				return;
 			}	
 			if( this.checkAction( 'sell' ) )    // Check that this action is possible at this moment
