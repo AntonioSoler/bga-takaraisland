@@ -1160,10 +1160,10 @@ class takaraisland extends Table
 		    self::incGameStateValue( 'playermoves' , 1 );
 			$player_id = self::getActivePlayerId();
 			self::giveExtraTime($player_id);
-			
-			if ( self::getGameStateValue('playermoves') == 1 )
+			$gold=self::getGoldBalance($player_id);
+			if ( self::getGameStateValue('playermoves') == 1 AND $gold > 2 )
 			{
-				self::notifyPlayer($player_id, "activatesword", clienttranslate( '${player_name} starts a new turn' ) , array( 'player_name' => self::getActivePlayerName() ) );	
+				self::notifyPlayer($player_id, "activatesword", clienttranslate( '${player_name} can rent now the sword' ) , array( 'player_name' => self::getActivePlayerName() ) );	
 			}
 			
 			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
@@ -1187,9 +1187,13 @@ class takaraisland extends Table
 		$player_id = self::getActivePlayerId();
 		self::DbQuery( "UPDATE tokens SET card_location='TH_$player_id' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and ((card_location like 'explore%') or (card_location in ('diveC','counterC','expertsC','WaitingroomC'))) " );
 		self::DbQuery( "UPDATE tokens SET card_location='swordholder' WHERE card_type='4'" );
-		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('workersC','HospitalC') and card_type_arg=$player_id";
-		$tiles = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
-		if ($tiles == 0 )
+		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('workersC') and card_type_arg=$player_id";
+		$tilesb = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
+		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('HospitalC') and card_type_arg=$player_id";
+		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
+		$tilest=$tilesh+$tilesb;
+		$gold=self::getGoldBalance($player_id);
+		if (! ( $tilest > 0 OR ($gold >= 2  AND $tilesh >0 ) OR ($tilesb>0 AND $gold >=5 )) )
 		{
 			$this->gamestate->nextState( );
 		}
