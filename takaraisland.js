@@ -1082,8 +1082,8 @@ function (dojo, declare) {
 			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'recruit' ) )
             {   return; }
-			dojo.removeClass( 'tile_'+this.getActivePlayerId()+'_3','borderpulse' ) ;
-			dojo.disconnect(this.recruitcon);
+			dojo.query(".borderpulse").removeClass("borderpulse");
+			dojo.forEach(this.recruitcon, dojo.disconnect);
 			
 			if( this.checkAction( 'recruit' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=5 )  )    // Check that this action is possible at this moment
             {            
