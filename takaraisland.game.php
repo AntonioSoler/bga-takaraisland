@@ -1193,7 +1193,7 @@ class takaraisland extends Table
 		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
 		$tilest=$tilesh+$tilesb;
 		$gold=self::getGoldBalance($player_id);
-		if ( $tilest == 0 OR ($gold < 2  AND $tilesh >0 ) OR ($tilesb>0 AND $gold < 5 ) )
+		if ( $tilest == 0 OR (($gold < 2  AND $tilesh > 0 ) AND ($tilesb>0 AND $gold < 5 )) )
 		{
 			$this->gamestate->nextState( );
 		}
@@ -1355,7 +1355,7 @@ class takaraisland extends Table
 		$player_id = self::getActivePlayerId();
 		$sitenr= self::getGameStateValue('currentsite');
 		$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
-		$gohospital=false;
+		$gohospital=false;yep
 		//var_dump ($this->card_types[$topcard['type']]['name'] ) ;
 		switch ($topcard['type'] ) 
 		{
