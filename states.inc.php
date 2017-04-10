@@ -159,7 +159,7 @@ $machinestates = array(
 	    "name" => "fight",
 	    "description" => clienttranslate('${actplayer} is fighting a monster'),
 		"descriptionmyturn" => clienttranslate('${you} are fighting a monster'),
-        "type" => "game",
+        "type" => "activeplayer",
         "action" => "stfight",
         "updateGameProgression" => true,
         "transitions" => array( "" => 3 )
@@ -169,7 +169,7 @@ $machinestates = array(
 	    "name" => "dig",
 	    "description" => clienttranslate('${actplayer} is digging in a Excavation site'),
 		"descriptionmyturn" => clienttranslate('${you} are digging in a Excavation site'),
-        "type" => "game",
+        "type" => "activeplayer",
         "action" => "stdig",
         "updateGameProgression" => true,
         "transitions" => array( "playermove" => 3  , "gettreasure" =>10)
