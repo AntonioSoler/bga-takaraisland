@@ -52,7 +52,7 @@ function (dojo, declare) {
             console.log( "Starting game setup" );
             this.param=new Array();
 			this.gameconnections=new Array();
-			this.recuitcon==new Array();
+			
 			this.swordconnection=null;
 			
             // Setting up player boards
@@ -288,7 +288,7 @@ function (dojo, declare) {
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
-						this.recruitcon.push=( dojo.connect(thiselement, 'onclick' , this, 'recruit'));
+						this.recruitcon= dojo.connect(thiselement, 'onclick' , this, 'recruit');
 					}
 					list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
 					if ( list.length > 0 )
@@ -367,10 +367,10 @@ function (dojo, declare) {
 					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
 				}
 				dojo.forEach(this.gameconnections, dojo.disconnect);
-				dojo.forEach(this.recruitcon, dojo.disconnect);
+				dojo.disconnect(this.recruitcon);
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
-				this.recruitcon=[];
+				this.recruitcon=null;
 			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
                 break;
 			
@@ -399,6 +399,11 @@ function (dojo, declare) {
 				dojo.replaceClass('diceresult','no');
 			    dojo.replaceClass('dice','no');
                 break;
+			
+			case 'gettreasure':
+				dojo.replaceClass('diceresult','no');
+			    dojo.replaceClass('dice','no');
+                break;			
 				
 			case 'sendexpert':
 			    this.expertpicked=0;
@@ -1082,8 +1087,8 @@ function (dojo, declare) {
 			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'recruit' ) )
             {   return; }
-			dojo.query(".borderpulse").removeClass("borderpulse");
-			dojo.forEach(this.recruitcon, dojo.disconnect);
+			dojo.disconnect(this.recruitcon);	
+			dojo.query(".playertile").removeClass("borderpulse");
 			
 			if( this.checkAction( 'recruit' ) && (this.gamedatas.players[this.getActivePlayerId()]['gold']>=5 )  )    // Check that this action is possible at this moment
             {            
