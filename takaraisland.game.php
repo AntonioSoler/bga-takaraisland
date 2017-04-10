@@ -1188,9 +1188,9 @@ class takaraisland extends Table
 		self::DbQuery( "UPDATE tokens SET card_location='TH_$player_id' WHERE card_type_arg=$player_id AND card_type in ('1','2','3') and ((card_location like 'explore%') or (card_location in ('diveC','counterC','expertsC','WaitingroomC'))) " );
 		self::DbQuery( "UPDATE tokens SET card_location='swordholder' WHERE card_type='4'" );
 		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('workersC') and card_type_arg=$player_id";
-		$tilesb = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
+		$tilesb = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES in Beach TO PAY FOR?
 		$sql = "SELECT COUNT(*) FROM tokens where card_location in ('HospitalC') and card_type_arg=$player_id";
-		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES TO PAY FOR?
+		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES in Hospital TO PAY FOR?
 		$tilest=$tilesh+$tilesb;
 		$gold=self::getGoldBalance($player_id);
 		if ( $tilest == 0 OR (($gold < 2  AND $tilesh > 0 ) AND ($tilesb>0 AND $gold < 5 )) )
@@ -1351,8 +1351,7 @@ class takaraisland extends Table
 		
 	function stdig()
 	{
-        
-		$player_id = self::getActivePlayerId();
+    	$player_id = self::getActivePlayerId();
 		$sitenr= self::getGameStateValue('currentsite');
 		$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
 		$gohospital=false;yep
@@ -1380,7 +1379,8 @@ class takaraisland extends Table
 								'player_name' => self::getActivePlayerName(),
 								'amount' => $gold,
 								'source' => "playercardstore_".$player_id
-								) );		
+								) );
+						$this->gamestate->nextState("playermove");
 						break;
 			case  "4":     //GO HOSPITAL
 			case  "9": 
@@ -1427,7 +1427,7 @@ class takaraisland extends Table
 								'tile_id' => "tile_".$player_id."_".$tile
 								) );	
 						}
-						
+						$this->gamestate->nextState("playermove");
 						break;
 			case "13":       // TREASURE
 			case "18":
@@ -1442,7 +1442,6 @@ class takaraisland extends Table
 						$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
 						$this->gamestate->nextState("gettreasure");
-						
 						break;
 			case "2":       // ROCKFALL
 			case "14":
@@ -1478,6 +1477,7 @@ class takaraisland extends Table
 						
 							) );
 						}
+						$this->gamestate->nextState("playermove");
 						break;
 			case "5":        //MONSTER
 			case "6":
@@ -1514,7 +1514,7 @@ class takaraisland extends Table
 								'tile_id' => "tile_".$player_id."_".$tile
 								) );	
 						}
-						
+						$this->gamestate->nextState("playermove");
 						break;
 			case "22":    // STONE OF LEGEND
 			case "23":
@@ -1541,12 +1541,9 @@ class takaraisland extends Table
 								) );		
 						
 						self::incGameStateValue('stonesfound',1);
-						
+						$this->gamestate->nextState("playermove");
 						break;
 		}					
-		
-		$this->gamestate->nextState("playermove");
-		
 	}
 
 ////////////////////////////////////////////////////////////////////////////
