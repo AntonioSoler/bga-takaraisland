@@ -188,6 +188,15 @@ function (dojo, declare) {
 			this.addTooltip("explore4", "Excavation site 4","");
 			this.addTooltip("explore5", "Excavation site 5","");
 			this.addTooltip("explore6", "Excavation site 6","");
+			
+			this.addTooltip("button_deck1", "Browse/Gather Deck 1","");
+			this.addTooltip("button_deck2", "Browse/Gather Deck 2","");
+			this.addTooltip("button_deck3", "Browse/Gather Deck 3","");
+			this.addTooltip("button_deck4", "Browse/Gather Deck 4","");
+			this.addTooltip("button_deck5", "Browse/Gather Deck 5","");
+			this.addTooltip("button_deck6", "Browse/Gather Deck 6","");
+			
+			
 			this.addTooltipToClass("coin", "Kara Gold","");
 			
             this.setupNotifications();
