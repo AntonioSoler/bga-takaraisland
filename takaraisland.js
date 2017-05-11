@@ -97,7 +97,7 @@ function (dojo, declare) {
                 thisplayerid=this.gamedatas.players[i].id;
 				thisstore="xpstore_"+thisplayerid;
 				this[thisstore] = new ebg.stock();
-				this[thisstore].create( this, $(thisstore), 45 , 50);
+				this[thisstore].create( this, $(thisstore), 45 , 48);
 				this[thisstore].image_items_per_row = 2;
 				this[thisstore].setSelectionMode( 0 );
 				this[thisstore].item_margin = 1;
