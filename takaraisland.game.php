@@ -399,7 +399,7 @@ class takaraisland extends Table
 	self::checkAction( 'movetile' );
 	$player_id = self::getActivePlayerId();
 	self::DbQuery( "UPDATE tokens SET card_location='$destination' WHERE card_type_arg=$player_id AND card_type='$tile'" );
-    self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} moved an adventurer.' ), array(
+    self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} moves an adventurer.' ), array(
 				'player_id' => $player_id,
 				'player_name' => self::getActivePlayerName(),
 				'destination' => $destination,
@@ -539,7 +539,7 @@ class takaraisland extends Table
 				$gold+=2;
 				$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$thiscard['id'];
 				self::DbQuery( $sql );
-				self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} detected a monster on the survey of site: ${sitenr}' ), array(
+				self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} detects a monster on the survey of site: ${sitenr}' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'sitenr' => $sitenr ,
@@ -584,6 +584,10 @@ class takaraisland extends Table
 	$player_id = self::getActivePlayerId();
 	self::setGameStateValue('monsterpresent' ,0 );
 	$sitenr= self::getGameStateValue('currentsite');
+	self::notifyAllPlayers( 'message', clienttranslate( '${player_name} surveys excavation site ${sitenr}'), array(
+							'player_name' => self::getActivePlayerName(),
+								'sitenr' => $sitenr
+							) );
 	$topcards=$this->cards->getCardsOnTop( 3 , 'deck'.$sitenr );
 	$cards=array();
 	foreach($topcards as $thiscard )
@@ -601,7 +605,7 @@ class takaraisland extends Table
 				self::DbQuery( "UPDATE player set player_gold = player_gold + 2 WHERE Player_id = $player_id" );
 				$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$thiscard['id'];
 				self::DbQuery( $sql );
-				self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} detected a rockfall on the survey of site: ${sitenr}' ), array(
+				self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} detects a rockfall on the survey of site: ${sitenr}' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'sitenr' => $sitenr ,
@@ -833,7 +837,7 @@ class takaraisland extends Table
 								self::incStat (1,"cards_digged_player",$player_id);
 								$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcards[$i]['id'];
 									self::DbQuery( $sql );
-									self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digged into a monster in site: ${sitenr} and the Miner runs home' ), array(
+									self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs into a monster in site: ${sitenr} and the Miner runs home' ), array(
 											'player_id' => $player_id,
 											'player_name' => self::getActivePlayerName(),
 											'sitenr' => substr( $deckpicked ,-1),
@@ -1166,7 +1170,7 @@ class takaraisland extends Table
 				self::notifyPlayer($player_id, "activatesword", clienttranslate( '${player_name} can rent now the sword' ) , array( 'player_name' => self::getActivePlayerName() ) );	
 			}
 			
-			$emptydecks=self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) cardsondecks WHERE c=0");
+			$emptydecks= 6 - self::getUniqueValueFromDB("SELECT COUNT(*) FROM (SELECT COUNT(CARD_ID) c FROM cards WHERE card_location like 'deck%' GROUP BY CARD_LOCATION) ccc ");
 			if (( $emptydecks >= 5 AND self::getGameStateValue('stonesfound') == 1  ) OR (self::getGameStateValue('stonesfound') == 2))
 			{
 				$this->gamestate->nextState( 'gameEndScoring' );
@@ -1193,7 +1197,7 @@ class takaraisland extends Table
 		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES in Hospital TO PAY FOR?
 		$tilest=$tilesh+$tilesb;
 		$gold=self::getGoldBalance($player_id);
-		if ( $tilest == 0 OR (($gold < 2  AND $tilesh > 0 ) AND ($tilesb>0 AND $gold < 5 )) )
+		if ( ( $tilest == 0 ) OR ( $gold < 2 ) OR ( ($tilesh==0) AND ($gold < 5 )) )
 		{
 			$this->gamestate->nextState( );
 		}
@@ -1354,7 +1358,7 @@ class takaraisland extends Table
     	$player_id = self::getActivePlayerId();
 		$sitenr= self::getGameStateValue('currentsite');
 		$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
-		$gohospital=false;yep
+		$gohospital=false;
 		//var_dump ($this->card_types[$topcard['type']]['name'] ) ;
 		switch ($topcard['type'] ) 
 		{
@@ -1474,7 +1478,6 @@ class takaraisland extends Table
 							self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sent a first adventurer to dig a rockfall on site ${sitenr} (2 adventurers required)'), array(
 							'player_name' => self::getActivePlayerName(),
 								'sitenr' => $sitenr
-						
 							) );
 						}
 						$this->gamestate->nextState("playermove");
@@ -1724,7 +1727,6 @@ class takaraisland extends Table
                                  'type' => 'header'
                                );
             
-
             $gold = $this->getGoldBalance (  $player_id );
 			$XP = $this->getXPBalance (  $player_id );
 			$stones = $this->getStoneBalance (  $player_id );
@@ -1735,7 +1737,7 @@ class takaraisland extends Table
 			
 			if ( self::getGameStateValue('stonesfound') < 2 )
 			{
-				$stones=0;				
+				$stones=0;				// if only one stone found it does not count for the score
 			}
 			
 			$table[1][] = $gold;

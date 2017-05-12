@@ -150,54 +150,56 @@ function (dojo, declare) {
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3> &dagger; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
 				
 			this.addTooltipHtml("expert1",  "<div class='tooltipimage'><div class='card expertcardfront expert1' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE MINER:  <hr>  Permits to dig 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
+			_( "<b> THE MINER </b>  <hr>  Permits to dig 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE IMPERSONATOR:  <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
+			_( "<b> THE IMPERSONATOR</b> <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE ARCHEOLOGIST</b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE SOOTHSAYER </b><hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("sword", "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE MAGIC SWORD:  <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
+			_( "<b> THE MAGIC SWORD </b> <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
 			
 			this.addTooltipHtml("HospitalC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the recovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the recovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("WaitingroomC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE HOSPITAL:  <hr>  <b> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("thedive", "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE DIVE:  <hr>  <b> The local pub of the island. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
+			_( "<b> THE DIVE </b> <hr>  The local pub of the island. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
 			
 			this.addTooltipHtml("counter", "<div class='tooltipimage' ><div class='counterthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE COUNTER:  <hr>  <b> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point. <p><b> XP tokens adquired on the Counter cannot be sold back </b>" )+"</div>", "" );
+			_( "<b> THE COUNTER </b> <hr> A player can send here 1 Adventurer per turn <p> The operations here are:  <p> BUY XP :  the player can buy an 2 XP token for 5 Kara gold. <p> SELL XP : A player can sell an XP token and will receive 5 Kara gold per XP point. <p><b> XP tokens adquired on the Counter cannot be sold back </b>" )+"</div>", "" );
 			
 			this.addTooltipHtml("expertsC", "<div class='tooltipimage' ><img src='"+ g_gamethemeurl +"img/expert_front.jpg'  height='100' width='75' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( " THE DOCKS:  <hr>  <b> A player can send here 1 Adventurer per turn to hire an Specialist.<p> The Specialists can perform special operations depending on the type. <p> The Specialist card is moved to the player's board <p> A the end of the turn  the Specialist has to rest for another turn: this card is flipped faced down. <p> Faced down Specialists are returned to the docks at the end of the next turn." )+"</div>", "" );
+			_( "<b> THE DOCKS </b> <hr> A player can send here 1 Adventurer per turn to hire an Specialist.<p> The Specialists can perform special operations depending on the type. <p> The Specialist card is moved to the player's board <p> A the end of the turn  the Specialist has to rest for another turn: this card is flipped faced down. <p> Faced down Specialists are returned to the docks at the end of the next turn." )+"</div>", "" );
 			
 			this.addTooltipHtml("workersC", "<div class='tooltipimage  beachthumb'></div> <div  class='tooltipmessage'> "  +
-			_( " THE BEACH:  <hr>  <b> At the end of the turn</b> a player can hire an extra Adventurer for 5 Kara gold.<p> The new Adventurer tile is then moved to the player's board. <p> This can only be done once in the game." )+"</div>", "" );
+			_( "<b> THE BEACH </b><hr> <b>At the end of the turn</b> a player can hire an extra Adventurer for 5 Kara gold.<p> The new Adventurer tile is then moved to the player's board. <p> This can only be done once in the game." )+"</div>", "" );
 			
-			this.addTooltip("explore1", "Excavation site 1","");
-			this.addTooltip("explore2", "Excavation site 2","");
-			this.addTooltip("explore3", "Excavation site 3","");
-			this.addTooltip("explore4", "Excavation site 4","");
-			this.addTooltip("explore5", "Excavation site 5","");
-			this.addTooltip("explore6", "Excavation site 6","");
+			this.addTooltip("explore1", _("Excavation site 1"),"");
+			this.addTooltip("explore2", _("Excavation site 2"),"");
+			this.addTooltip("explore3", _("Excavation site 3"),"");
+			this.addTooltip("explore4", _("Excavation site 4"),"");
+			this.addTooltip("explore5", _("Excavation site 5"),"");
+			this.addTooltip("explore6", _("Excavation site 6"),"");
 			
-			this.addTooltip("button_deck1", "Browse/Gather Deck 1","");
-			this.addTooltip("button_deck2", "Browse/Gather Deck 2","");
-			this.addTooltip("button_deck3", "Browse/Gather Deck 3","");
-			this.addTooltip("button_deck4", "Browse/Gather Deck 4","");
-			this.addTooltip("button_deck5", "Browse/Gather Deck 5","");
-			this.addTooltip("button_deck6", "Browse/Gather Deck 6","");
+			this.addTooltip("button_deck1", _("Browse/Gather Deck 1"),"");
+			this.addTooltip("button_deck2", _("Browse/Gather Deck 2"),"");
+			this.addTooltip("button_deck3", _("Browse/Gather Deck 3"),"");
+			this.addTooltip("button_deck4", _("Browse/Gather Deck 4"),"");
+			this.addTooltip("button_deck5", _("Browse/Gather Deck 5"),"");
+			this.addTooltip("button_deck6", _("Browse/Gather Deck 6"),"");
 			
 			
-			this.addTooltipToClass("coin", "Kara Gold","");
+			this.addTooltipToClass("coin", _('Kara Gold'),"");
+			this.addTooltipToClass("xpcounter", _('XP points'),"");
+			
 			
             this.setupNotifications();
 			
@@ -433,6 +435,8 @@ function (dojo, declare) {
                 {
 			    case 'exploresite':
                     this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
+					
+					
 					this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
                     break;
 				case 'exchange':
@@ -664,7 +668,7 @@ function (dojo, declare) {
 		
 		placewound: function(thetoken) {
 		x = Math.floor(Math.random() * 50) + 50;  	
-		y = Math.floor(Math.random() * 120) + 50;
+		y = Math.floor(Math.random() * 100) + 50;
 		dojo.place(
                 this.format_block('jstpl_woundtoken', {
                     id: thetoken.id ,
@@ -721,6 +725,7 @@ function (dojo, declare) {
 				this[thisdeck].item_margin = 0;			
 				this[thisdeck].setOverlap( 0.5 , 0 );				
 				this.slideToObjectRelative (thisdeck, returndeck);
+				dojo.destroy("marker");// destroy marker
 				if (this.expertpicked == 4)
 				{
 					this[thisdeck].setSelectionMode (0);
@@ -733,7 +738,8 @@ function (dojo, declare) {
 		            this[browseddeck].item_margin = 0;	
 					this[browseddeck].setOverlap( 0.5 , 0 );
 					returndeck="deckholder"+dojo.byId("tablecards").children[0].id.charAt(4);
-					this.slideToObjectRelative (browseddeck, returndeck);
+					this.slideToObjectRelative (browseddeck, returndeck); 
+					dojo.destroy("marker");// destroy marker
 					if (this.expertpicked == 4)
 					{
 						this[browseddeck].setSelectionMode (0);
@@ -741,6 +747,8 @@ function (dojo, declare) {
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
+				dojo.place("<div id='marker' class='marker'></div>", "deckholder"+deck ) ;//create marker
+				this.addTooltip("marker", _("This is the currently selected deck, see the cards below"),"");
 				if (this.expertpicked == 4)
 					{
 						this[thisdeck].apparenceBorderWidth="2px";
@@ -1030,11 +1038,11 @@ function (dojo, declare) {
 							// Create the HTML of my dialog. 
 
 							var html = "<div id='im_miner' class='tooltipimage'><div class='card expertcardfront expert1' ></div>"+
-									_("THE MINER:  <hr>  Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
-									"&nbsp;<div id='im_arch'  class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
-									_( " THE ARCHEOLOGIST:  <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
+									_( "<b> THE MINER </b> <hr> Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
+									"&nbsp;<div id='im_arch' class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
+									_( "<b> THE ARCHEOLOGIST </b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
 									"&nbsp;<div id='im_sooth' class='tooltipimage'><div class='card expertcardfront expert4' ></div>"+
-									_( " THE SOOTHSAYER:  <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
+									_( "<b> THE SOOTHSAYER </b> <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
 									
 							// Show the dialog
 							this.myDlg.attr("content", html );
@@ -1367,6 +1375,7 @@ function (dojo, declare) {
         {
             console.log( 'notif_revealcard' );
             console.log( notif );
+			debugger;
 			if (($(tablecards).children.length < 1  ) || ($(tablecards).children["0"].id != "deck"+notif.args.sitenr))
 			{
 				this.browseGatherDeck ( null , notif.args.sitenr );

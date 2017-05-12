@@ -62,6 +62,9 @@
 					<div id="diceresult" >
 
 						<div id="dice"  >
+						    <div class="cover x"></div>
+							<div class="cover y"></div>
+							<div class="cover z"></div>
 							<div class="side front">
 								<div class="dsword"></div>
 							</div>
@@ -86,10 +89,6 @@
 								<div class="dcross"></div>
 							</div>
 							<div class="side back inner"></div>
-
-							<div class="side cover x"></div>
-							<div class="side cover y"></div>
-							<div class="side cover z"></div>
 						</div>
 					</div> 						
 				</div> 

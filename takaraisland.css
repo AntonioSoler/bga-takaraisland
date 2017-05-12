@@ -71,7 +71,7 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   perspective: 2000px;
-  padding: 10px;
+  padding: 6px;
   margin: 1px;
 }
 .goldcounter {
@@ -97,8 +97,9 @@
   float: left;
   width: 1024px;
   height: 738px;
-  padding: 10px;
-  margin: 10px;
+  padding-left: 10px;
+  margin-left: 10px;
+  margin-top: 5px;
 }
 
 #table_wrap {
@@ -233,6 +234,13 @@ border-radius: 8%;
   transform: rotate(10deg);
   display: flex;
   z-index: 111;
+}
+
+.marker{
+  width: 80px;
+  height: 80px;
+  margin: 40px;
+  background-image: url('img/marker.png');
 }
 
 .hospitalthumb{
@@ -471,6 +479,7 @@ transform: rotate(0deg);
   left: -25px;
   top:-17px;
   z-index: 15;
+  cursor: pointer;
 }
 
 .stockitem {
@@ -686,6 +695,7 @@ transform: rotate(0deg);
     background-size: cover;
     position: relative;
     display: inline-block;
+    margin-left: 20px;
 }
 
 .xplog {
@@ -959,7 +969,6 @@ background-image: url('img/ffa500.jpg');
     width: 50px;
     height: 50px;
     background: #000;
-    box-shadow: 0 0 10px 0px #1b1b1b;
     border-radius: 20%;
 }
 #dice .cover, #dice .inner {
@@ -1055,12 +1064,12 @@ background-image: url('img/ffa500.jpg');
 @keyframes pulse {
   0% {
   box-shadow: 
-	    0 0 0 5px #c0dd00;
+	    0 0 0 5px #fed400;
   }
 
   100% {
   box-shadow: 
-	    0 0 0 1px #c0dd00;
+	    0 0 0 2px #fed800;
   }
 }
 
