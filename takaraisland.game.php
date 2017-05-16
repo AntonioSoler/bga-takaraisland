@@ -745,11 +745,11 @@ class takaraisland extends Table
 				'token_id' => $token_id 
 				) );
 		self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playergetsgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> from the Counter' ), array(
+		self::notifyAllPlayers( "playergetgold", clienttranslate( '${player_name} gets ${amount} <div class="goldlog"></div> from the Counter' ), array(
 						'player_id' => $player_id,
 						'player_name' => self::getActivePlayerName(),
 						'amount' => $gold ,  
-						'source' => "counterC"
+						'source' => "counter"
 				) );	
 		}
 		else 
@@ -923,15 +923,10 @@ class takaraisland extends Table
 				$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like '$deckpicked' AND card_location_arg in ( $result , $result +1 , $result -1 )";
 				$topcards=self::getObjectListFromDB( $sql );
 				self::setGameStateValue('monsterpresent' ,0 );
-<<<<<<< HEAD
+
 				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr}'), array(
 							'player_name' => self::getActivePlayerName(),
 								'sitenr' => substr( $deckpicked ,-1)
-=======
-				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr} (2 adventurers required)'), array(
-							'player_name' => self::getActivePlayerName(),
-								'sitenr' => $sitenr
->>>>>>> origin/master
 							) );
 				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Soothsayer on the survey of Excavation site: ${sitenr}' ), array(
 								'player_id' => $player_id,
@@ -1090,7 +1085,9 @@ class takaraisland extends Table
 	self::checkAction( 'payhospital' );
 	
 	$player_id = self::getActivePlayerId();
-	if ( self::getGoldBalance($player_id) >=2 ) 
+	$token_id=self::getUniqueValueFromDB( "SELECT card_id c from tokens WHERE card_location='HospitalC' AND card_type_arg=$player_id LIMIT 1" );	
+	
+	if (( self::getGoldBalance($player_id) >=2 ) AND ( $token_id != null )) 
 		{
 		self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
 		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 <div class="goldlog"></div> to the Hospital' ), array(
@@ -1099,7 +1096,7 @@ class takaraisland extends Table
 						'amount' => 2 ,  
 						'destination' => "HospitalC"
 						) );
-		$token_id=self::getUniqueValueFromDB( "SELECT card_id c from tokens WHERE card_location='HospitalC' AND card_type_arg=$player_id LIMIT 1" );				
+					
 		$sql="UPDATE tokens SET card_location='TH_".$player_id."' WHERE card_id=".$token_id." LIMIT 1";
 		self::DbQuery( $sql );
 		

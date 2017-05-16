@@ -74,12 +74,8 @@
   display: flex;
   margin: 1px;
   flex-wrap: wrap;
-<<<<<<< HEAD
   align-items: flex-start;
-=======
->>>>>>> origin/master
 }
-
 
 @media screen and (min-width: 1920px){
 	#playareascaler{
@@ -93,34 +89,14 @@
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
 	#playareascaler{
-<<<<<<< HEAD
 	zoom: 0.7;
 	-ms-zoom: 0.7;
 	-webkit-zoom: 0.7;
 	-moz-transform: scale(0.7,0.7);
-=======
-	zoom: 0.55;
-	-ms-zoom: 0.55;
-	-webkit-zoom: 0.55;
-	-moz-transform: scale(0.55,0.55);
 	-moz-transform-origin: top left;
 	}
-
 }
 
-@media screen and (max-width: 768px) and (min-width: 1024px){
-	#playareascaler{
-	zoom: 0.5;
-	-ms-zoom: 0.5;
-	-webkit-zoom: 0.5;
-	-moz-transform: scale(0.5,0.5);
->>>>>>> origin/master
-	-moz-transform-origin: top left;
-	}
-
-}
-
-<<<<<<< HEAD
 @media screen and (max-width: 1024px) and (min-width: 1px){
 	#playareascaler{
 	zoom: 0.5;
@@ -129,22 +105,7 @@
 	-moz-transform: scale(0.5,0.5);
 	-moz-transform-origin: top left;
 	}
-
 }
-=======
-
-@media screen and (min-width : 0px) and (max-width : 767px){
-	#playareascaler{
-	zoom: 0.3;
-	-ms-zoom: 0.3;
-	-webkit-zoom: 0.3;
-	-moz-transform:  scale(0.3,0.3);
-	-moz-transform-origin: top left;
-	}
-}
-*/
->>>>>>> origin/master
-
 
 .goldcounter {
 	font-family: "Roboto", Arial, sans-serif;
