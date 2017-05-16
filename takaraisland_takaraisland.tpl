@@ -25,7 +25,8 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 <div id="playArea">
-	<div id="playareaup">
+	<div id="playareascaler">
+		<div id="tablecards" class="whiteblock tablecards"></div>	
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
 				
@@ -137,12 +138,8 @@
 				</div>
 			</div>
 			<!-- END camp -->
-		</div>
-	<BR>	
-	<div id="table_wrap">
-
-		<div id="tablecards" class="whiteblock tablecards"></div>
-	</div>
+			
+		</div>	
 </div>
 
 

@@ -50,7 +50,8 @@ function (dojo, declare) {
         setup: function( gamedatas )
         {
             console.log( "Starting game setup" );
-            this.param=new Array();
+            			
+			this.param=new Array();
 			this.gameconnections=new Array();
 			
 			this.swordconnection=null;
@@ -145,6 +146,12 @@ function (dojo, declare) {
 				var thistoken = this.gamedatas.tokens[i];
 				this.placetokens(thistoken);
             }
+			if (this.gamedatas.activatesword)
+			{ 
+				dojo.addClass( 'swordholder','borderpulse' ) ;
+				this.swordconnection= dojo.connect ( $('sword'),'onclick',this,'rentsword');
+			}
+			
 			
 			this.addTooltipHtml("dice",  "<div class='tooltipimage'><img src='"+ g_gamethemeurl +"img/dice.png' ></div><div  class='tooltipmessage'> " + 	
 			 _(" <p><h3> &#10010; </h3> The adventurer is injured by the monster and has go to hospital. The fighting ends <p><p>  <h3> &dagger; </h3> The player has injured the monster and it takes a wound. " ) +"</div>", "" );
@@ -507,7 +514,6 @@ function (dojo, declare) {
             script.
         
         */
-          
 				  
 		flipcard: function ( card, visible )
 		{
@@ -970,6 +976,11 @@ function (dojo, declare) {
 			var tile_id = this.adventurer.split('_');
 			var tile = tile_id[2];
 			
+		/*	this.confirmationDialog( _('Are you sure you want to make this?'), dojo.hitch( this, function() {
+            this.ajaxcall( '/mygame/mygame/makeThis.html', { lock:true }, this, function( result ) {} );
+			} ) ); */
+			
+			
 			dojo.toggleClass(this.adventurer,"tileselected")
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			if (this.swordconnection)
@@ -1317,19 +1328,19 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('browsecards', 3000);
 			
 			dojo.subscribe('playerpaysgold', this, "notif_playerpaysgold");
-            this.notifqueue.setSynchronous('playerpaysgold', 1000);
+            this.notifqueue.setSynchronous('playerpaysgold', 2000);
 			
 			dojo.subscribe('playergetgold', this, "notif_playergetgold");
-            this.notifqueue.setSynchronous('playergetgold', 1000);
+            this.notifqueue.setSynchronous('playergetgold', 2000);
 			
 			dojo.subscribe( 'removecard', this, "notif_removecard" );
 			this.notifqueue.setSynchronous( 'removecard', 2000 );
 			
 			dojo.subscribe('playergetxp', this, "notif_playergetxp");
-            this.notifqueue.setSynchronous('playergetxp', 1000);
+            this.notifqueue.setSynchronous('playergetxp', 2000);
 			
 			dojo.subscribe('playersellxp', this, "notif_playersellxp");
-            this.notifqueue.setSynchronous('playersellxp', 1000);
+            this.notifqueue.setSynchronous('playersellxp', 2000);
 			
 			dojo.subscribe('rolldice', this, "notif_rolldice");
             this.notifqueue.setSynchronous('rolldice', 4000);
@@ -1375,10 +1386,12 @@ function (dojo, declare) {
         {
             console.log( 'notif_revealcard' );
             console.log( notif );
-			debugger;
-			if (($(tablecards).children.length < 1  ) || ($(tablecards).children["0"].id != "deck"+notif.args.sitenr))
-			{
-				this.browseGatherDeck ( null , notif.args.sitenr );
+			
+			if ( !notif.args.istopcard )
+			{	if (($(tablecards).children.length < 1  ) || ($(tablecards).children["0"].id != "deck"+notif.args.sitenr))
+				{
+					this.browseGatherDeck ( null , notif.args.sitenr );
+				}
 			}
 			this.flipcard ( notif.args.card, true );
         },			
