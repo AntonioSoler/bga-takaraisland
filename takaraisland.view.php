@@ -82,13 +82,31 @@
 		$this->page->begin_block( "takaraisland_takaraisland", "camp" );
 		
 		$playercount=0;
-     	foreach( $players as $player )	{
-                $this->page->insert_block( "camp", array( "PLAYER_ID" => $player['player_id'],
+		
+		global $g_user;
+        
+		$current_player_id = $g_user->get_id();
+     	
+		foreach( $players as $player )	
+		{
+            if  ( $current_player_id  == $player['player_id'] )
+			{
+				$this->page->insert_block( "camp", array( "PLAYER_ID" => $player['player_id'],
 			                                            "PLAYER_NAME" => $player['player_name'],
 														"PLAYER_COLOR" => $player['player_color']
                                                       ));
+			}
 		}
-
+		foreach( $players as $player )	
+		{
+            if  ( $current_player_id  != $player['player_id'] )
+			{
+				$this->page->insert_block( "camp", array( "PLAYER_ID" => $player['player_id'],
+			                                            "PLAYER_NAME" => $player['player_name'],
+														"PLAYER_COLOR" => $player['player_color']
+                                                      ));
+			}
+		}
         /*********** Do not change anything below this line  ************/
   	}
   }

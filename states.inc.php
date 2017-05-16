@@ -141,6 +141,7 @@ $machinestates = array(
         "description" => clienttranslate('${actplayer} is sending an adventurer to an Excavation site'),
 		"descriptionmyturn" => clienttranslate('${you} are sending an adventurer to an Excavation site'),
 		"possibleactions" => array( "dig","survey"),
+		"args" => "argRocfallVisible",
         "updateGameProgression" => false,
         "transitions" => array( "dig" => 12 ,  "browsecards" => 8  ) //
     ),
