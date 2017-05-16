@@ -74,7 +74,10 @@
   display: flex;
   margin: 1px;
   flex-wrap: wrap;
+<<<<<<< HEAD
   align-items: flex-start;
+=======
+>>>>>>> origin/master
 }
 
 
@@ -90,15 +93,34 @@
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
 	#playareascaler{
+<<<<<<< HEAD
 	zoom: 0.7;
 	-ms-zoom: 0.7;
 	-webkit-zoom: 0.7;
 	-moz-transform: scale(0.7,0.7);
+=======
+	zoom: 0.55;
+	-ms-zoom: 0.55;
+	-webkit-zoom: 0.55;
+	-moz-transform: scale(0.55,0.55);
 	-moz-transform-origin: top left;
 	}
 
 }
 
+@media screen and (max-width: 768px) and (min-width: 1024px){
+	#playareascaler{
+	zoom: 0.5;
+	-ms-zoom: 0.5;
+	-webkit-zoom: 0.5;
+	-moz-transform: scale(0.5,0.5);
+>>>>>>> origin/master
+	-moz-transform-origin: top left;
+	}
+
+}
+
+<<<<<<< HEAD
 @media screen and (max-width: 1024px) and (min-width: 1px){
 	#playareascaler{
 	zoom: 0.5;
@@ -109,6 +131,19 @@
 	}
 
 }
+=======
+
+@media screen and (min-width : 0px) and (max-width : 767px){
+	#playareascaler{
+	zoom: 0.3;
+	-ms-zoom: 0.3;
+	-webkit-zoom: 0.3;
+	-moz-transform:  scale(0.3,0.3);
+	-moz-transform-origin: top left;
+	}
+}
+*/
+>>>>>>> origin/master
 
 
 .goldcounter {
@@ -145,7 +180,11 @@
   padding: 1px;
   margin: 3px;
   flex: 1 1;
+<<<<<<< HEAD
   display: block;
+=======
+  /* display: inline-flex; */
+>>>>>>> origin/master
 }
 
 #table_wrap {
@@ -688,6 +727,10 @@ transform: rotate(0deg);
   background-image: url('img/0000ff.jpg');
   position: relative;
   margin: 5px;
+<<<<<<< HEAD
+=======
+  display: inline;
+>>>>>>> origin/master
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
 }

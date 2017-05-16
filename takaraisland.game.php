@@ -923,9 +923,15 @@ class takaraisland extends Table
 				$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like '$deckpicked' AND card_location_arg in ( $result , $result +1 , $result -1 )";
 				$topcards=self::getObjectListFromDB( $sql );
 				self::setGameStateValue('monsterpresent' ,0 );
+<<<<<<< HEAD
 				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr}'), array(
 							'player_name' => self::getActivePlayerName(),
 								'sitenr' => substr( $deckpicked ,-1)
+=======
+				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr} (2 adventurers required)'), array(
+							'player_name' => self::getActivePlayerName(),
+								'sitenr' => $sitenr
+>>>>>>> origin/master
 							) );
 				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Soothsayer on the survey of Excavation site: ${sitenr}' ), array(
 								'player_id' => $player_id,
