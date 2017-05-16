@@ -24,16 +24,14 @@
     
     Please REMOVE this comment before publishing your game on BGA
 -->
-<div id="playArea">
-	<div id="playareascaler">
+<div id="playareascaler">
+	<div id="playArea">
 		<div id="tablecards" class="whiteblock tablecards"></div>	
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
-				
 				<div id="swordholder">
 					<div id="sword"></div>
 				</div>
-				
 				
 				<div id="expertholder1" class="expertholder">
 					<div id="expert1" class="card expert">
@@ -122,8 +120,9 @@
 				<div id="reward"   class="treasurereward"></div>
 			</div>
 		</div>
-			<!-- BEGIN camp -->
 			<div class="campwrapper">
+			<!-- BEGIN camp -->
+			
 				<div id="playerCamp_{PLAYER_ID}" class="playercamp playercolor_{PLAYER_COLOR}" >
 					<div id="playername_{PLAYER_ID}" class="playernameholder" style="color:#{PLAYER_COLOR};"><b>{PLAYER_NAME}</b></div>
 					<div id="playerSwordholder_{PLAYER_ID}" class="playerswordholder"></div>
@@ -136,9 +135,9 @@
 					
 					</div>
 				</div>
-			</div>
-			<!-- END camp -->
 			
+			<!-- END camp -->
+			</div>
 		</div>	
 </div>
 
