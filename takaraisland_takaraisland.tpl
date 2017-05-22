@@ -61,9 +61,9 @@
 					<div id="diceresult" >
 
 						<div id="dice"  >
-						    <div class="cover x"></div>
+						    <!-- <div class="cover x"></div>
 							<div class="cover y"></div>
-							<div class="cover z"></div>
+							<div class="cover z"></div> -->
 							<div class="side front">
 								<div class="dsword"></div>
 							</div>

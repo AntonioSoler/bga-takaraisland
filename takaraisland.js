@@ -678,8 +678,8 @@ function (dojo, declare) {
 		},
 		
 		placewound: function(thetoken) {
-		x = Math.floor(Math.random() * 50) + 50;  	
-		y = Math.floor(Math.random() * 100) + 50;
+		x = Math.floor(Math.random() * 50) + 10;  	
+		y = Math.floor(Math.random() * 50) + 50;
 		dojo.place(
                 this.format_block('jstpl_woundtoken', {
                     id: thetoken.id ,

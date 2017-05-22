@@ -66,44 +66,78 @@
 */
 
 #playArea {
-  width: 100%;
-  background-image: url('img/background.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  perspective: 2000px;
-  display: flex;
-  margin: 1px;
-  flex-wrap: wrap;
-  align-items: flex-start;
+
+width: 100%;
+
+background-image: url('img/background.png');
+
+background-size: 100% 100%;
+
+background-repeat: no-repeat;
+
+perspective: 2000px;
+
+display: flex;
+
+margin: 1px;
+
+flex-wrap: wrap;
+
+align-items: flex-start;
 }
 
 @media screen and (min-width: 1920px){
 	#playareascaler{
-	zoom: 0.9;
+	/* zoom: 0.9;
 	-ms-zoom: 0.9;
-	-webkit-zoom: 0.9;
-	-moz-transform:  scale(0.9,0.9);
-	-moz-transform-origin: top left;
+	-webkit-zoom: 0.9; */
+	width: 1850px;
+	transform: scale(0.9,0.9);
+	transform-origin: top left;
 	}
 }
 
-@media screen and (max-width: 1913px) and (min-width: 1025px){
+@media screen and (max-width: 1913px) and (min-width: 1281px){
 	#playareascaler{
-	zoom: 0.7;
+	/*zoom: 0.7;
 	-ms-zoom: 0.7;
-	-webkit-zoom: 0.7;
-	-moz-transform: scale(0.7,0.7);
-	-moz-transform-origin: top left;
+	-webkit-zoom: 0.7; */
+	width: 1443px;
+	transform: scale(0.78,0.78);
+	transform-origin: top left;
 	}
 }
 
-@media screen and (max-width: 1024px) and (min-width: 1px){
+@media screen and (max-width: 1280px) and (min-width: 1028px){
 	#playareascaler{
-	zoom: 0.5;
+	/* zoom: 0.5;
 	-ms-zoom: 0.5;
-	-webkit-zoom: 0.5;
-	-moz-transform: scale(0.5,0.5);
-	-moz-transform-origin: top left;
+	-webkit-zoom: 0.5; */
+	width: 1450px;
+	transform: scale(0.6,0.6);
+	transform-origin: top left;
+	}
+}
+
+@media screen and (max-width: 1024px) and (min-width: 800px){
+	#playareascaler{
+	/* zoom: 0.5;
+	-ms-zoom: 0.5;
+	-webkit-zoom: 0.5; */
+	width: 1450px;
+	transform: scale(0.5,0.5);
+	transform-origin: top left;
+	}
+}
+
+@media screen and (max-width: 800px) and (min-width: 1px){
+	#playareascaler{
+	/* zoom: 0.5;
+	-ms-zoom: 0.5;
+	-webkit-zoom: 0.5; */
+	width: 1450px;
+	transform: scale(0.40,0.40);
+	transform-origin: top left;
 	}
 }
 
@@ -141,11 +175,8 @@
   padding: 1px;
   margin: 3px;
   flex: 1 1;
-<<<<<<< HEAD
   display: block;
-=======
   /* display: inline-flex; */
->>>>>>> origin/master
 }
 
 #table_wrap {
@@ -319,10 +350,8 @@ border-radius: 8%;
   width: 60px;
   height: 60px;
   background-image: url('img/playertiles.png');
-
   background-position: bottom left;
 }
-
 
 #WaitingroomC {
   border: 0px;
@@ -392,6 +421,7 @@ border-radius: 8%;
   border-color: #ffff40;
   transform: rotate(-10deg);
 }
+
 #thedive {
   border: 0px;
   width: 220px;
@@ -402,8 +432,6 @@ border-radius: 8%;
   border-style: solid;
   border-color: #ff0f40;
 }
-
-
 
 #diveC {
   border: 0px;
@@ -418,10 +446,7 @@ border-radius: 8%;
   border-radius: 35px;
 }
 
-#diveC div:nth-child(1) {
-
-	margin-left:0px;
-}
+#diveC div:nth-child(1) {margin-left:0px;}
 #diveC div:nth-child(2) {margin-left: 20px;}
 #diveC div:nth-child(3) {margin-left: 20px;}
 
@@ -621,8 +646,9 @@ transform: rotate(0deg);
 	border: 0px !important;
 	}
 
-.tooltipimage * { position: relative 
-!important;}
+.tooltipimage * { 
+position: relative !important;
+}
 
 .tooltipmessage {
 	display: inline-block;
@@ -688,10 +714,7 @@ transform: rotate(0deg);
   background-image: url('img/0000ff.jpg');
   position: relative;
   margin: 5px;
-<<<<<<< HEAD
-=======
   display: inline;
->>>>>>> origin/master
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
 }
@@ -715,8 +738,7 @@ transform: rotate(0deg);
     background-size: cover;
     position: relative;
     display: inline-block;
-    border-radius: 50%;
-    
+    border-radius: 50%;    
 }
 .spining{	
 	animation: spin 1s infinite;
@@ -781,8 +803,7 @@ transform: rotate(0deg);
 }
 
 .playertileholder div:nth-child(1) {
-	margin-top: 0px;
-	
+	margin-top: 0px;	
 }
 .playertileholder div:nth-child(2) {
 	margin-top: 30px;
@@ -1015,12 +1036,13 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 50px;
     height: 50px;
-    background: #000;
-    border-radius: 20%;
+    background: rgb(14, 13, 11);
+    border-radius: 2px;
+    backface-visibility: hidden;
 }
 #dice .cover, #dice .inner {
-    background: #050505;
-    box-shadow: none;
+    background: rgba(4, 4, 4, 1);
+    /*! box-shadow: none; */
 }
 #dice .cover {
     border-radius: 0;
@@ -1069,24 +1091,25 @@ background-image: url('img/ffa500.jpg');
     transform: rotateX(-90deg) translateZ(24px);
 }
 .dsword {
-    width:45px;
-    height: 45px;
-    margin:10%;
+    width: 48px;
+    height: 48px;
+    margin: 2%;
     background-image: url('img/dice.png');
     background-repeat: no-repeat;
     background-size: 45px 90px;
     background-position: bottom;
-    border-radius: 30px;
+    border-radius: 13%;
+    backface-visibility: visible;
 }
 .dcross {
-    width:45px;
-	height:45px;
-	margin:10%;
-	background-image: url('img/dice.png');
+    width: 48px;
+    height: 48px;
+    margin: 2%;
+    background-image: url('img/dice.png');
     background-repeat: no-repeat;
-	background-size: 45px 90px; 
-	background-position:  top;
-	border-radius: 30px;
+    background-size: 45px 90px;
+    background-position:  top;
+    border-radius: 13%;
 }
 
 #wrapperdice {
@@ -1123,5 +1146,3 @@ background-image: url('img/ffa500.jpg');
 .tileselected {
 border: 2px red solid !important;
 }
-
-a {}
