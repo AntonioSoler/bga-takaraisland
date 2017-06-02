@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © <Your name here> <Your email address here>
+ * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : (c) Antonio Soler Morgalad.es@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -468,7 +468,7 @@ function (dojo, declare) {
 					this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
 					break;
 				 
-				 case 'pickexpert':
+				 case 'hireexpert':
 					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
                     break;
 					
@@ -605,7 +605,8 @@ function (dojo, declare) {
 			var target = sourceclick.target || sourceclick.srcElement;
 			this.adventurer=target.id;
 			dojo.toggleClass(this.adventurer,"tileselected");
-			
+			//debugger; //
+			dojo.style("playArea", "cursor", "url('"+g_gamethemeurl+"img/"+target.parentElement.parentElement.classList[1] +"_"+ target.id.slice(-1)+".png') ,auto");
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			dojo.query(".borderpulse").removeClass("borderpulse");
 			this.gameconnections=[];
@@ -717,6 +718,7 @@ function (dojo, declare) {
 
 		browseGatherDeck : function(sourceclick,deck) {
     		var browseddeck = "";
+			//dojo.stopEvent( sourceclick );
 
 			if ( typeof deck == 'undefined')
 			{
@@ -758,8 +760,14 @@ function (dojo, declare) {
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
-				dojo.place("<div id='marker' class='marker'></div>", "deckholder"+deck ) ;//create marker
-				this.addTooltip("marker", _("This is the currently selected deck, see the cards below"),"");
+				dojo.place("<div id='marker' class='marker' style='cursor: zoom-out;'></div>", "deckholder"+deck ) ;
+				targetdeck=$('button_deck'+deck);
+				
+				//$('marker').onclick = this.browseGatherDeck( null ,deck );
+				
+				dojo.connect($('marker'), "onclick", dojo.hitch(this, this.browseGatherDeck,  null , deck));
+				
+				this.addTooltip("marker", _("This is the currently selected deck, see the cards expanded above"),"");
 				if (this.expertpicked == 4)
 					{
 						this[thisdeck].apparenceBorderWidth="2px";
@@ -986,7 +994,9 @@ function (dojo, declare) {
 			} ) ); */
 			
 			
-			dojo.toggleClass(this.adventurer,"tileselected")
+			dojo.toggleClass(this.adventurer,"tileselected");
+			dojo.style("playArea", "cursor", "");
+			
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			if (this.swordconnection)
 			{
@@ -1061,9 +1071,18 @@ function (dojo, declare) {
 									_( "<b> THE SOOTHSAYER </b> <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
 									
 							// Show the dialog
+							
+							if( this.gamedatas.players[this.getActivePlayerId()]['gold']<4   )    // Miner
+							{            
+								this.showMessage  ( _("You cannot afford to hire this Specialist..."), "info")
+								break;
+							}
+							
 							this.myDlg.attr("content", html );
 							this.myDlg.show(); 
-							                                       //todo check gold
+							
+							
+							
 							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
 							   evt.preventDefault();
 							   this.myDlg.hide();

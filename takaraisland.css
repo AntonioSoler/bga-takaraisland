@@ -66,24 +66,16 @@
 */
 
 #playArea {
-
-width: 100%;
-
-background-image: url('img/background.png');
-
-background-size: 100% 100%;
-
-background-repeat: no-repeat;
-
-perspective: 2000px;
-
-display: flex;
-
-margin: 1px;
-
-flex-wrap: wrap;
-
-align-items: flex-start;
+  width: 120%;
+  background-image: url('img/background.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  perspective: 2000px;
+  display: flex;
+  margin: 1px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 @media screen and (min-width: 1920px){
@@ -91,55 +83,51 @@ align-items: flex-start;
 	/* zoom: 0.9;
 	-ms-zoom: 0.9;
 	-webkit-zoom: 0.9; */
-	width: 1850px;
 	transform: scale(0.9,0.9);
 	transform-origin: top left;
 	}
 }
 
-@media screen and (max-width: 1913px) and (min-width: 1281px){
+@media screen and (max-width: 1913px) and (min-width: 1025px){
 	#playareascaler{
 	/*zoom: 0.7;
 	-ms-zoom: 0.7;
 	-webkit-zoom: 0.7; */
-	width: 1443px;
-	transform: scale(0.78,0.78);
+	transform: scale(0.7,0.7);
 	transform-origin: top left;
 	}
+	#playArea {
+    width: 150%;
+    }
 }
 
-@media screen and (max-width: 1280px) and (min-width: 1028px){
-	#playareascaler{
-	/* zoom: 0.5;
-	-ms-zoom: 0.5;
-	-webkit-zoom: 0.5; */
-	width: 1450px;
-	transform: scale(0.6,0.6);
-	transform-origin: top left;
-	}
-}
 
 @media screen and (max-width: 1024px) and (min-width: 800px){
 	#playareascaler{
 	/* zoom: 0.5;
 	-ms-zoom: 0.5;
 	-webkit-zoom: 0.5; */
-	width: 1450px;
 	transform: scale(0.5,0.5);
 	transform-origin: top left;
 	}
+	#playArea {
+    width: 1470px;
+    }
 }
 
-@media screen and (max-width: 800px) and (min-width: 1px){
+@media screen and (max-width: 799px) and (min-width: 1px){
 	#playareascaler{
 	/* zoom: 0.5;
 	-ms-zoom: 0.5;
 	-webkit-zoom: 0.5; */
-	width: 1450px;
-	transform: scale(0.40,0.40);
+	transform: scale(0.5,0.5);
 	transform-origin: top left;
 	}
+	#playArea {
+    width: 1500px;
+    }
 }
+
 
 .goldcounter {
 	font-family: "Roboto", Arial, sans-serif;
@@ -153,6 +141,7 @@ align-items: flex-start;
   position:relative;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
   background-color: white;
+  border-radius: 5px;
 }
 
 #campswrapper {
@@ -319,6 +308,7 @@ border-radius: 8%;
   transform: rotate(10deg);
   display: flex;
   z-index: 111;
+  cursor: cell;
 }
 
 .hospitalthumb{
@@ -512,6 +502,7 @@ transform: rotate(0deg);
 .deckholder .deck:hover .buttondiv {  
   display: block;
   background-image:url('img/browse.gif');
+  cursor:zoom-in
 }
 
 .deckholder .deck>:nth-child(2) {
@@ -528,6 +519,7 @@ transform: rotate(0deg);
 
 .tablecards .deck:hover .buttondiv {  
   display: block;
+  cursor: zoom-out;
   background-image:url('img/gather.gif');
 }
 
@@ -546,12 +538,13 @@ transform: rotate(0deg);
 .buttondiv {
   position: absolute;
   display: none;
-  width: 75px;
-  height: 33px;
+  width: 130px;
+  height: 160px;
   background-image:none;
   left: -25px;
   top:-17px;
   z-index: 15;
+  background-repeat: no-repeat;
 }
 
 .stockitem {
@@ -707,14 +700,21 @@ position: relative !important;
  left: 860px;
  top: 450px;
 }
+
+.treasure.stockitem_unselectable {
+	cursor: unset !important;}
+
+.playable.borderpulse {
+	cursor: unset !important;}
+
 .playercamp {
   width: 380px;
   height: 277px;
-  float: right;
+  float: left;
   background-image: url('img/0000ff.jpg');
   position: relative;
-  margin: 5px;
-  display: inline;
+  margin: 10px;
+  display: inline-block;
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
 }
@@ -928,12 +928,23 @@ background-image: url('img/ffa500.jpg');
 .tablecards {
     max-width: 1420px;
     width: 98%;
-    min-width: 500px;
+    min-width: 900px;
     min-height: 210px;
     padding: 5px;
-    margin: 5px;
+    margin-left: 40px;
+    margin-bottom: 15px;
+    margin-top: 20px;
     flex: 2 1 auto;
+    /* border: solid 3px #683720; */
+    /* background-image: url("../../../img/layout/back-main.jpg"); */
+    /* border-radius: 25px; */
+    /* box-shadow: 5px 5px 0px 0px rgb(104, 55, 32), 10px 9px 5px 4px rgba(5, 5, 5, 0.60); */
 }
+
+.tablecards > .deck {
+	 /* border: solid 5px #c0dd00; */
+}
+
 @keyframes roll {	                      
 	0% { transform:  translate3d(    0px ,  0px, 800px)   rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
     13% {transform: translate3d(    0px ,  0px , 0px)      rotateX(360deg) rotateY(90deg) rotateZ(180deg);}

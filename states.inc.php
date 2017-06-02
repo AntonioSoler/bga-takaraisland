@@ -1,8 +1,8 @@
 <?php
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -73,7 +73,7 @@ $machinestates = array(
         "name" => "playermove",  
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding where to send the adventurers'),
-		"descriptionmyturn" => clienttranslate('${you} need to decide where to send your adventurers'),
+		"descriptionmyturn" => clienttranslate('${you} need to select one adventurer and send him to the island'),
 		"action" => "stplayermove",
 		"possibleactions" => array( "movetile", "rentsword", "choosereward" ),
 		"args" => "argMapowner",
@@ -97,7 +97,7 @@ $machinestates = array(
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding what Specialist he wants to hire '),
 		"descriptionmyturn" => clienttranslate('${you} need to decide what Specialist you want to hire '),
-		"possibleactions" => array( "pickexpert"),
+		"possibleactions" => array( "pickexpert" , 'viewdone' ),
         "updateGameProgression" => false,
         "transitions" => array( "sendexpert" => 6 , "playermove" => 3 ) //
     ),

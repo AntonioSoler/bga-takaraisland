@@ -1,8 +1,8 @@
 <?php
  /**
   *------
-  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
-  * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+  * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+  * takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>
   * 
   * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
   * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -287,19 +287,7 @@ class takaraisland extends Table
 			{	
 				$result['activatesword'] = false;
 			}
-		
-		/*
-		$sql = "SELECT player_tent FROM player WHERE player_id='$current_player_id'";
-        $result['tent'] = self::getUniqueValueFromDB( $sql );  //only you can see your tent
-        
-        //show number of cards in deck too.
-        $result['cardsRemaining'] = $this->cards->countCardsInLocation('deck');
-        $result['iterations'] = $this->getGameStateValue('iterations');
-        $result['exploringPlayers'] = $this->getExploringPlayers();
-		$sql = "SELECT COUNT(*) FROM cards WHERE card_location ='temple' AND card_type in (12,13,14,15,16)"; 
-		$result['templeartifacts'] = self::getUniqueValueFromDB( $sql );
-		$result['table'] = $this->cards->getCardsInLocation( 'table' );
-         */     
+		     
         return $result;
     }
 
@@ -662,8 +650,16 @@ class takaraisland extends Table
 	function viewdone()
     {
 	self::checkAction( 'viewdone' );
-	
-	$this->gamestate->nextState( );
+	$state=$this->gamestate->state();
+	if ( $state['name'] == "hireexpert")
+		{
+			$this->gamestate->nextState( "playermove" );
+			
+		}
+	else
+		{
+		$this->gamestate->nextState( );
+		}
     }
 	
 	function recruit()
@@ -1014,10 +1010,25 @@ class takaraisland extends Table
 								'tile_id' => "expert2",
 								'impersonated' => $impersonated
 								) );
-						
+					$this->gamestate->nextState('sendexpert');	
 					}
+					else
+					{
+						$sql = "SELECT card_type FROM tokens WHERE card_location like 'expertsC' LIMIT 1";
+						$tile = self::getUniqueValueFromDB( $sql );
+						self::DbQuery( "UPDATE tokens set card_location = 'TH_$player_id' WHERE card_type = '$tile' AND card_type_arg=$player_id LIMIT 1 " );
+						
+						self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} does not have enough money! The adventurer return to camp.' ), array(
+							'player_id' => $player_id,
+							'player_name' => self::getActivePlayerName(),
+							'destination' => "TH_".$player_id,
+							'tile_id' => "tile_".$player_id."_".$tile
+							) );
+						$this->gamestate->nextState('playermove');
+					}
+						
 					
-					$this->gamestate->nextState('sendexpert');
+					
 		
 					break;
 		case "expert3":
