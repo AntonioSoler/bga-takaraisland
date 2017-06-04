@@ -761,6 +761,7 @@ position: relative !important;
     width: 30px;
     height: 30px;
     margin: 1px;
+    margin-left: 25px;
     background-image: url(img/xpicon.png);
     background-size: cover;
     position: relative;
@@ -934,7 +935,7 @@ background-image: url('img/ffa500.jpg');
     margin-left: 40px;
     margin-bottom: 15px;
     margin-top: 20px;
-    flex: 2 1 auto;
+    /* flex: 2 1 auto; */
     /* border: solid 3px #683720; */
     /* background-image: url("../../../img/layout/back-main.jpg"); */
     /* border-radius: 25px; */

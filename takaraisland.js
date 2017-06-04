@@ -450,11 +450,12 @@ function (dojo, declare) {
 						this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
 						this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
 					}
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );
                     break;
 				case 'exchange':
                     this.addActionButton( 'buy_button', _('Buy 2XP token for 5 Kara gold  '), 'buy' );
 					this.addActionButton( 'sell_button', _('Sell selected XP token'), 'sell' );
-					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );					
                     break;
                 case 'browsecards':
 				    if ( args.monsterpresent == 1 )
@@ -469,7 +470,7 @@ function (dojo, declare) {
 					break;
 				 
 				 case 'hireexpert':
-					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );					
                     break;
 					
 				 case 'sendexpert':
@@ -1234,6 +1235,19 @@ function (dojo, declare) {
             }	
         },
 		
+		cancel: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'cancel' ) )
+            {  return; }
+			
+			if( this.checkAction( 'cancel' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/cancel.html", {
+                }, this, function( result ) {} );
+            }	
+        },
+		
 		buy: function( evt )
         {
 			dojo.stopEvent( evt );
@@ -1506,4 +1520,3 @@ function (dojo, declare) {
         },
         
    });             
-});

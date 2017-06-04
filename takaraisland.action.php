@@ -84,6 +84,13 @@
 		self::ajaxResponse();    
 	}
 	
+	public function cancel()
+    {
+		self::setAjaxMode();	
+		$this->game->cancel();
+		self::ajaxResponse();    
+	}
+	
 	public function revealmonster()
     {
 		self::setAjaxMode();	
@@ -170,4 +177,3 @@
 
   }
   
-
