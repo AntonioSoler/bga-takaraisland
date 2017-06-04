@@ -1,4 +1,3 @@
-
 -- ------
 -- BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
 -- takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>

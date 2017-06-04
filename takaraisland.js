@@ -1520,4 +1520,3 @@ function (dojo, declare) {
         },
         
    });             
-});
