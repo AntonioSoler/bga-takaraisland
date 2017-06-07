@@ -322,9 +322,7 @@ class takaraisland extends Table
 
 	function getCardStatus($thiscard_id)
     {
-        //Compute and return the game progression
-        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
-
+        
         $result = 0;
         $sql = "SELECT card_status from cards where card_id=". $thiscard_id;
 		$result = self::getUniqueValueFromDB( $sql ) ;
@@ -333,9 +331,7 @@ class takaraisland extends Table
 	
 	function getGoldBalance($player_id)
     {
-        //Compute and return the game progression
-        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
-
+     
         $result = 0;
         $sql = "SELECT player_gold from player where player_id=". $player_id;
 		$result = self::getUniqueValueFromDB( $sql ) ;
@@ -344,9 +340,7 @@ class takaraisland extends Table
 	
 	function getXPBalance($player_id)
     {
-        //Compute and return the game progression
-        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
-
+      
         $result = 0;
         $sql = "SELECT player_xp from player where player_id=". $player_id;
 		$result = self::getUniqueValueFromDB( $sql ) ;
@@ -355,9 +349,7 @@ class takaraisland extends Table
 	
 	function getStoneBalance($player_id)
     {
-        //Compute and return the game progression
-        // there are 5 iterations so each one is a 20% of the game + aproximately 1% for each card drawn in this iteration.
-
+    
         $result = 0;
         $sql = "SELECT Count(*) from tokens where card_type in ('11','12' ) AND card_location='playercardstore_$player_id' ";
 		$result = self::getUniqueValueFromDB( $sql ) ;
@@ -769,9 +761,10 @@ class takaraisland extends Table
 				'source' => "playercardstore_".$player_id,
 				'token_id' => $token_id ,
 				'NOSELL' =>  1
-				) );		
+				) );
+		$this->gamestate->nextState( );
 		}
-	$this->gamestate->nextState( );
+	
     }
 	
 	function sell($token_id)
@@ -787,7 +780,7 @@ class takaraisland extends Table
 		
 		$gold=$token['type_arg']*5;
 		$xp=$token['type_arg'];
-		
+		self::DbQuery( "UPDATE player set player_xp = player_xp - $xp WHERE Player_id = $player_id" );
 		self::DbQuery('DELETE FROM tokens where card_id='.$token_id);
 		self::notifyAllPlayers( "playersellxp", clienttranslate( '${player_name} sells a ${amount} XP token to the Counter' ), array(
 				'player_id' => $player_id,
@@ -802,7 +795,8 @@ class takaraisland extends Table
 						'player_name' => self::getActivePlayerName(),
 						'amount' => $gold ,  
 						'source' => "counter"
-				) );	
+				) );
+		$this->gamestate->nextState( );
 		}
 		else 
 		{
@@ -810,7 +804,7 @@ class takaraisland extends Table
 							'player_name' => self::getActivePlayerName()
 							) );
 		}
-	$this->gamestate->nextState( );
+	
     }
 	
 	function selectcards($deckpicked,$token_id)
@@ -949,7 +943,15 @@ class takaraisland extends Table
 										) );		
 								
 								self::incGameStateValue('stonesfound',1);
-								break;
+								
+								if ( self::getGameStateValue ('stonesfound') ==2)
+								{ 
+									break 2;
+							    }
+								else
+								{
+									break;
+								}	
 					}
 				}
 				$this->gamestate->nextState('playermove');
@@ -1590,7 +1592,15 @@ class takaraisland extends Table
 								'tile_id' => "card_". $topcard['id'],
 								'deck' => $topcard['location']
 								) );
-							$gold=self::getUniqueValueFromDB( "SELECT COUNT(*) FROM cards WHERE card_location like 'deck%' and card_status>=1 AND card_type in ('2','14') "  );
+							$gold=0 ;
+							for ($g=1 ; $g<=6 ; $g++ )
+							{	    // VISIBLE ROCKFALL ON TOP OF A DECK
+								$ftopcard=$this->cards->getCardOnTop( 'deck'.$g );
+								if ( ( $ftopcard['type'] == 2 OR $ftopcard['type']==14) AND ( $this->getCardStatus($ftopcard['id']) >=1 ) )
+									{
+									 $gold=$gold + 1;
+									}							 
+							}
 							$gold=$gold * 2 ;  // visible rockfalls x 2
 							self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );
 							$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];

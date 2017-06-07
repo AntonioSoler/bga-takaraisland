@@ -1139,11 +1139,11 @@ background-image: url('img/ffa500.jpg');
 
 .borderpulse {
     cursor: pointer;
-    animation: pulse 2s ease infinite;
+    animation: tkpulse 2s ease infinite;
     z-index: 200 !important;
 }
 
-@keyframes pulse {
+@keyframes tkpulse {
   0% {
   box-shadow: 
 	    0 0 0 5px #c0dd00;
