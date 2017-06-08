@@ -32,6 +32,7 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 			this.cardwidth = 150;
             this.cardheight = 200;
+			this.interface_min_width = 1020;
         },
         
         /*
@@ -246,13 +247,20 @@ function (dojo, declare) {
 			    
 			    if (this.isCurrentPlayerActive() )
 				{
+					list =dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' );
+					if (typeof list[0] !== 'undefined') 
+					{ 
+						this.selectadventurer(null,list[0]);
+					}
+					/* +++++++++++++ AUTOSELECT
+					
 					list =dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
 					
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
-					}
+					}*/
 				}
 				break;
 				
@@ -601,15 +609,23 @@ function (dojo, declare) {
 			
 		},
 		
-		selectadventurer : function(sourceclick) {
-			dojo.stopEvent( sourceclick );
-			var target = sourceclick.target || sourceclick.srcElement;
-			this.adventurer=target.id;
+		selectadventurer : function(sourceclick, firstaventurer) {
+			if (typeof firstaventurer !== 'undefined') 
+			{
+				this.adventurer = firstaventurer.id  ; // the variable is defined
+				target=firstaventurer ;
+			}
+			else
+			{
+				dojo.stopEvent( sourceclick );
+				var target = sourceclick.target || sourceclick.srcElement;
+				this.adventurer=target.id;
+			}	
 			dojo.toggleClass(this.adventurer,"tileselected");
 			//debugger; //
 			dojo.style("playArea", "cursor", "url('"+g_gamethemeurl+"img/"+target.parentElement.parentElement.classList[1] +"_"+ target.id.slice(-1)+".png') ,auto");
 			dojo.forEach(this.gameconnections, dojo.disconnect);
-			dojo.query(".borderpulse").removeClass("borderpulse");
+			//dojo.query(".borderpulse").removeClass("borderpulse");
 			this.gameconnections=[];
 			
 			if (dojo.byId("expertsC").children.length == 0) 
@@ -1227,7 +1243,8 @@ function (dojo, declare) {
 			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
-			
+			dojo.query(".borderpulse").removeClass("borderpulse");
+			dojo.query(".flipped").removeClass("flipped");
 			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/viewdone.html", {
@@ -1351,7 +1368,7 @@ function (dojo, declare) {
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
             dojo.subscribe( 'movetoken', this, "notif_movetoken" );
-			this.notifqueue.setSynchronous( 'movetoken', 1000 );
+			this.notifqueue.setSynchronous( 'movetoken', 1500 );
 			
 			dojo.subscribe( 'placestone', this, "notif_placestone" );
 			this.notifqueue.setSynchronous( 'placestone', 1000 );

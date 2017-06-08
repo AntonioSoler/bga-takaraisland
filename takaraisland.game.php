@@ -959,15 +959,27 @@ class takaraisland extends Table
 			case 3:
 				$topcards=$this->cards->getCardsOnTop( 5 , $deckpicked );
 				self::setGameStateValue('monsterpresent' ,0 );
-				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Archeologist to site ${sitenr} '), array(
-							'player_name' => self::getActivePlayerName(),
+				
+				self::notifyAllPlayers( 'movetoken', clienttranslate( '${player_name} sends the Archeologist to site ${sitenr} '), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "deckholder".substr( $deckpicked ,-1),
+								'tile_id' => "expert3",
 								'sitenr' => substr( $deckpicked ,-1)
-							) );
+								) );
+								
 				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Archeologist on the survey of Excavation site: ${sitenr}' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'sitenr' => substr( $deckpicked ,-1),
 								'cards' => $topcards
+								) );
+								
+				self::notifyAllPlayers( "movetoken", ""  , array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert3"
 								) );
 				$this->gamestate->nextState( 'browsecards' );
 			    break;
@@ -978,15 +990,24 @@ class takaraisland extends Table
 				$topcards=self::getObjectListFromDB( $sql );
 				self::setGameStateValue('monsterpresent' ,0 );
 
-				self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr}'), array(
-							'player_name' => self::getActivePlayerName(),
+				self::notifyAllPlayers( 'movetoken', clienttranslate( '${player_name} sends the Soothsayer to site ${sitenr} '), array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "deckholder".substr( $deckpicked ,-1),
+								'tile_id' => "expert4",
 								'sitenr' => substr( $deckpicked ,-1)
-							) );
+								) );
 				self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards detected by the Soothsayer on the survey of Excavation site: ${sitenr}' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'sitenr' => substr( $deckpicked ,-1),
 								'cards' => $topcards
+								) );
+				self::notifyAllPlayers( "movetoken", ""  , array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => "playercardstore_".$player_id,
+								'tile_id' => "expert4"
 								) );
 				$this->gamestate->nextState( 'browsecards' );
 			    break;	
