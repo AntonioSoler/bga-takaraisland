@@ -364,6 +364,40 @@ border-radius: 8%;
   display: flex;
   flex-flow: row wrap;
 }
+
+#WaitingroomC div:nth-child(2) {
+    left: 30px;
+
+}
+
+#WaitingroomC div:nth-child(3) {
+    left: 60px;
+}
+
+#WaitingroomC div:nth-child(4) {
+    left: 90px;
+}
+
+#WaitingroomC div:nth-child(5) {
+    left: 0px;
+    top: 60px;
+}
+
+#WaitingroomC div:nth-child(6) {
+	top: 60px;
+    left: 30px;
+}
+
+#WaitingroomC div:nth-child(7) {
+    top: 60px;
+    left: 60px;
+}
+
+#WaitingroomC div:nth-child(8) {
+    top: 60px;
+    left: 90px;
+}
+
 #expertsC {
   border: 0px;
   width: 60px;
@@ -445,8 +479,8 @@ border-radius: 8%;
 }
 
 #diveC div:nth-child(1) {margin-left:0px;}
-#diveC div:nth-child(2) {margin-left: 20px;}
-#diveC div:nth-child(3) {margin-left: 20px;}
+#diveC div:nth-child(2) {left: 65px;}
+#diveC div:nth-child(3) {left: 130px;}
 
 #treasuredeck {
     border: 0px;

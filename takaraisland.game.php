@@ -564,13 +564,11 @@ class takaraisland extends Table
 	$topcard=$this->cards->getCardOnTop( 'deck'.$sitenr );
 	//var_dump( $topcard );
 	$card=self::getObjectFromDB( "SELECT * FROM cards WHERE card_id=".$topcard['id'] );
-	$advcount=self::getUniqueValueFromDB( "SELECT card_status FROM cards WHERE card_id = ".$topcard['id'] ); 
+	$cardstatus=self::getUniqueValueFromDB( "SELECT card_status FROM cards WHERE card_id = ".$topcard['id'] ); 
 	
-	if ($advcount==0) 
-	{
-		$sql = "UPDATE cards set card_status = 1 WHERE card_id = ".$topcard['id'];
-		self::DbQuery( $sql );
-	}
+	$sql = "UPDATE cards set card_status = card_status + 1 WHERE card_id = ".$topcard['id'];
+	self::DbQuery( $sql );
+	
 			
 	self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs a card on the excavation site: ${sitenr}' ), array(
 					'player_id' => $player_id,
@@ -1601,9 +1599,9 @@ class takaraisland extends Table
 						break;
 			case "2":       // ROCKFALL
 			case "14":
-						$advcount=self::getUniqueValueFromDB( "SELECT card_status FROM cards WHERE card_id = ".$topcard['id'] );
+						$cardstatus=self::getUniqueValueFromDB( "SELECT card_status FROM cards WHERE card_id = ".$topcard['id'] );
 						//var_dump( $advcount );
-						if ($advcount > 1) 
+						if ($cardstatus == 3) 
 						{
 							self::incStat (1,"cards_digged_player",$player_id);
 							self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
@@ -1634,14 +1632,22 @@ class takaraisland extends Table
 									'source' => "playercardstore_".$player_id
 									) );
 						}
-						else
+						if ($cardstatus == 2)
 						{   
-							$sql = "UPDATE cards set card_status = 2 WHERE card_id = ".$topcard['id'];
-							self::DbQuery( $sql );
 							self::notifyAllPlayers( 'message', clienttranslate( '${player_name} sent a first adventurer to dig a rockfall on site ${sitenr} (2 adventurers required)'), array(
 							'player_name' => self::getActivePlayerName(),
 								'sitenr' => $sitenr
 							) );
+						}
+						if ($cardstatus == 1)
+						{   
+							self::notifyAllPlayers( "revealcard", clienttranslate( '${player_name} digs into a Rockfall in site: ${sitenr}' ), array(
+									'player_id' => $player_id,
+									'player_name' => self::getActivePlayerName(),
+									'sitenr' => $sitenr ,
+									'card' => $topcard,
+									'istopcard' => true
+									) );
 						}
 						$this->gamestate->nextState("playermove");
 						break;
