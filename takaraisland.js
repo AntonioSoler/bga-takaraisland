@@ -233,16 +233,20 @@ function (dojo, declare) {
 			
 			switch( stateName )
             {
+            case 'startturn':
+			    //debugger;
+			    for( var player_id in args.args.argScores['players'] )
+				{
+					var player = args.args.argScores['players'][player_id];
+					
+					dojo.byId("goldcount_p"+player_id).innerHTML=player['gold'];
+					dojo.byId("xpcount_p"+player_id).innerHTML=player['xp'];
+					var newScore = player['score'];
+					this.scoreCtrl[ player_id ].toValue( newScore );
+				}
+			    
+		    break;
             
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Show some HTML block at this game state
-                dojo.style( 'my_html_block_id', 'display', 'block' );
-                
-                break;
-           */
             case 'playermove':
 			    
 			    if (this.isCurrentPlayerActive() )
@@ -542,23 +546,23 @@ function (dojo, declare) {
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
 			_("Experience: this card gives XP points when dug" ),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
-			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Gallery: this card gives Kara Gold when dug"),
 			_("Experience: this card gives XP points when dug" ),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
 			_("Experience: this card gives XP points when dug" ),
 			_("Gallery: this card gives Kara Gold when dug"),
 			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
-			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Drake: a POWERFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Drake: a POWERFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points"),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points")]
 			
@@ -1368,7 +1372,7 @@ function (dojo, declare) {
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
             dojo.subscribe( 'movetoken', this, "notif_movetoken" );
-			this.notifqueue.setSynchronous( 'movetoken', 1500 );
+			this.notifqueue.setSynchronous( 'movetoken', 2000 );
 			
 			dojo.subscribe( 'placestone', this, "notif_placestone" );
 			this.notifqueue.setSynchronous( 'placestone', 1000 );

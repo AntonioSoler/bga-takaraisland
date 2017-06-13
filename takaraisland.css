@@ -225,6 +225,7 @@ transition: transform 1.5s;
   height: 200px;
   transition: transform 1s ease-out;
 }
+
 .stonetoken{
 background-image: url('img/cards.jpg');
 border-radius: 8%;
@@ -258,6 +259,9 @@ border-radius: 8%;
   visibility: hidden;
   position: absolute;
   transform: rotateY(180deg) ;
+}
+.card.flipped{
+	transform: rotate(0deg)!important;
 }
 
 .card.flipped  .card-front {
@@ -418,11 +422,11 @@ border-radius: 8%;
 }
 #workersC {
   border: 0px;
-  width: 110px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   position: absolute;
   left: 280px;
-  top: 330px;
+  top: 325px;
   display: flex;
   flex-flow: row wrap;
   border-style: solid;
@@ -430,12 +434,16 @@ border-radius: 8%;
 }
 
 #workersC div:nth-child(1) {
+	left: 0px;
 }
 #workersC div:nth-child(2) {
-}
+	left: 65px;}
 #workersC div:nth-child(3) {
-}
+top: 65px ;
+	left: 0px;}
 #workersC div:nth-child(4) {
+	top: 65px ;
+	left: 65px;
 }
 
 #counterC {

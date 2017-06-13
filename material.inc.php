@@ -44,7 +44,8 @@
 	"idol"            => clienttranslate('idol'),
 	"skull"           => clienttranslate('skull'),
 	"score_window_title" => clienttranslate('FINAL SCORE'),
-	"win_condition" => clienttranslate('The player with the 2 stones wins. If 2 players have 1 stone all players compare points. If only one stone was found it does not score')
+	"win_condition" => clienttranslate('The player with the 2 stones wins. If 2 players have 1 stone each all players compare points. If only one stone was found it does not score. If no stone was found all players loose!')
+	
 );
 
  //
