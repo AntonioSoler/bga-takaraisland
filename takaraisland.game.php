@@ -106,6 +106,10 @@ class takaraisland extends Table
 		self::initStat( 'player', 'gold' , 0 );  // Init a player statistics (for all players)
 		self::initStat( 'player', 'experience' , 0 );  // Init a player statistics (for all players)
 		self::initStat( 'player', 'stones_found' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'experts_hired' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'fights' , 0 );  // Init a player statistics (for all players)
+		self::initStat( 'player', 'kills' , 0 );  // Init a player statistics (for all players)
+		
 		
         // setup the initial game situation here
         // self::DbQuery( "UPDATE player set player_gold = 100" );   // TEST!!!
@@ -440,7 +444,26 @@ class takaraisland extends Table
 				$this->gamestate->nextState( 'exchange' );
 				break;
 			case "expertsC":
-				$this->gamestate->nextState( 'hireexpert' );
+			    $expertcount=self::getUniqueValueFromDB( "SELECT COUNT(*) FROM tokens WHERE card_type in ( '7','8','9','10') and card_location = 'playercardstore_$player_id'  " ); 
+				if  ( $expertcount > 0 )
+				{
+					$sql = "SELECT card_type FROM tokens WHERE card_location like 'expertsC' LIMIT 1";
+					$tile = self::getUniqueValueFromDB( $sql );
+					self::DbQuery( "UPDATE tokens set card_location = 'TH_$player_id' WHERE card_type = '$tile' AND card_type_arg=$player_id LIMIT 1 " );
+					
+					self::notifyAllPlayers( "movetoken", clienttranslate( '${player_name} you can not hire a second Specialist! The adventurer returns to camp.' ), array(
+						'player_id' => $player_id,
+						'player_name' => self::getActivePlayerName(),
+						'destination' => "TH_".$player_id,
+						'tile_id' => "tile_".$player_id."_".$tile
+						) );
+					$this->gamestate->nextState( "playermove" );
+				}
+					
+				else 
+				{ 
+					$this->gamestate->nextState( 'hireexpert' );
+				}
 				break;
 		}
     }
@@ -1048,6 +1071,7 @@ class takaraisland extends Table
 					$result = self::getUniqueValueFromDB( $sql ) ;
 					if ( self::getGoldBalance($player_id) >=5 AND $result=="expertholder1" ) 
 					{
+					self::incStat (1,"experts_hired",$player_id);
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
 					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to hire the Miner' ), array(
 									'player_id' => $player_id,
@@ -1091,6 +1115,7 @@ class takaraisland extends Table
 					$result = self::getUniqueValueFromDB( $sql ) ;
 					if ( self::getGoldBalance($player_id) >= $gold  AND $result=="expertholder2" ) 
 					{
+					self::incStat (1,"experts_hired",$player_id);
 					self::DbQuery( "UPDATE player set player_gold = player_gold - $gold WHERE Player_id = $player_id" );	
 					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays ${amount} <div class="goldlog"></div> to hire the Impersonator acting as ${impersonated}' ), array(
 									'player_id' => $player_id,
@@ -1136,6 +1161,7 @@ class takaraisland extends Table
 					$result = self::getUniqueValueFromDB( $sql ) ;
 					if ( self::getGoldBalance($player_id) >=2  AND $result=="expertholder3" ) 
 					{
+					self::incStat (1,"experts_hired",$player_id);	
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 2 WHERE Player_id = $player_id" );	
 					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 2 <div class="goldlog"></div> to hire the Archeologist' ), array(
 									'player_id' => $player_id,
@@ -1166,6 +1192,7 @@ class takaraisland extends Table
 					$result = self::getUniqueValueFromDB( $sql ) ;
 					if ( self::getGoldBalance($player_id) >=3  AND $result=="expertholder4" ) 
 					{
+					self::incStat (1,"experts_hired",$player_id);	
 					self::DbQuery( "UPDATE player set player_gold = player_gold - 3 WHERE Player_id = $player_id" );	
 					self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 3 <div class="goldlog"></div> to hire the Soothsayer' ), array(
 									'player_id' => $player_id,
@@ -1452,6 +1479,7 @@ class takaraisland extends Table
 				) );	
 		}
 		else do {
+			
 			$result=mt_rand (1,6);
 			self::notifyAllPlayers( "rolldice", "" , array(	'result' => $result  ) );
 			if ($result<5)   // dice sword  -> place wound
@@ -1486,10 +1514,11 @@ class takaraisland extends Table
 			} 
 			$wounds=self::getUniqueValueFromDB( "SELECT COUNT(*) c FROM tokens where card_location='deck".$sitenr."_item_card_".$topcard['id']."_back'" );		
 		} while ($life > $wounds);
-		
+		self::incStat (1,"fights",$player_id);
 		if ( $wounds >= $life )
 		{   
 			self::incStat (1,"cards_digged_player",$player_id);
+			self::incStat (1,"kills",$player_id);
 			self::DbQuery( "DELETE FROM tokens WHERE card_location ='deck".$sitenr."_item_card_".$topcard['id']."_back'");
 			self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} beats the ${monstername}.' ), array(
 				'player_id' => $player_id,
@@ -1987,6 +2016,7 @@ class takaraisland extends Table
             "title" => $this->resources["score_window_title"],
             "table" => $table,
             "header" => '<div>'.$this->resources["win_condition"].'</div>',
+			"footer" => '<div>'.$this->resources["end_condition"].'</div>',
 			"closing" => clienttranslate( "OK" )
             //"closelabel" => clienttranslate( "Closing button label" )
         ) ); 

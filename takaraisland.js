@@ -1381,7 +1381,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous( 'activatesword', 500 );
 			
 			dojo.subscribe('revealcard', this, "notif_revealcard");
-            this.notifqueue.setSynchronous('revealcard', 2000);
+            this.notifqueue.setSynchronous('revealcard', 3000);
 			
 			dojo.subscribe('browsecards', this, "notif_browsecards");
             this.notifqueue.setSynchronous('browsecards', 3000);
@@ -1402,7 +1402,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('playersellxp', 2000);
 			
 			dojo.subscribe('rolldice', this, "notif_rolldice");
-            this.notifqueue.setSynchronous('rolldice', 4000);
+            this.notifqueue.setSynchronous('rolldice', 5000);
 			
 			dojo.subscribe('placewound', this, "notif_placewound");
             this.notifqueue.setSynchronous('placewound', 2000);
