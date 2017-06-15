@@ -269,11 +269,11 @@ class takaraisland extends Table
 		
         $result['treasures'] = self::getCollectionFromDb( $sql );
 		
-		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' ORDER BY card_location, card_location_arg ";
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' ORDER BY card_location_arg DESC";
 		
         $result['cards'] = self::getCollectionFromDb( $sql );
 		
-		$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' AND card_status>=1 ORDER BY card_location,card_location_arg";
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' AND card_status>=1 ORDER BY card_location_arg DESC";
 		
         $result['visiblecards'] = self::getCollectionFromDb( $sql );
 		

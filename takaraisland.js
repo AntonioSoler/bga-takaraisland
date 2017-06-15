@@ -110,7 +110,8 @@ function (dojo, declare) {
 					this[thisstore].addItemType( tarray[c] , 0 , g_gamethemeurl+'img/xp.png', c );
 				}		
 			}
-						
+			
+            
             for( var i in this.gamedatas.cards )
             { 
 				var thisdeck = this.gamedatas.cards[i].location;
@@ -125,7 +126,8 @@ function (dojo, declare) {
 				position= xpos+"px "+ ypos+"px ";
 				
 				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
-				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id, "transform" , "translatez("+position*3+"0px)");
+				myvalue="translateZ(0."+card.location_arg+"em)";
+				$(this.gamedatas.cards[i].location+'_item_card_'+card.id).style.transform = myvalue ;
 				
             }
 			
