@@ -24,7 +24,7 @@
     
     Please REMOVE this comment before publishing your game on BGA
 -->
-<div id="change">
+<div id="change3d">
  <button id="c3dZoomin" class="button3d zoomin">+</button>
  <button id="c3dUp"     class="button3d up">&#8679;</button>
  <button id="c3dZoomout" class="button3d zoomout">-</button>

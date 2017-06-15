@@ -369,6 +369,7 @@ function (dojo, declare) {
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id; 
+					dojo.toggleClass(thiselement, 'traveller');
 					dojo.toggleClass(thiselement, 'visible');
 					console.log("*** returning expert"+thiselement);
 					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ,1000 ) ;
@@ -409,7 +410,6 @@ function (dojo, declare) {
                 break;	
 				
 			case 'endturn':
-			    
 			    this.slideToObjectRelative ("sword","swordholder",1000);
 				list=dojo.query( '.playable .playertile' );
 				for (var i = 0; i < list.length; i++)
@@ -578,7 +578,7 @@ function (dojo, declare) {
 			this.control3dypos+= ypos;
 			this.control3dpers+= pers;
 			 $('playArea').style.transform = "rotatex("+this.control3dxaxis+"deg) translate("+this.control3dypos+"px,"+this.control3dxpos+"px) rotateZ("+this.control3dzaxis+"deg)" ;
-			 $('playareascaler').style.perspective = this.control3dpers+"px" ;
+			 //$('playareascaler').style.perspective = this.control3dpers+"px" ;
 			}
 		},
 

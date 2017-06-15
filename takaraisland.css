@@ -77,20 +77,26 @@
   align-items: flex-start;
   transform-style: preserve-3d;
   transition: transform 0.5s ease;
+  pointer-events: visible;
 }
 #playArea div{
 	  transform-style: preserve-3d;
+}
+#change3d{
+	position: absolute;
+    z-index: 900;
 }
 
 .button3d {
 	width: 14px;
 	height: 14px;
 	text-align: center;
-	font-size: 7px;
+	font-size: 8px;
 	padding: 0px;
 	margin: 0px;
-	background-color: #f8f8f8;
+	background-color: Transparent;
 	border: 0px;
+	font-weight: bold;
 }
 
 @media screen and (min-width: 1920px){
@@ -104,7 +110,9 @@
 }
 #playareascaler{
     transform-style: preserve-3d;
-    perspective-origin: 64% 5%;
+    perspective-origin: 64% 52%;
+    pointer-events: none;
+    perspective: 6261px;
     }
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
@@ -161,7 +169,7 @@
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
   background-color: white;
   border-radius: 5px;
-  transform-style: preserve-3d;
+  transform: translateZ(2px);
 }
 
 #campswrapper {
@@ -310,6 +318,9 @@ border-radius: 8%;
 	background-image: url('img/treasure.jpg')!important;
 }
 .expert .card-front{
+	background-image: url('img/expert_front.jpg')!important;
+}
+.expertcardfront{
 	background-image: url('img/expert_front.jpg')!important;
 }
 
@@ -701,11 +712,20 @@ transform: rotate(0deg);
 	max-width: 300px;
     cursor: pointer;
 }
-
 .stockitem_selected{
+	border: 0px !important;	
+}
+
+.stockitem_selected::after{
+	content:".";
+	height:200px; 
+	width:150px;
 	box-shadow: -155px 0px 0px 10px #c0dd00, 0px 0px 0px 10px #c0dd00, 155px 0px 0px 10px #c0dd00;
 	z-index: 0 !important;
 	border: 0px !important;
+	position:absolute;
+	top:0px;
+	transform:translateZ(-6px);
 	}
 
 .tooltipimage * { 
@@ -791,7 +811,7 @@ position: relative !important;
   display: inline-block;
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
-  transform: translateZ(1px);
+  transform: translateZ(2px);
 }
 .cp_board{
   display: inline-flex;
@@ -877,7 +897,7 @@ position: relative !important;
 }
 
 .playertileholder .playertile{
-	transition: top 0.5s ease;
+	/* transition: top 0.5s ease, left 0.5s ease; */
 }
 
 .playertileholder div:nth-child(1) {
@@ -959,6 +979,7 @@ background-image: url('img/ffa500.jpg');
 	border: 0px;
 	position: absolute;
 	transform: translatez(0.7em);
+	/* transition: top 0.5s ease, left 0.5s ease; */
 }
 /*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
 
