@@ -33,6 +33,14 @@ function (dojo, declare) {
 			this.cardwidth = 150;
             this.cardheight = 200;
 			this.interface_min_width = 1020;
+			
+			this.control3dxaxis=50;
+			this.control3dzaxis=-10;
+			this.control3dxpos=0;
+			this.control3dypos=0;
+			this.control3dpers=4000;
+			this.control3dmode3d=false;
+			
         },
         
         /*
@@ -53,9 +61,19 @@ function (dojo, declare) {
             console.log( "Starting game setup" );
             			
 			this.param=new Array();
-			this.gameconnections=new Array();
-			
+			this.gameconnections=new Array();			
 			this.swordconnection=null;
+										//change3d: function ( xaxis , xpos , ypos , zaxis , pers, enable3d )
+			
+			dojo.connect($('c3dZoomin'),  "onclick", dojo.hitch(this, this.change3d,  10 , 0 , 0 , 0 , 0 , true ));
+			dojo.connect($('c3dZoomout'), "onclick", dojo.hitch(this, this.change3d,  -10 , 0 , 0 , 0 , 0 , true ));
+			dojo.connect($('c3dUp'),      "onclick", dojo.hitch(this, this.change3d,  0 , 100 , 0 , 0 , 0 , true ));
+			dojo.connect($('c3dDown'),    "onclick", dojo.hitch(this, this.change3d,  0 , -100 , 0 , 0 , 0 , true ));
+			dojo.connect($('c3dLeft'),    "onclick", dojo.hitch(this, this.change3d,  0 , 0 , -100 , 0 , 0 , true ));
+			dojo.connect($('c3dRight'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 100 , 0 , 0 , true ));
+			dojo.connect($('c3dRotateL'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 10 , 0 , true ));
+			dojo.connect($('c3dRotateR'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , -10 , 0 , true ));
+			dojo.connect($('c3dReset'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 , false ));
 			
             // Setting up player boards
 			
@@ -126,7 +144,7 @@ function (dojo, declare) {
 				position= xpos+"px "+ ypos+"px ";
 				
 				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
-				myvalue="translateZ(0."+card.location_arg+"em)";
+				myvalue="translateZ("+(card.location_arg*3 )+"px)";
 				$(this.gamedatas.cards[i].location+'_item_card_'+card.id).style.transform = myvalue ;
 				
             }
@@ -339,13 +357,13 @@ function (dojo, declare) {
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;
-					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1] , 1000 ) 
 				}
 				list=dojo.query( '#HospitalC div[id^="tile_'+this.getActivePlayerId()+'"]') ;
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;
-					this.slideToObjectRelative ( thiselement , "WaitingroomC" ) ;
+					this.slideToObjectRelative ( thiselement , "WaitingroomC" , 1000 ) ;
 				}
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' .visible') ;
 				for (var i = 0; i < list.length; i++)
@@ -353,7 +371,7 @@ function (dojo, declare) {
 					var thiselement = list[i].id; 
 					dojo.toggleClass(thiselement, 'visible');
 					console.log("*** returning expert"+thiselement);
-					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ) ;
+					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ,1000 ) ;
 				}
 				
 				dojo.forEach(this.gameconnections, dojo.disconnect);
@@ -382,7 +400,7 @@ function (dojo, declare) {
         onLeavingState: function( stateName )
         {
             console.log( 'Leaving state: '+stateName );
-            
+            dojo.query(".traveller").removeClass("traveller");
             switch( stateName )
             {
 
@@ -392,19 +410,20 @@ function (dojo, declare) {
 				
 			case 'endturn':
 			    
-			    this.slideToObjectRelative ("sword","swordholder");
+			    this.slideToObjectRelative ("sword","swordholder",1000);
 				list=dojo.query( '.playable .playertile' );
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;
-					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1]  ) 
+					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1],1000  ) 
 				}
 				dojo.forEach(this.gameconnections, dojo.disconnect);
 				dojo.disconnect(this.recruitcon);
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 				this.recruitcon=null;
-			    dojo.query( '.flipped' ).removeClass( 'flipped' )   ;
+				dojo.query( '.flipped' ).addClass( 'traveller' );
+			    dojo.query( '.flipped' ).removeClass( 'flipped' ) ;
                 break;
 			
 			case 'exchange':
@@ -441,7 +460,8 @@ function (dojo, declare) {
 			case 'sendexpert':
 			    this.expertpicked=0;
 				break;
-            }               
+            }
+		dojo.query(".traveller").removeClass("traveller");
         }, 
 
         // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
@@ -535,7 +555,34 @@ function (dojo, declare) {
             script.
         
         */
-				  
+        change3d: function ( xaxis , xpos , ypos , zaxis , pers, enable3d )
+		{
+			//debugger;
+			if ( enable3d == false ){
+			this.control3dmode3d= !this.control3dmode3d ;
+			}
+			
+			if ( this.control3dmode3d == false )
+			{			
+		    
+			// $('#playArea').style.transform = "rotatex("+50+"deg) translate("+0+"px,"+0+"px) rotateZ("+-10+"deg)" ; 		
+			$('playArea').style.transform = "rotatex("+0+"deg) translate("+0+"px,"+0+"px) rotateZ("+0+"deg)" ; 		
+			}
+			else
+			{
+			this.control3dxaxis+= xaxis;
+			if (this.control3dxaxis >= 90 ) { this.control3dxaxis = 90 ; }
+			if (this.control3dxaxis <= 0 ) { this.control3dxaxis = 0 ;}
+			this.control3dzaxis+= zaxis;
+			this.control3dxpos+= xpos;
+			this.control3dypos+= ypos;
+			this.control3dpers+= pers;
+			 $('playArea').style.transform = "rotatex("+this.control3dxaxis+"deg) translate("+this.control3dypos+"px,"+this.control3dxpos+"px) rotateZ("+this.control3dzaxis+"deg)" ;
+			 $('playareascaler').style.perspective = this.control3dpers+"px" ;
+			}
+		},
+
+		
 		flipcard: function ( card, visible )
 		{
 			image_items_per_row=7;
@@ -573,6 +620,7 @@ function (dojo, declare) {
 			
 			if (visible) 
 				{
+				dojo.toggleClass( card.location+'_item_card_'+card.id , "flipped", true);
 				dojo.toggleClass( card.location+'_item_card_'+card.id, "visible", true);
 				}		
 			else
@@ -733,11 +781,11 @@ function (dojo, declare) {
 		},
 		
 		moveplayertile: function(thetoken) {		
-			this.slideToObjectRelative ("tile_"+thetoken.type_arg+"_"+thetoken.type, thetoken.location);			
+			this.slideToObjectRelative ("tile_"+thetoken.type_arg+"_"+thetoken.type, thetoken.location , 1000);			
 		},
 		
 		movesword: function(thetoken) {
-			this.slideToObjectRelative ("sword", thetoken.location);			
+			this.slideToObjectRelative ("sword", thetoken.location, 1000);			
 		},
 
 		browseGatherDeck : function(sourceclick,deck) {
@@ -836,9 +884,14 @@ function (dojo, declare) {
          */
         slideToObjectRelative : function(token, finalPlace, tlen, tdelay, onEnd) {
             this.resetPosition(token);
-
+             
+            dojo.toggleClass( token , "traveller", true);
+			
             var box = this.attachToNewParentNoDestroy(token, finalPlace);
-            var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
+			var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
+			
+			
+			dojo.toggleClass( token , "traveller", true);
 
             dojo.connect(anim, "onEnd", dojo.hitch(this, function(token) {
                 this.stripPosition(token);
@@ -1251,6 +1304,7 @@ function (dojo, declare) {
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
 			dojo.query(".borderpulse").removeClass("borderpulse");
+			dojo.query(".flipped").addClass("traveller");
 			dojo.query(".flipped").removeClass("flipped");
 			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
             {            
@@ -1427,7 +1481,7 @@ function (dojo, declare) {
         {
             console.log( 'notif_movetoken' );
             console.log( notif );
-            this.slideToObjectRelative (notif.args.tile_id, notif.args.destination,1500)
+            this.slideToObjectRelative (notif.args.tile_id, notif.args.destination,1000)
         },
 		
 		notif_placestone: function( notif )
@@ -1492,6 +1546,8 @@ function (dojo, declare) {
         {
             console.log( 'notif_removecard' );
             console.log( notif );
+			
+			dojo.toggleClass( notif.args.deck+"_item_"+notif.args.tile_id , "traveller", true);
 		    this[notif.args.deck].removeFromStockById (notif.args.tile_id, notif.args.destination)
         },
 		

@@ -70,20 +70,27 @@
   background-image: url('img/background.gif');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  perspective: 8000px;
   display: flex;
   margin: 1px;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: flex-start;
-  transform-style: inherit;
-  transform: rotatex(58deg) translate(36px,-146px) rotateZ(-4deg);
   transform-style: preserve-3d;
-  transform-origin: center;
-  perspective: 8000px;
+  transition: transform 0.5s ease;
 }
 #playArea div{
-	  transform-style: inherit;
+	  transform-style: preserve-3d;
+}
+
+.button3d {
+	width: 14px;
+	height: 14px;
+	text-align: center;
+	font-size: 7px;
+	padding: 0px;
+	margin: 0px;
+	background-color: #f8f8f8;
+	border: 0px;
 }
 
 @media screen and (min-width: 1920px){
@@ -97,8 +104,7 @@
 }
 #playareascaler{
     transform-style: preserve-3d;
-    /* transform-origin: top; */
-    perspective: 8000px;
+    perspective-origin: 64% 5%;
     }
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
@@ -207,7 +213,7 @@
 
 .playerswordholder #sword {
 transform: rotate(520deg)!important;
-transition: transform 1.5s;
+transition: transform 1.5s ease;
 }
 
 .marker{
@@ -229,7 +235,7 @@ transition: transform 1.5s;
   width: 65px;
   height: 150px;
   position: absolute;
-  transition: transform 1.5s;
+  transition: transform 1.5s ease;
   z-index: 100 !important;
   background-image: url('img/sword.png');
   transform: translate3d(0px,-2px,0px);
@@ -251,7 +257,6 @@ border-radius: 8%;
   margin: auto;
   border-radius: 8%;
   backface-visibility: hidden;
-  /*/*transform-style: preserve-3d;*/*/
   transition: transform 1s ease, visibility 1s ease;
   width: 150px;
   height: 200px;
@@ -263,7 +268,6 @@ border-radius: 8%;
   top:0px;
   border-radius: 8%;
   backface-visibility: hidden;
-  /*transform-style: preserve-3d;*/
   transition: transform 1s ease, visibility 1s ease;
   width: 150px;
   height: 200px;
@@ -273,9 +277,6 @@ border-radius: 8%;
   visibility: hidden;
   position: absolute;
   transform: rotateY(180deg) ;
-}
-.card.flipped{
-	transform: rotate(0deg)!important;
 }
 
 .card.flipped  .card-front {
@@ -302,21 +303,21 @@ border-radius: 8%;
     transform: rotateY(0deg) ;
 	}
 
-.treasure  .card-front{
+.treasure .card-front{
 	background-image: url('img/treasure.jpg')!important;
 }
-.treasure  .card-back{
+.treasure .card-back{
 	background-image: url('img/treasure.jpg')!important;
 }
-.expert  .card-front{
+.expert .card-front{
 	background-image: url('img/expert_front.jpg')!important;
 }
 
-.expertcardfront{
-	background-image: url('img/expert_front.jpg')!important;
+.expert{
+	    transform: translateZ(3px);
 }
 
-.expert  .card-back{
+.expert .card-back{
 	background-image: url('img/expert_back.jpg')!important;
 }
 
@@ -514,18 +515,14 @@ top: 65px ;
 #treasuredeck {
     border: 0px;
     width: 210px;
-    height: 210px;
     position: absolute;
-    /*transform-style: preserve-3d;*/
-    left: 680px;
-    top: 270px;
+    transform-style: preserve-3d;
+    left: 656px;
+    top: 245px;
     z-index: 5;
+    transform: rotateZ(-90deg);
 }
-#treasuredeck .card {
-  /*transform-style: preserve-3d;*/
-  transition: transform 1s ease, visibility 1s ease;
-  transform: rotate(-90deg); 
-}
+
 
 .treasurereward {
     border: 0px;
@@ -562,9 +559,8 @@ transform: rotate(0deg);
 .deck {
   width: 99%;
   height: 205px;
-  position: relative;
   border-radius: 8%;
-  display: table;
+  position:absolute !important;
 }
 
 .deck >div:only-child{
@@ -617,7 +613,7 @@ transform: rotate(0deg);
   top: 0px;
   z-index: 15;
   background-repeat: no-repeat;
-  transform: translatez(1em);
+  transform: translatez(28px);
 }
 
 .stockitem {
@@ -795,6 +791,7 @@ position: relative !important;
   display: inline-block;
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
+  transform: translateZ(1px);
 }
 .cp_board{
   display: inline-flex;
@@ -880,7 +877,7 @@ position: relative !important;
 }
 
 .playertileholder .playertile{
-	transition: margin-top 0.5s;
+	transition: top 0.5s ease;
 }
 
 .playertileholder div:nth-child(1) {
@@ -1257,12 +1254,12 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 950px;
     height: 1px;
-    left: 140px;
-    top: 1px;
+    left: 70px;
+    top: 3px;
     border: 0px;
     border-style: solid;
     border-color: white;
-    transform-style: inherit;
+    transform-style: preserve-3d !important;
     transform: translate3d(0px,0px,25px);
 }
 
@@ -1291,6 +1288,49 @@ background-image: url('img/ffa500.jpg');
   0% {  box-shadow: 0 0 0 5px #c0dd00;  }
   100% {  box-shadow:  0 0 0 1px #c0dd00;  }
 }
+
+
+.flipped {
+	-webkit-animation: flipanim 1s ease 1; /* Safari 4+ */
+    -moz-animation:    flipanim 1s ease 1; /* Fx 5+ */
+    -o-animation:      flipanim 1s ease 1; /* Opera 12+ */
+    animation:         flipanim 1s ease 1; /* IE 10+, Fx 29+ */    
+}
+
+@keyframes flipanim{
+  50% {  transform: translateZ(100px);}
+}
+@-webkit-keyframes flipanim {
+50% {  transform: translateZ(100px);}
+}
+@-moz-keyframes flipanim {
+50% {  transform: translateZ(100px);}
+}
+@-o-keyframes flipanim { 
+  50% {  transform: translateZ(100px);}
+}
+
+.traveller {
+	-webkit-animation: travelanim 1s ease 1; /* Safari 4+ */
+    -moz-animation:    travelanim 1s ease 1; /* Fx 5+ */
+    -o-animation:      travelanim 1s ease 1; /* Opera 12+ */
+    animation:         travelanim 1s ease 1; /* IE 10+, Fx 29+ */    
+}
+
+@keyframes travelanim{
+  50% {  transform: translateZ(300px);}
+}
+@-webkit-keyframes travelanim {
+50% {  transform: translateZ(300px);}
+}
+@-moz-keyframes travelanim {
+50% {  transform: translateZ(300px);}
+}
+@-o-keyframes travelanim { 
+  50% {  transform: translateZ(300px);}
+}
+
+
 
 .tileselected {
 border: 2px red solid !important;
