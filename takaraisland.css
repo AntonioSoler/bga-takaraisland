@@ -112,7 +112,7 @@
     transform-style: preserve-3d;
     perspective-origin: 64% 52%;
     pointer-events: none;
-    perspective: 6261px;
+    perspective: 4000px;
     }
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
@@ -169,7 +169,7 @@
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
   background-color: white;
   border-radius: 5px;
-  transform: translateZ(2px);
+  transform-style: preserve-3d;
 }
 
 #campswrapper {
@@ -589,7 +589,11 @@ transform: rotate(0deg);
 }
 
 .tablecards .deck .card-front{
-    box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
+    box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); 
+}
+
+.tablecards .deck .card{
+        transform: translateZ(50px) !important;
 }
 
 .tablecards .deck .card-back{
@@ -811,7 +815,7 @@ position: relative !important;
   display: inline-block;
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
-  transform: translateZ(2px);
+  transform: translateZ(1px);
 }
 .cp_board{
   display: inline-flex;

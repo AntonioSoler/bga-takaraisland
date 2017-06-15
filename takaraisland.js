@@ -153,7 +153,9 @@ function (dojo, declare) {
             {		
 				var card = this.gamedatas.treasures[i];
 				this.treasuredeck.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
-				this.treasuredeck.addToStockWithId( card.id , "treasure_"+card.id  )
+				this.treasuredeck.addToStockWithId( card.id , "treasure_"+card.id  );
+				myvalue="translateZ("+(card.location_arg*3 )+"px)";
+				$('treasuredeck_item_treasure_'+card.id).style.transform = myvalue ;
             }
 			
 			dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
