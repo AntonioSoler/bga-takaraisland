@@ -1,7 +1,7 @@
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © <Your name here> <Your email address here>
+ * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : (c) Antonio Soler Morgalad.es@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -32,6 +32,7 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 			this.cardwidth = 150;
             this.cardheight = 200;
+			this.interface_min_width = 1020;
         },
         
         /*
@@ -79,7 +80,7 @@ function (dojo, declare) {
 				this[decks[i]].setSelectionMode( 0 );
 				this[decks[i]].item_margin = 0;
 				this[decks[i]].setOverlap( 0.5 , 0 );
-				this[decks[i]].jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\"></div><div id=\"${id}_back\" class=\"card-back\"></div>";
+				this[decks[i]].jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card\" style=\"top:${top}px;left:${left}px;z-index:${position}; transform: translatez(0.${position}em);\"> <div id=\"${id}_front\" class=\"card-front\"></div><div id=\"${id}_back\" class=\"card-back\"></div>";
                 this[decks[i]].setSelectionAppearance( 'class' );				
 			}
 			
@@ -89,7 +90,7 @@ function (dojo, declare) {
 			this.treasuredeck.setSelectionMode( 0 );
 			this.treasuredeck.item_margin = 0;
 			this.treasuredeck.setOverlap( 0.05 , 0 );
-			this.treasuredeck.jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card treasure\" style=\"top:${top}px;left:${left}px;z-index:${position};\"> <div id=\"${id}_front\" class=\"card-front\" ></div><div id=\"${id}_back\" class=\"card-back\"></div>";
+			this.treasuredeck.jstpl_stock_item="<div id=\"${id}\" class=\"stockitem card treasure\" style=\"top:${top}px;left:${left}px;z-index:${position}; transform: translatez(0.${position}em);\"> <div id=\"${id}_front\" class=\"card-front\" ></div><div id=\"${id}_back\" class=\"card-back\"></div>";
 
 			
 			for (  i in gamedatas.players ) 
@@ -124,6 +125,7 @@ function (dojo, declare) {
 				position= xpos+"px "+ ypos+"px ";
 				
 				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
+				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id, "transform" , "translatez("+position*3+"0px)");
 				
             }
 			
@@ -232,27 +234,38 @@ function (dojo, declare) {
 			
 			switch( stateName )
             {
+            case 'startturn':
+			    //debugger;
+			    for( var player_id in args.args.argScores['players'] )
+				{
+					var player = args.args.argScores['players'][player_id];
+					
+					dojo.byId("goldcount_p"+player_id).innerHTML=player['gold'];
+					dojo.byId("xpcount_p"+player_id).innerHTML=player['xp'];
+					var newScore = player['score'];
+					this.scoreCtrl[ player_id ].toValue( newScore );
+				}
+			    
+		    break;
             
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Show some HTML block at this game state
-                dojo.style( 'my_html_block_id', 'display', 'block' );
-                
-                break;
-           */
             case 'playermove':
 			    
 			    if (this.isCurrentPlayerActive() )
 				{
+					list =dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' );
+					if (typeof list[0] !== 'undefined') 
+					{ 
+						this.selectadventurer(null,list[0]);
+					}
+					/* +++++++++++++ AUTOSELECT
+					
 					list =dojo.query( '#TH_'+this.getActivePlayerId() +' .playertile' ).addClass( 'borderpulse' ) ;
 					
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
 						this.gameconnections.push( dojo.connect(thiselement, 'onclick' , this, 'selectadventurer'))
-					}
+					}*/
 				}
 				break;
 				
@@ -450,11 +463,12 @@ function (dojo, declare) {
 						this.addActionButton( 'dig_button', _('Dig 1 card on this site'), 'dig' );
 						this.addActionButton( 'survey_button', _('Survey the first 3 cards of this site'), 'survey' ); 
 					}
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );
                     break;
 				case 'exchange':
                     this.addActionButton( 'buy_button', _('Buy 2XP token for 5 Kara gold  '), 'buy' );
 					this.addActionButton( 'sell_button', _('Sell selected XP token'), 'sell' );
-					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );					
                     break;
                 case 'browsecards':
 				    if ( args.monsterpresent == 1 )
@@ -468,8 +482,8 @@ function (dojo, declare) {
 					this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
 					break;
 				 
-				 case 'pickexpert':
-					this.addActionButton( 'viewdone_button', _("Pass"), 'viewdone' );					
+				 case 'hireexpert':
+					this.addActionButton( 'viewdone_button', _("Cancel"), 'cancel' );					
                     break;
 					
 				 case 'sendexpert':
@@ -533,23 +547,23 @@ function (dojo, declare) {
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
 			_("Experience: this card gives XP points when dug" ),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
-			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Bat: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Gallery: this card gives Kara Gold when dug"),
 			_("Experience: this card gives XP points when dug" ),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Goblin: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
 			_("Rockfall: gives 2 kara gold when detected in a Survey.<p> Requires 2 adventures to dig and gives Gold 2 x nr of visible rockfalls on other sites"),
 			_("Experience: this card gives XP points when dug but the adventurer will be injured and will go to Hospital" ),
 			_("Experience: this card gives XP points when dug" ),
 			_("Gallery: this card gives Kara Gold when dug"),
 			_("Treasure: this card gives a treasure from the treasure deck when dug" ),
-			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
-			_("Drake: a POWERFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword for fight it" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Skeleton: a monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
+			_("Drake: a POWERFUL monster that needs to be defeated to continue the exploration,<p> you need the Magic Sword to fight it" ),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points"),
 			_("Stone of legend: if a player diggs both Stones he would automatically win the game.<p> If 2 players have one part they tally the XP points")]
 			
@@ -600,14 +614,23 @@ function (dojo, declare) {
 			
 		},
 		
-		selectadventurer : function(sourceclick) {
-			dojo.stopEvent( sourceclick );
-			var target = sourceclick.target || sourceclick.srcElement;
-			this.adventurer=target.id;
+		selectadventurer : function(sourceclick, firstaventurer) {
+			if (typeof firstaventurer !== 'undefined') 
+			{
+				this.adventurer = firstaventurer.id  ; // the variable is defined
+				target=firstaventurer ;
+			}
+			else
+			{
+				dojo.stopEvent( sourceclick );
+				var target = sourceclick.target || sourceclick.srcElement;
+				this.adventurer=target.id;
+			}	
 			dojo.toggleClass(this.adventurer,"tileselected");
-			
+			//debugger; //
+			dojo.style("playArea", "cursor", "url('"+g_gamethemeurl+"img/"+target.parentElement.parentElement.classList[1] +"_"+ target.id.slice(-1)+".png') ,auto");
 			dojo.forEach(this.gameconnections, dojo.disconnect);
-			dojo.query(".borderpulse").removeClass("borderpulse");
+			//dojo.query(".borderpulse").removeClass("borderpulse");
 			this.gameconnections=[];
 			
 			if (dojo.byId("expertsC").children.length == 0) 
@@ -717,6 +740,7 @@ function (dojo, declare) {
 
 		browseGatherDeck : function(sourceclick,deck) {
     		var browseddeck = "";
+			//dojo.stopEvent( sourceclick );
 
 			if ( typeof deck == 'undefined')
 			{
@@ -758,8 +782,14 @@ function (dojo, declare) {
 				}
 				this[thisdeck].item_margin = 5;
 				this.slideToObjectRelative (thisdeck, "tablecards" );
-				dojo.place("<div id='marker' class='marker'></div>", "deckholder"+deck ) ;//create marker
-				this.addTooltip("marker", _("This is the currently selected deck, see the cards below"),"");
+				dojo.place("<div id='marker' class='marker' style='cursor: zoom-out;'></div>", "deckholder"+deck ) ;
+				targetdeck=$('button_deck'+deck);
+				
+				//$('marker').onclick = this.browseGatherDeck( null ,deck );
+				
+				dojo.connect($('marker'), "onclick", dojo.hitch(this, this.browseGatherDeck,  null , deck));
+				
+				this.addTooltip("marker", _("This is the currently selected deck, see the cards expanded above"),"");
 				if (this.expertpicked == 4)
 					{
 						this[thisdeck].apparenceBorderWidth="2px";
@@ -986,7 +1016,9 @@ function (dojo, declare) {
 			} ) ); */
 			
 			
-			dojo.toggleClass(this.adventurer,"tileselected")
+			dojo.toggleClass(this.adventurer,"tileselected");
+			dojo.style("playArea", "cursor", "");
+			
 			dojo.forEach(this.gameconnections, dojo.disconnect);
 			if (this.swordconnection)
 			{
@@ -1061,9 +1093,18 @@ function (dojo, declare) {
 									_( "<b> THE SOOTHSAYER </b> <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
 									
 							// Show the dialog
+							
+							if( this.gamedatas.players[this.getActivePlayerId()]['gold']<4   )    // Miner
+							{            
+								this.showMessage  ( _("You cannot afford to hire this Specialist..."), "info")
+								break;
+							}
+							
 							this.myDlg.attr("content", html );
 							this.myDlg.show(); 
-							                                       //todo check gold
+							
+							
+							
 							dojo.connect( $('im_miner'), 'onclick', this, function(evt){
 							   evt.preventDefault();
 							   this.myDlg.hide();
@@ -1207,10 +1248,24 @@ function (dojo, declare) {
 			dojo.stopEvent( evt );
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
-			
+			dojo.query(".borderpulse").removeClass("borderpulse");
+			dojo.query(".flipped").removeClass("flipped");
 			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
             {            
                 this.ajaxcall( "/takaraisland/takaraisland/viewdone.html", {
+                }, this, function( result ) {} );
+            }	
+        },
+		
+		cancel: function( evt )
+        {
+			dojo.stopEvent( evt );
+			if( ! this.checkAction( 'cancel' ) )
+            {  return; }
+			
+			if( this.checkAction( 'cancel' ) )    // Check that this action is possible at this moment
+            {            
+                this.ajaxcall( "/takaraisland/takaraisland/cancel.html", {
                 }, this, function( result ) {} );
             }	
         },
@@ -1318,7 +1373,7 @@ function (dojo, declare) {
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
             dojo.subscribe( 'movetoken', this, "notif_movetoken" );
-			this.notifqueue.setSynchronous( 'movetoken', 1000 );
+			this.notifqueue.setSynchronous( 'movetoken', 2000 );
 			
 			dojo.subscribe( 'placestone', this, "notif_placestone" );
 			this.notifqueue.setSynchronous( 'placestone', 1000 );
@@ -1327,7 +1382,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous( 'activatesword', 500 );
 			
 			dojo.subscribe('revealcard', this, "notif_revealcard");
-            this.notifqueue.setSynchronous('revealcard', 2000);
+            this.notifqueue.setSynchronous('revealcard', 3000);
 			
 			dojo.subscribe('browsecards', this, "notif_browsecards");
             this.notifqueue.setSynchronous('browsecards', 3000);
@@ -1348,7 +1403,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('playersellxp', 2000);
 			
 			dojo.subscribe('rolldice', this, "notif_rolldice");
-            this.notifqueue.setSynchronous('rolldice', 4000);
+            this.notifqueue.setSynchronous('rolldice', 5000);
 			
 			dojo.subscribe('placewound', this, "notif_placewound");
             this.notifqueue.setSynchronous('placewound', 2000);
@@ -1487,4 +1542,4 @@ function (dojo, declare) {
         },
         
    });             
-});
+ });  

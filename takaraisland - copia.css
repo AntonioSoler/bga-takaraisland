@@ -70,20 +70,12 @@
   background-image: url('img/background.gif');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  perspective: 8000px;
+  perspective: 2000px;
   display: flex;
   margin: 1px;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: flex-start;
-  transform-style: inherit;
-  transform: rotatex(58deg) translate(36px,-146px) rotateZ(-4deg);
-  transform-style: preserve-3d;
-  transform-origin: center;
-  perspective: 8000px;
-}
-#playArea div{
-	  transform-style: inherit;
 }
 
 @media screen and (min-width: 1920px){
@@ -95,11 +87,6 @@
 	transform-origin: top left;
 	}
 }
-#playareascaler{
-    transform-style: preserve-3d;
-    /* transform-origin: top; */
-    perspective: 8000px;
-    }
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
 	#playareascaler{
@@ -155,7 +142,6 @@
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
   background-color: white;
   border-radius: 5px;
-  transform-style: preserve-3d;
 }
 
 #campswrapper {
@@ -171,7 +157,6 @@
   margin-left: 15px;
   flex: 0 0 auto;
   /* flex-wrap: wrap; */
-  transform-style: inherit;
 }
 .campwrapper {
   min-width: 400px;
@@ -232,7 +217,7 @@ transition: transform 1.5s;
   transition: transform 1.5s;
   z-index: 100 !important;
   background-image: url('img/sword.png');
-  transform: translate3d(0px,-2px,0px);
+  transform: rotate(0deg);
 }
 
 .card {
@@ -251,19 +236,20 @@ border-radius: 8%;
   margin: auto;
   border-radius: 8%;
   backface-visibility: hidden;
-  /*/*transform-style: preserve-3d;*/*/
+  transform-style: preserve-3d;
   transition: transform 1s ease, visibility 1s ease;
   width: 150px;
   height: 200px;
   position: relative;
   background-image: url('img/cards.jpg');
+  transform: rotateY(0deg);
 }
 
 .card-back {
   top:0px;
   border-radius: 8%;
   backface-visibility: hidden;
-  /*transform-style: preserve-3d;*/
+  transform-style: preserve-3d;
   transition: transform 1s ease, visibility 1s ease;
   width: 150px;
   height: 200px;
@@ -516,13 +502,13 @@ top: 65px ;
     width: 210px;
     height: 210px;
     position: absolute;
-    /*transform-style: preserve-3d;*/
+    transform-style: preserve-3d;
     left: 680px;
     top: 270px;
     z-index: 5;
 }
 #treasuredeck .card {
-  /*transform-style: preserve-3d;*/
+  transform-style: preserve-3d;
   transition: transform 1s ease, visibility 1s ease;
   transform: rotate(-90deg); 
 }
@@ -536,12 +522,12 @@ top: 65px ;
     top: 265px;
     border-style: solid;
     border-color: #ff0f40;
-    /*transform-style: preserve-3d;*/
+    transform-style: preserve-3d;
     z-index: 100;
 }
 
 #treasurereward .card { 
-/*transform-style: preserve-3d;*/
+transform-style: preserve-3d;
 transition: transform 1s ease, visibility 1s ease;
 transform: rotate(0deg); 
 }
@@ -613,11 +599,10 @@ transform: rotate(0deg);
   width: 130px;
   height: 160px;
   background-image:none;
-  left: 0px;
-  top: 0px;
+  left: -25px;
+  top:-17px;
   z-index: 15;
   background-repeat: no-repeat;
-  transform: translatez(0.7em);
 }
 
 .stockitem {
@@ -961,7 +946,6 @@ background-image: url('img/ffa500.jpg');
 	margin-right: -15px;
 	border: 0px;
 	position: absolute;
-	transform: translate3d(0px,0px,2px);
 }
 /*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
 
@@ -1162,14 +1146,15 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 50px;
     height: 50px;
-    transform-style: inherit;
-    transform: translate3d(    0px,  0px, 0px);
+    transform-style: preserve-3d;
+    transform: translate3d(    0px,  0px, -500px);
 }
 
 #diceresult {
-    position: absolute;
+    position: absolute;	
     width: 50px;
     height: 50px;
+    transform-style:  preserve-3d;
 }
 
 .side {
@@ -1257,13 +1242,12 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 950px;
     height: 1px;
-    left: 140px;
+    perspective: 2400px;
+    left: 10px;
     top: 1px;
     border: 0px;
     border-style: solid;
     border-color: white;
-    transform-style: inherit;
-    transform: translate3d(0px,0px,25px);
 }
 
 .borderpulse {

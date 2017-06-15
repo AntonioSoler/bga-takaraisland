@@ -70,20 +70,14 @@
   background-image: url('img/background.gif');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  perspective: 8000px;
+  perspective: 6995px;
   display: flex;
   margin: 1px;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: flex-start;
-  transform-style: inherit;
-  transform: rotatex(58deg) translate(36px,-146px) rotateZ(-4deg);
   transform-style: preserve-3d;
-  transform-origin: center;
-  perspective: 8000px;
-}
-#playArea div{
-	  transform-style: inherit;
+  transform: rotatex(46deg) translate(0px,-320px) rotateZ(711deg);
 }
 
 @media screen and (min-width: 1920px){
@@ -95,11 +89,6 @@
 	transform-origin: top left;
 	}
 }
-#playareascaler{
-    transform-style: preserve-3d;
-    /* transform-origin: top; */
-    perspective: 8000px;
-    }
 
 @media screen and (max-width: 1913px) and (min-width: 1025px){
 	#playareascaler{
@@ -171,7 +160,7 @@
   margin-left: 15px;
   flex: 0 0 auto;
   /* flex-wrap: wrap; */
-  transform-style: inherit;
+  transform-style: preserve-3d;
 }
 .campwrapper {
   min-width: 400px;
@@ -232,7 +221,7 @@ transition: transform 1.5s;
   transition: transform 1.5s;
   z-index: 100 !important;
   background-image: url('img/sword.png');
-  transform: translate3d(0px,-2px,0px);
+  transform: rotate(0deg);
 }
 
 .card {
@@ -257,6 +246,7 @@ border-radius: 8%;
   height: 200px;
   position: relative;
   background-image: url('img/cards.jpg');
+  transform: rotateY(0deg);
 }
 
 .card-back {
@@ -613,11 +603,10 @@ transform: rotate(0deg);
   width: 130px;
   height: 160px;
   background-image:none;
-  left: 0px;
-  top: 0px;
+  left: -25px;
+  top:-17px;
   z-index: 15;
   background-repeat: no-repeat;
-  transform: translatez(0.7em);
 }
 
 .stockitem {
@@ -961,7 +950,6 @@ background-image: url('img/ffa500.jpg');
 	margin-right: -15px;
 	border: 0px;
 	position: absolute;
-	transform: translate3d(0px,0px,2px);
 }
 /*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
 
@@ -1162,14 +1150,15 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 50px;
     height: 50px;
-    transform-style: inherit;
-    transform: translate3d(    0px,  0px, 0px);
+    transform-style: preserve-3d;
+    transform: translate3d(    0px,  0px, -500px);
 }
 
 #diceresult {
     position: absolute;
     width: 50px;
     height: 50px;
+    transform-style:  preserve-3d;
 }
 
 .side {
@@ -1257,13 +1246,13 @@ background-image: url('img/ffa500.jpg');
     position: absolute;
     width: 950px;
     height: 1px;
-    left: 140px;
+    perspective: 2400px;
+    left: 10px;
     top: 1px;
     border: 0px;
     border-style: solid;
     border-color: white;
-    transform-style: inherit;
-    transform: translate3d(0px,0px,25px);
+    transform-style: preserve-3d;
 }
 
 .borderpulse {

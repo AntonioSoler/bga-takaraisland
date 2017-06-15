@@ -1,8 +1,9 @@
+
 <?php
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -65,6 +66,7 @@ $machinestates = array(
 		"description" => clienttranslate('a new turn starts...'),
         "type" => "game",
         "action" => "ststartturn",
+		"args" => "argScores",
         "updateGameProgression" => false,
         "transitions" => array( "playermove" => 3 ) 
     ),
@@ -85,7 +87,7 @@ $machinestates = array(
         "name" => "endturn",  //  pay hospital and hire new recruit
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding some end of turn actions '),
-		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach, when done press:'),
+		"descriptionmyturn" => clienttranslate('${you} can pay the hospital or recruit one worker on the beach, when done click here :'),
 		"action" => "stendturn",
 		"possibleactions" => array( "payhospital", "recruit", 'viewdone' ),
         "updateGameProgression" => false,
@@ -95,9 +97,9 @@ $machinestates = array(
 	5 => array(
         "name" => "hireexpert",  // 
         "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is deciding what Specialist he wants to hire '),
+        "description" => clienttranslate('${actplayer} is deciding what Specialist wants to hire '),
 		"descriptionmyturn" => clienttranslate('${you} need to decide what Specialist you want to hire '),
-		"possibleactions" => array( "pickexpert"),
+		"possibleactions" => array( "pickexpert" , 'cancel' ),
         "updateGameProgression" => false,
         "transitions" => array( "sendexpert" => 6 , "playermove" => 3 ) //
     ),
@@ -106,8 +108,8 @@ $machinestates = array(
     6 => array(
         "name" => "sendexpert",  
         "type" => "activeplayer",
-        "description" => clienttranslate('${actplayer} is deciding where to send the expert'),
-		"descriptionmyturn" => clienttranslate('${you} need to pick the cards that your expert will act on'),
+        "description" => clienttranslate('${actplayer} is deciding where to send the hired expert'),
+		"descriptionmyturn" => clienttranslate('${you} need to select the cards that your expert will act on'),
 		"possibleactions" => array( "selectcards"),
 		"args" => "argExpertpicked",
         "updateGameProgression" => true,
@@ -119,7 +121,7 @@ $machinestates = array(
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is deciding whether to buy or sell xp '),
 		"descriptionmyturn" => clienttranslate('${you} have to select to buy or to sell XP: '),
-		"possibleactions" => array( "sell","buy","viewdone"),
+		"possibleactions" => array( "sell","buy","cancel"),
         "updateGameProgression" => false,
         "transitions" => array( "" => 3 ) //
     ),
@@ -128,7 +130,7 @@ $machinestates = array(
         "name" => "browsecards",  // 
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is inspecting the cards from the survey of this site'),
-		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, and when finished press:'),
+		"descriptionmyturn" => clienttranslate('${you} can view some cards of this site, and when finished click here:'),
 		"possibleactions" => array( "revealmonster","viewdone"),
 		"args" => "argMonsterpresent",
         "updateGameProgression" => false,
@@ -140,10 +142,10 @@ $machinestates = array(
         "type" => "activeplayer",
         "description" => clienttranslate('${actplayer} is sending an adventurer to an Excavation site'),
 		"descriptionmyturn" => clienttranslate('${you} are sending an adventurer to an Excavation site'),
-		"possibleactions" => array( "dig","survey"),
+		"possibleactions" => array( "dig","survey","cancel"),
 		"args" => "argRocfallVisible",
         "updateGameProgression" => false,
-        "transitions" => array( "dig" => 12 ,  "browsecards" => 8  ) //
+        "transitions" => array( "dig" => 12 ,  "browsecards" => 8 ,"playermove" => 3 ) //
     ),
     
 	10 => array(
@@ -229,5 +231,6 @@ $machinestates = array(
     )
 
 );
+
 
 

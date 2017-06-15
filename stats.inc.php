@@ -90,8 +90,18 @@ $stats_type = array(
 					
 		"stones_found" => array("id"=> 15,
                     "name" => totranslate("Number of Stones of Legend found"),
-                    "type" => "int" ),			
-
+                    "type" => "int" ),
+		"experts_hired" => array("id"=> 16,
+                    "name" => totranslate("Number of Speciallists hired"),
+                    "type" => "int" ),	
+		"fights" => array("id"=> 17,
+                    "name" => totranslate("Battles fought"),
+                    "type" => "int" ),
+        "kills" => array("id"=> 18,
+                    "name" => totranslate("Monsters killed"),
+                    "type" => "int" ),
+         					
+		
 /*
         Examples:    
         

@@ -2,8 +2,8 @@
 
 <!-- 
 --------
--- BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
--- takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+-- BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+-- takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>
 -- 
 -- This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
 -- See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -24,9 +24,24 @@
     
     Please REMOVE this comment before publishing your game on BGA
 -->
+<div id="change">
+ <button class="zoomin">+</button>
+ <button class="up">&#11115;</button>
+ <button class="zoomout">-</button>
+ <br>
+ <button class="left">&#11114;</button>
+ <button class="reset">3D</button>
+ <button class="right">&#11116;</button>
+ <br>
+ <button class="rotateleft">&#x21bb;</button>
+ <button class="down">&#11117;</button>
+ <button class="rotateright">&#x21ba;</button>
+ 
+</div>
+
 <div id="playareascaler">
 	<div id="playArea">
-		<div id="tablecards" class="whiteblock tablecards"></div>	
+		<div id="tablecards" class="tablecards"></div>	
 		<div id="boardwrapper" >
 			<div id="boardPanel" class="boarddiv">
 				<div id="swordholder">

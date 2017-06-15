@@ -1,8 +1,8 @@
 <?php
 /**
  *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * takaraisland implementation : © Antonio Soler <morgald.es@gmail.com>
+ * BGA framework: (c) Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * takaraisland implementation : (c) Antonio Soler <morgald.es@gmail.com>
  * 
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -44,7 +44,8 @@
 	"idol"            => clienttranslate('idol'),
 	"skull"           => clienttranslate('skull'),
 	"score_window_title" => clienttranslate('FINAL SCORE'),
-	"win_condition" => clienttranslate('The player with the 2 stones wins. If 2 players have 1 stone all players compare points. If only one stone was found it does not score')
+	"win_condition" => clienttranslate('The player with the 2 stones wins. If 2 players have 1 stone each all players compare points.<br> If only one stone was found it does not score. <br>If no stone was found all players loose!'),
+	"end_condition" => clienttranslate('The game ends if : <br>5 decks are depleted <br> 4 decks are depleted and no stone was found.<br> 2 Stones are found')
 );
 
  //
