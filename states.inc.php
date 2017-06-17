@@ -78,7 +78,7 @@ $machinestates = array(
 		"descriptionmyturn" => clienttranslate('${you} need to decide where to send your adventurers'),
 		"action" => "stplayermove",
 		"possibleactions" => array( "movetile", "rentsword", "choosereward" ),
-		"args" => "argMapowner",
+		"args" => "argMoves",
         "updateGameProgression" => true, //game ends if  2 stones found or 4/5 decks are depleted
         "transitions" => array( "playermove" => 3 , "endturn" => 4, "hireexpert" => 5, "exchange" => 7 , "exploresite" => 9, "fight" => 11 , "gameEndScoring" => 90) 
     ),

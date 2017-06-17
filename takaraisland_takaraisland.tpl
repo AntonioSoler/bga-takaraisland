@@ -25,17 +25,20 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 <div id="change3d">
- <button id="c3dZoomin" class="button3d zoomin">+</button>
- <button id="c3dUp"     class="button3d up">&#8679;</button>
- <button id="c3dZoomout" class="button3d zoomout">-</button>
+ <button id="c3dAngleUp" class="button3d ">&#x290A;</button>
+ <button id="c3dUp"     class="button3d ">&#8679;</button>
+ <button id="c3dAngleDown" class="button3d">&#x290B;</button>
  <br>
- <button id="c3dLeft" class="button3d left">&#8678;</button>
- <button id="c3dReset" class="button3d reset">3D</button>
- <button id="c3dRight" class="button3d right">&#8680;</button>
+ <button id="c3dLeft" class="button3d ">&#8678;</button>
+ <button id="c3dReset" class="button3d">3D</button>
+ <button id="c3dRight" class="button3d">&#8680;</button>
  <br>
- <button id="c3dRotateL" class="button3d rotateleft">&#x21bb;</button>
- <button id="c3dDown" class="button3d down">&#8681;</button>
- <button id="c3dRotateR" class="button3d rotateright">&#x21ba;</button>
+ <button id="c3dRotateL" class="button3d">&#x21bb;</button>
+ <button id="c3dDown" class="button3d ">&#8681;</button>
+ <button id="c3dRotateR" class="button3d ">&#x21ba;</button>
+ <br>
+ <button id="c3dZoomIn" class="button3d ">+</button>
+ <button id="c3dZoomOut" class="button3d">-</button>
 </div>
 <br>
 <div id="playareascaler">
@@ -152,6 +155,7 @@
 			
 			<!-- END camp -->
 			</div>
+			<div id="removed" class="tablecards"></div>
 		</div>	
 </div>
 

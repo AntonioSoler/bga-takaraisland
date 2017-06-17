@@ -225,11 +225,10 @@ transition: transform 1.5s ease;
 }
 
 .marker{
-  /* width: 80px; */
-  /* height: 80px; */
+
   width: 150px;
   height: 200px;
-  /* margin: 40px; */
+  pointer-events: none;
   background-image: url('img/marker.png');
   background-repeat: no-repeat;
   background-position: center center;
@@ -325,7 +324,7 @@ border-radius: 8%;
 }
 
 .expert{
-	    transform: translateZ(3px);
+	    transform: translateZ(10px);
 }
 
 .expert .card-back{
@@ -578,13 +577,19 @@ transform: rotate(0deg);
 	display: none !important;
 	}
 
-.deckholder .deck:hover .buttondiv {  
+/*.deckholder .deck:hover .buttondiv {  
   display: block;
   background-image:url('img/browse.gif');
   cursor:zoom-in
 }
 
-.deckholder .deck>:nth-child(2) {
+tablecards .deck:hover .buttondiv {  
+  display: block;
+  cursor: zoom-out;
+  background-image:url('img/gather.gif');
+}*/
+
+.deckholder .deck>:nth-child(3) {
     box-shadow: 9px 12px 7px 3px rgba(0, 0, 0, 0.72);
 }
 
@@ -600,10 +605,10 @@ transform: rotate(0deg);
     box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72); */
 }
 
-.tablecards .deck:hover .buttondiv {  
-  display: block;
-  cursor: zoom-out;
-  background-image:url('img/gather.gif');
+#removed .stockitem{
+    box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72);
+    transform: rotatey(2deg) rotate(-29deg) translateZ(30px);
+    position:absolute;
 }
 
 .woundtoken {
@@ -620,15 +625,16 @@ transform: rotate(0deg);
 
 .buttondiv {
   position: absolute;
-  display: none;
-  width: 130px;
-  height: 160px;
+  /*display: none;*/
+  width: 150px;
+  height: 190px;
   background-image:none;
   left: 0px;
   top: 0px;
   z-index: 15;
   background-repeat: no-repeat;
   transform: translatez(28px);
+  cursor:pointer;
 }
 
 .stockitem {
@@ -636,14 +642,18 @@ transform: rotate(0deg);
 }
 
 .exploreholder {
-  border: 4px;
-  width: 150px;
-  height: 60px;
-  position: absolute;
-  border-color: #21a7b6;
-  border-radius: 35px;
-  border-style: dashed;
-  display: flex;
+     border: 4px;
+    width: 150px;
+    height: 60px;
+    position: absolute;
+    border-color: #21a7b6;
+    border-radius: 35px;
+    border-style: dashed;
+    font-size: 33px;
+    font-weight: bold;
+    font-family: fantasy;
+    color: #f8f1dc;
+    text-align: right;
 }
 
 .exploreholder div:nth-child(1) 
@@ -722,9 +732,9 @@ transform: rotate(0deg);
 
 .stockitem_selected::after{
 	content:".";
-	height:200px; 
+	height:200px;
 	width:150px;
-	box-shadow: -155px 0px 0px 10px #c0dd00, 0px 0px 0px 10px #c0dd00, 155px 0px 0px 10px #c0dd00;
+	box-shadow: -155px 0px 0px 10px #3ceb20, 0px 0px 0px 10px #3ceb20, 155px 0px 0px 10px #3ceb20;
 	z-index: 0 !important;
 	border: 0px !important;
 	position:absolute;

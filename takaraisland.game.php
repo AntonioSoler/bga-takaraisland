@@ -273,6 +273,10 @@ class takaraisland extends Table
 		
         $result['cards'] = self::getCollectionFromDb( $sql );
 		
+		$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like 'removed'";
+		
+        $result['removed'] = self::getCollectionFromDb( $sql );
+		
 		$sql = "SELECT card_id id, card_location_arg location_arg, card_type type, card_type_arg type_arg , card_location location from cards WHERE card_location like 'deck%' AND card_status>=1 ORDER BY card_location_arg DESC";
 		
         $result['visiblecards'] = self::getCollectionFromDb( $sql );
@@ -871,7 +875,9 @@ class takaraisland extends Table
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
 									'tile_id' => "card_". $topcards[$i]['id'],
-									'deck' => $topcards[$i]['location']
+									'deck' => $topcards[$i]['location'],
+									'type' => $topcards[$i]['type'],
+									'id' => $topcards[$i]['id']
 									) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );	
@@ -888,7 +894,9 @@ class takaraisland extends Table
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
 									'tile_id' => "card_". $topcards[$i]['id'],
-									'deck' => $topcards[$i]['location']
+									'deck' => $topcards[$i]['location'],
+									'type' => $topcards[$i]['type'],
+									'id' => $topcards[$i]['id']
 									) );
 								$xp=$this->card_types[$topcards[$i]['type']]['xp'];
 								self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
@@ -913,7 +921,9 @@ class takaraisland extends Table
 										'player_name' => self::getActivePlayerName(),
 										'destination' => "playercardstore_".$player_id,
 										'tile_id' => "card_". $topcards[$i]['id'],
-										'deck' => $topcards[$i]['location']
+										'deck' => $topcards[$i]['location'],
+										'type' => $topcards[$i]['type'],
+										'id' => $topcards[$i]['id']
 										) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );
@@ -927,7 +937,9 @@ class takaraisland extends Table
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
 									'tile_id' => "card_". $topcards[$i]['id'],
-									'deck' => $topcards[$i]['location']
+									'deck' => $topcards[$i]['location'],
+									'type' => $topcards[$i]['type'],
+							        'id' => $topcards[$i]['id']
 									) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );	
@@ -959,7 +971,9 @@ class takaraisland extends Table
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
 									'tile_id' => "card_". $topcards[$i]['id'],
-									'deck' => $topcards[$i]['location']
+									'deck' => $topcards[$i]['location'],
+									'type' => $topcards[$i]['type'],
+									'id' => $topcards[$i]['id']
 									) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );
@@ -1315,12 +1329,7 @@ class takaraisland extends Table
         );
     }
 	
-	function argMapowner()
-    {
-        return array(
-            'mapowner' => self::getGameStateValue( 'mapowner' )
-        );
-    }
+	
 	
 	function argScores()
     {
@@ -1336,6 +1345,25 @@ class takaraisland extends Table
 		
 		return array(
             'argScores' => $result
+        );
+    }
+	
+	function argMoves()
+    {
+		$result = array( );
+   
+        $sql = "SELECT count(*) cardcount, card_location location FROM cards WHERE card_location like 'deck%' GROUP BY card_location ";
+		
+        $result['cardcount'] = self::getCollectionFromDb( $sql );
+		
+		$sql = "SELECT card_type from cards where card_location='removed'";
+		
+        $result['removed'] = self::getCollectionFromDb( $sql );
+		
+		return array(
+            'argDeckstats' => $result ,
+            'mapowner' => self::getGameStateValue( 'mapowner' )
+        
         );
     }
 
@@ -1526,7 +1554,9 @@ class takaraisland extends Table
 				'destination' => "playercardstore_".$player_id,
 				'tile_id' => "card_". $topcard['id'],
 				'monstername' => $monstername,
-				'deck' => $topcard['location']
+				'deck' => $topcard['location'],
+				'type' => $topcard['type'] ,
+				'id' => $topcard['id'] 
 				) );
 			$xp=$this->card_types[$topcard['type']]['xp'];
 			$gold=$this->card_types[$topcard['type']]['gold'];
@@ -1589,7 +1619,9 @@ class takaraisland extends Table
 							'player_name' => self::getActivePlayerName(),
 							'destination' => "playercardstore_".$player_id,
 							'tile_id' => "card_". $topcard['id'],
-							'deck' => $topcard['location']
+							'deck' => $topcard['location'],
+							'type' => $topcard['type'],
+							'id' => $topcard['id']
 							) );
 						$gold=$this->card_types[$topcard['type']]['gold'];
 						self::DbQuery( "UPDATE player set player_gold = player_gold + $gold WHERE Player_id = $player_id" );
@@ -1618,7 +1650,9 @@ class takaraisland extends Table
 							'player_name' => self::getActivePlayerName(),
 							'destination' => "playercardstore_".$player_id,
 							'tile_id' => "card_". $topcard['id'],
-							'deck' => $topcard['location']
+							'deck' => $topcard['location'],
+							'type' => $topcard['type'],
+							'id' => $topcard['id']
 							) );
 						$xp=$this->card_types[$topcard['type']]['xp'];
 						self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
@@ -1659,7 +1693,9 @@ class takaraisland extends Table
 								'player_name' => self::getActivePlayerName(),
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "card_". $topcard['id'],
-								'deck' => $topcard['location']
+								'deck' => $topcard['location'],
+								'type' => $topcard['type'],
+								'id' => $topcard['id']
 								) );
 						$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
@@ -1677,7 +1713,9 @@ class takaraisland extends Table
 								'player_name' => self::getActivePlayerName(),
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "card_". $topcard['id'],
-								'deck' => $topcard['location']
+								'deck' => $topcard['location'],
+								'type' => $topcard['type'],
+								'id' => $topcard['id']
 								) );
 							$gold=0 ;
 							for ($g=1 ; $g<=6 ; $g++ )
@@ -1895,6 +1933,7 @@ class takaraisland extends Table
 								'tile_id' => "treasure_". $topcard['id'],
 								'deck' => 'treasuredeck',
 								'cardname' => $cardname
+
 									) );
 								
 							$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
@@ -1928,7 +1967,8 @@ class takaraisland extends Table
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "treasure_". $topcard['id'],
 								'deck' => 'treasuredeck',
-								'cardname' => $cardname
+								'cardname' => $cardname 
+								
 									) );
 						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
