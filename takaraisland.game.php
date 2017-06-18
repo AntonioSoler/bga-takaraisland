@@ -281,6 +281,10 @@ class takaraisland extends Table
 		
         $result['visiblecards'] = self::getCollectionFromDb( $sql );
 		
+		$sql = "SELECT card_location location, count(*) cardcount FROM cards WHERE card_location like 'deck%' GROUP BY card_location ";
+		
+        $result['cardcount'] = self::getCollectionFromDb( $sql );
+		
 		$player_id = self::getActivePlayerId();
 		
 		$gold=self::getGoldBalance($player_id);
@@ -851,7 +855,12 @@ class takaraisland extends Table
 								'tile_id' => "expert1",
 								'sitenr' => substr( $deckpicked ,-1)
 								) );
-				
+				self::notifyAllPlayers( "movetoken", ""  , array(
+								'player_id' => $player_id,
+								'player_name' => self::getActivePlayerName(),
+								'destination' => $returnexpert,
+								'tile_id' => "expert1"
+								) );
 				for  ($i=0 ; $i < sizeof($topcards) ; $i++ )
 				{
 					$card=self::getObjectFromDB( "SELECT * FROM cards WHERE card_id=".$topcards[$i]['id'] );
@@ -1001,12 +1010,7 @@ class takaraisland extends Table
 					}
 					
 				}
-				self::notifyAllPlayers( "movetoken", ""  , array(
-								'player_id' => $player_id,
-								'player_name' => self::getActivePlayerName(),
-								'destination' => $returnexpert,
-								'tile_id' => "expert1"
-								) );
+				
 				$this->gamestate->nextState('playermove');
 				break;
 			case 3:
@@ -1355,11 +1359,7 @@ class takaraisland extends Table
         $sql = "SELECT count(*) cardcount, card_location location FROM cards WHERE card_location like 'deck%' GROUP BY card_location ";
 		
         $result['cardcount'] = self::getCollectionFromDb( $sql );
-		
-		$sql = "SELECT card_type from cards where card_location='removed'";
-		
-        $result['removed'] = self::getCollectionFromDb( $sql );
-		
+				
 		return array(
             'argDeckstats' => $result ,
             'mapowner' => self::getGameStateValue( 'mapowner' )

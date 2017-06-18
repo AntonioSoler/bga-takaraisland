@@ -79,6 +79,18 @@
   transition: transform 0.5s ease;
   pointer-events: visible;
 }
+#fakeboard {
+    /* display: inline-block; */
+    width: 2000px;
+    height: 1481px;
+    background-image:  url("img/back-main.jpg");
+    background-repeat: repeat;
+    position: absolute;
+    left: -500px; //*adjust your positioning as necessary/*/
+    top: -500px;
+    z-index: -100;
+}
+
 #playArea div{
 	  transform-style: preserve-3d;
 }
@@ -91,7 +103,7 @@
 	width: 14px;
 	height: 14px;
 	text-align: center;
-	font-size: 8px;
+	font-size: 9px;
 	padding: 0px;
 	margin: 0px;
 	background-color: Transparent;
@@ -112,6 +124,7 @@
     transform-style: preserve-3d;
     perspective-origin: 64% 52%;
     pointer-events: none;
+    background-image: url("../img/layout/back-main.jpg");
     perspective: 4000px;
     }
 
@@ -186,6 +199,7 @@
   flex: 0 0 auto;
   /* flex-wrap: wrap; */
   transform-style: inherit;
+  transform: translatez(5px);
 }
 .campwrapper {
   min-width: 400px;
@@ -219,24 +233,26 @@
   border-radius: 35px;
 }
 
-.playerswordholder #sword {
-transform: rotate(520deg)!important;
-transition: transform 1.5s ease;
-}
+.playerswordholder #sword {transform: rotate(520deg) translatez(5px)!important;transition: transform 1.5s ease;}
 
 .marker{
-
-  width: 150px;
-  height: 200px;
-  pointer-events: none;
-  background-image: url('img/marker.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  border-radius: 8%;
-  box-shadow: 0px 0px 19px 10px rgb(62, 246, 26);
-  float: right;
+width: 150px;
+height: 200px;
+pointer-events: none;
+background-image: url('img/marker.png');
+background-repeat: no-repeat;
+background-position: center center;
+border-radius: 8%;
+box-shadow: 0px 0px 19px 10px rgb(62, 246, 26);
+position: absolute;
+top: 0px;
+left: 1px;
 }
 
+#removed {
+	transform: scale3d(0.5,0.5,0.5);
+	transform-origin: top left;
+}
 
 #sword {
   width: 65px;
@@ -245,7 +261,17 @@ transition: transform 1.5s ease;
   transition: transform 1.5s ease;
   z-index: 100 !important;
   background-image: url('img/sword.png');
-  transform: translate3d(0px,-2px,0px);
+  transform: translateZ(5px);
+}
+#sword::after{
+	content:"";
+	width: 65px;
+	height: 150px;
+	position: absolute;
+	transition: transform 1.5s ease;
+	z-index: 100 !important;
+	background-image: url(img/sword.png);
+	transform: translateZ(3px);
 }
 
 .card {
@@ -271,6 +297,7 @@ border-radius: 8%;
   background-image: url('img/cards.jpg');
 }
 
+
 .card-back {
   top:0px;
   border-radius: 8%;
@@ -284,6 +311,29 @@ border-radius: 8%;
   visibility: hidden;
   position: absolute;
   transform: rotateY(180deg) ;
+}
+
+.card-back div:nth-child(1) {
+    left: 20px;
+    top: 60px;
+}
+
+.card-back div:nth-child(2) {
+    left: 80px;
+    top: 60px;
+}
+.card-back div:nth-child(3) {
+    left: 20px;
+    top: 115px;
+}
+.card-back div:nth-child(4) {
+    left: 80px;
+    top: 115px;
+}
+
+.card-back div:nth-child(5) {
+    left: 45px;
+    top: 80px;
 }
 
 .card.flipped  .card-front {
@@ -522,17 +572,26 @@ top: 65px ;
 #diveC div:nth-child(2) {left: 65px;}
 #diveC div:nth-child(3) {left: 130px;}
 
+#treasuredeckholder{border: 0px;width: 150px;height: 210px;position: absolute;transform-style: preserve-3d;left: 692px;top: 268px;z-index: 5;transform: rotateZ(-90deg) translateZ(4px);}
+
 #treasuredeck {
     border: 0px;
-    width: 210px;
+    width: 150px;
+    height: 210px;
     position: absolute;
     transform-style: preserve-3d;
-    left: 656px;
-    top: 245px;
     z-index: 5;
-    transform: rotateZ(-90deg);
+    transform:  translateZ(4px);
 }
 
+#treasuredeck::after {
+	content:"";
+	position:absolute;
+	width: 150px;
+	height:200px;
+	border-radius:8px;
+	box-shadow: -5px 11px 7px 8px rgba(0, 0, 0, 0.72), inset 0px 0px 9px 10px rgba(0, 0, 0, 0.72);
+}
 
 .treasurereward {
     border: 0px;
@@ -565,6 +624,7 @@ transform: rotate(0deg);
   position: absolute;
   border-style: solid;
   border-color: #c100dd;
+
 }
 .deck {
   width: 99%;
@@ -589,8 +649,13 @@ tablecards .deck:hover .buttondiv {
   background-image:url('img/gather.gif');
 }*/
 
-.deckholder .deck>:nth-child(3) {
-    box-shadow: 9px 12px 7px 3px rgba(0, 0, 0, 0.72);
+.deckholder .deck .card:last-of-type:not(:only-of-type)  {
+	content:"";
+	position:absolute;
+	width: 150px;
+	height:200px;
+	border-radius:8px;
+	box-shadow: 8px 8px 7px 8px rgba(0, 0, 0, 0.72), inset 0px 0px 9px 10px rgba(0, 0, 0, 0.72);
 }
 
 .tablecards .deck .card-front{
@@ -607,7 +672,7 @@ tablecards .deck:hover .buttondiv {
 
 #removed .stockitem{
     box-shadow: 5px 4px 3px 1px rgba(0, 0, 0, 0.72);
-    transform: rotatey(2deg) rotate(-29deg) translateZ(30px);
+    transform: rotatey(3deg) rotate(-40deg) translateZ(8px);
     position:absolute;
 }
 
@@ -615,7 +680,7 @@ tablecards .deck:hover .buttondiv {
   position: absolute;
   width: 50px;
   height: 50px;
-  background-color: aquamarine;
+  background-color: #4db592;
   background-image:url('img/wound.png');
   background-position: center;
   border-radius: 50%;
@@ -625,16 +690,34 @@ tablecards .deck:hover .buttondiv {
 
 .buttondiv {
   position: absolute;
-  /*display: none;*/
   width: 150px;
-  height: 190px;
+  height: 200px;
   background-image:none;
   left: 0px;
   top: 0px;
   z-index: 15;
   background-repeat: no-repeat;
-  transform: translatez(28px);
+  transform: translatez(38px);
   cursor:pointer;
+  display: none;
+}
+
+.deckcounter {
+  position: absolute;
+  width: 20px;
+  height: 25px;
+  background-image:none;
+  right: -5px;
+  bottom: -10px;
+  z-index: -15;
+  background-repeat: no-repeat;
+  text-align: right;
+  text-shadow: -1px 2px rgb(0, 0, 0);
+  font-size: 25px;
+  font-weight: bold;
+  font-family: georgia;
+  cursor: default;
+  color: #bafffc;
 }
 
 .stockitem {
@@ -754,32 +837,32 @@ position: relative !important;
 }
 
 #deckholder1 {
- left: 520px;
+ left: 512px;
  top: 30px;
  z-index: 50;
 }
 #deckholder2 {
- left: 690px;
+ left: 685px;
  top: 10px;
  z-index: 40;
 }
 #deckholder3 {
- left: 860px;
+ left: 857px;
  top: 10px;
  z-index: 30;
 }
 #deckholder4 {
- left: 510px;
+ left: 508px;
  top: 517px;
  z-index: 70;
 }
 #deckholder5 {
- left: 690px;
+ left: 686px;
  top: 530px;
  z-index: 60;
 }
 #deckholder6 {
- left: 860px;
+ left: 856px;
  top: 520px;
  z-index: 55;
 }
@@ -825,7 +908,7 @@ position: relative !important;
   display: inline-block;
   border-radius: 10px;
   box-shadow: 4px 4px 3px 2px rgba(5, 5, 5, 0.68);
-  transform: translateZ(1px);
+  transform: translateZ(5px);
 }
 .cp_board{
   display: inline-flex;
@@ -969,6 +1052,10 @@ position: relative !important;
   position: absolute;
   border-style: solid;
   border-color: #dd00bc;
+  transform: translateZ(15px);
+}
+.xpstore .stockitem{
+  transform: rotatey(15deg);
 }
 .playercolor_ff0000{
 background-image: url('img/ff0000.jpg');	
@@ -984,7 +1071,7 @@ background-image: url('img/ffa500.jpg');
 }
 .playertile {
 	background-image: url('img/playertiles.png');
-	box-shadow: 6px 6px 3px 1px rgba(0, 0, 0, 0.72);
+	box-shadow: 6px 6px 3px 1px rgba(0, 0, 0, 0.72), 0px 0px 0px 0px #faf5ef;
 	width:60px;
 	height:60px;
 	border-radius: 50%;
@@ -992,9 +1079,13 @@ background-image: url('img/ffa500.jpg');
 	margin-right: -15px;
 	border: 0px;
 	position: absolute;
-	transform: translatez(0.7em);
+	transform: translatez(8px);
 	/* transition: top 0.5s ease, left 0.5s ease; */
 }
+
+
+
+
 /*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
 
 .tile1.colorff0000{
@@ -1047,7 +1138,7 @@ background-image: url('img/ffa500.jpg');
     padding: 5px;
     margin-left: 40px;
     margin-bottom: 15px;
-    margin-top: 20px;
+    margin-top: 25px;
     z-index: 300;
     /* border: solid 3px #683720; */
     /* background-image: url("../../../img/layout/back-main.jpg"); */
@@ -1333,16 +1424,16 @@ background-image: url('img/ffa500.jpg');
 }
 
 @keyframes flipanim{
-  50% {  transform: translateZ(100px);}
+  50% {  transform: translateZ(120px);}
 }
 @-webkit-keyframes flipanim {
-50% {  transform: translateZ(100px);}
+50% {  transform: translateZ(120px);}
 }
 @-moz-keyframes flipanim {
-50% {  transform: translateZ(100px);}
+50% {  transform: translateZ(120px);}
 }
 @-o-keyframes flipanim { 
-  50% {  transform: translateZ(100px);}
+  50% {  transform: translateZ(120px);}
 }
 
 .traveller {
@@ -1353,16 +1444,16 @@ background-image: url('img/ffa500.jpg');
 }
 
 @keyframes travelanim{
-  50% {  transform: translateZ(300px);}
+  50% {  transform: translateZ(350px);}
 }
 @-webkit-keyframes travelanim {
-50% {  transform: translateZ(300px);}
+50% {  transform: translateZ(350px);}
 }
 @-moz-keyframes travelanim {
-50% {  transform: translateZ(300px);}
+50% {  transform: translateZ(350px);}
 }
 @-o-keyframes travelanim { 
-  50% {  transform: translateZ(300px);}
+  50% {  transform: translateZ(350px);}
 }
 
 

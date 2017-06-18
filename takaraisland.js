@@ -32,11 +32,11 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 			this.cardwidth = 150;
             this.cardheight = 200;			
-			this.control3dxaxis=50;
-			this.control3dzaxis=-10;
-			this.control3dxpos=-600;
-			this.control3dypos=0;
-			this.control3dscale=1;
+			this.control3dxaxis=40;
+			this.control3dzaxis=10;
+			this.control3dxpos=-300;
+			this.control3dypos=-100;
+			this.control3dscale=0.9;
 			this.control3dmode3d=false;
 			
         },
@@ -63,18 +63,18 @@ function (dojo, declare) {
 			this.swordconnection=null;
 										//change3d: function ( xaxis , xpos , ypos , zaxis , pers, enable3d )
 			
-			dojo.connect($('c3dAngleUp'),  "onclick", dojo.hitch(this, this.change3d,  10 , 0 , 0 , 0 , 0 , true ));
-			dojo.connect($('c3dAngleDown'), "onclick", dojo.hitch(this, this.change3d,  -10 , 0 , 0 , 0 , 0 , true ));
-			dojo.connect($('c3dUp'),      "onclick", dojo.hitch(this, this.change3d,  0 , -100 , 0 , 0 , 0 , true ));
-			dojo.connect($('c3dDown'),    "onclick", dojo.hitch(this, this.change3d,  0 , 100 , 0 , 0 , 0 , true ));
-			dojo.connect($('c3dLeft'),    "onclick", dojo.hitch(this, this.change3d,  0 , 0 , -100 , 0 , 0 , true ));
-			dojo.connect($('c3dRight'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 100 , 0 , 0 , true ));
-			dojo.connect($('c3dRotateL'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 10 , 0 , true ));
-			dojo.connect($('c3dRotateR'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , -10 , 0 , true ));
-			dojo.connect($('c3dReset'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 , false ));
-			dojo.connect($('c3dZoomIn'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0.1 , true ));
-			dojo.connect($('c3dZoomOut'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , -0.1 , true ));
-			
+			dojo.connect($('c3dAngleUp'), "onclick", dojo.hitch(this, this.change3d,  10 , 0 , 0 , 0 , 0 , true  ,false));
+			dojo.connect($('c3dAngleDown'),"onclick", dojo.hitch(this, this.change3d,  -10 , 0 , 0 , 0 , 0 , true,false));
+			dojo.connect($('c3dUp'),      "onclick", dojo.hitch(this, this.change3d,  0 , -100 , 0 , 0 , 0 , true,false));
+			dojo.connect($('c3dDown'),    "onclick", dojo.hitch(this, this.change3d,  0 , 100 , 0 , 0 , 0 , true ,false));
+			dojo.connect($('c3dLeft'),    "onclick", dojo.hitch(this, this.change3d,  0 , 0 , -100 , 0 , 0 , true,false));
+			dojo.connect($('c3dRight'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 100 , 0 , 0 , true ,false));
+			dojo.connect($('c3dRotateL'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 10 , 0 , true  ,false));
+			dojo.connect($('c3dRotateR'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , -10 , 0 , true ,false));
+			dojo.connect($('c3dReset'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 , false  ,false));
+			dojo.connect($('c3dZoomIn'),  "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0.1 , true ,false));
+			dojo.connect($('c3dZoomOut'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , -0.1 , true,false));
+			dojo.connect($('c3dClear'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 ,  true  , true));
             // Setting up player boards
 			
 			for( var player_id in gamedatas.players )
@@ -86,6 +86,14 @@ function (dojo, declare) {
                 dojo.place( this.format_block('jstpl_player_board', player ), player_board_div );
 				dojo.byId("goldcount_p"+player_id).innerHTML=player['gold'];
 				dojo.byId("xpcount_p"+player_id).innerHTML=player['xp'];
+            }
+			
+			for( var i in gamedatas.cardcount )
+            {
+                var cardcount = gamedatas.cardcount[i];
+                
+                dojo.byId("counter"+cardcount['location']).innerHTML="&#x21A8;"+cardcount['cardcount'];
+				
             }
 
 			decks= ["deck1","deck2","deck3","deck4","deck5","deck6"];
@@ -150,8 +158,9 @@ function (dojo, declare) {
 				position= xpos+"px "+ ypos+"px ";
 				
 				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id+"_front" , "background-position", position);
-				myvalue="translateZ("+(card.location_arg*3 )+"px)";
-				$(this.gamedatas.cards[i].location+'_item_card_'+card.id).style.transform = myvalue ;
+				myvalue="translateZ("+(card.location_arg*4 )+"px)";
+				dojo.style(this.gamedatas.cards[i].location+'_item_card_'+card.id , "transform", myvalue );
+				//$(this.gamedatas.cards[i].location+'_item_card_'+card.id).style.transform = myvalue ;
 				
             }
 			for (i=1 ; i<=23 ;i++)
@@ -172,8 +181,9 @@ function (dojo, declare) {
 				var card = this.gamedatas.treasures[i];
 				this.treasuredeck.addItemType( card.id, card.location_arg, g_gamethemeurl+'img/treasure.jpg', 0 );
 				this.treasuredeck.addToStockWithId( card.id , "treasure_"+card.id  );
-				myvalue="translateZ("+(card.location_arg*3 )+"px)";
-				$('treasuredeck_item_treasure_'+card.id).style.transform = myvalue ;
+				myvalue="translateZ("+(card.location_arg*4 )+"px)";
+				//$('treasuredeck_item_treasure_'+card.id).style.transform = myvalue ;
+				dojo.style('treasuredeck_item_treasure_'+card.id , "transform", myvalue );
             }
 			
 			/*dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
@@ -279,7 +289,7 @@ function (dojo, declare) {
 			switch( stateName )
             {
             case 'startturn':
-			    //debugger;
+			   
 			    for( var player_id in args.args.argScores['players'] )
 				{
 					var player = args.args.argScores['players'][player_id];
@@ -340,9 +350,10 @@ function (dojo, declare) {
 			    dojo.forEach(this.gameconnections, dojo.disconnect);
 				dojo.query(".borderpulse").removeClass("borderpulse");
 				this.gameconnections=[];
-				
+				dojo.query(".buttondiv").style("display","block");
 			    if ((this.isCurrentPlayerActive()) && (dojo.byId("tablecards").children.length > 0) && (this.expertpicked == 4 ) )
 				{
+						
 					browseddeck=dojo.byId("tablecards").children[0].id;
 					this[browseddeck].setSelectionMode (1);
 					this.deckselected=0;
@@ -401,7 +412,7 @@ function (dojo, declare) {
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id; 
-					dojo.toggleClass(thiselement, 'traveller');
+					dojo.addClass(thiselement, 'traveller');
 					dojo.toggleClass(thiselement, 'visible');
 					console.log("*** returning expert"+thiselement);
 					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ,1000 ) ;
@@ -416,7 +427,7 @@ function (dojo, declare) {
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;  //expert1
-					dojo.toggleClass(thiselement, 'traveller');
+					dojo.toggleClass(thiselement, 'flipped');
 					dojo.toggleClass(thiselement, 'visible');
 				}
 				
@@ -443,6 +454,7 @@ function (dojo, declare) {
                 break;	
 				
 			case 'endturn':
+			    dojo.query(".traveller").removeClass("traveller");
 			    this.slideToObjectRelative ("sword","swordholder",1000);
 				list=dojo.query( '.playable .playertile' );
 				for (var i = 0; i < list.length; i++)
@@ -493,12 +505,9 @@ function (dojo, declare) {
 			case 'sendexpert':
 			    this.expertpicked=0;
 				this.alreadyopen=false;
-				this.deckselected=0;
+				this.deckselected=0;				
+				dojo.query(".buttondiv").style("display","none");
 				break;
-				if ($(tablecards).children.length >= 1 )
-				{
-					this.browseGatherDeck (null , $(tablecards).children["0"].id.charAt(4))
-				}
             }
 			dojo.query(".traveller").removeClass("traveller");
 			
@@ -595,9 +604,9 @@ function (dojo, declare) {
             script.
         
         */
-        change3d: function ( xaxis , xpos , ypos , zaxis , scale, enable3d )
+        change3d: function ( xaxis , xpos , ypos , zaxis , scale, enable3d , clear3d )
 		{
-			//debugger;
+
 			if ( enable3d == false ){
 			this.control3dmode3d= !this.control3dmode3d ;
 			}
@@ -605,20 +614,28 @@ function (dojo, declare) {
 			if ( this.control3dmode3d == false )
 			{			
 		    $('c3dReset').innerHTML = "3D" ;
-			// $('#playArea').style.transform = "rotatex("+50+"deg) translate("+0+"px,"+0+"px) rotateZ("+-10+"deg)" ; 		
+			
 			$('playArea').style.transform = "rotatex("+0+"deg) translate("+0+"px,"+0+"px) rotateZ("+0+"deg)" ; 		
 			}
 			else
 			{
-		    $('c3dReset').innerHTML = "2D" ;
-			this.control3dxaxis+= xaxis;
-			if (this.control3dxaxis >= 90 ) { this.control3dxaxis = 90 ; }
-			if (this.control3dxaxis <= 0 ) { this.control3dxaxis = 0 ;}
-			this.control3dzaxis+= zaxis;
-			this.control3dxpos+= xpos;
-			this.control3dypos+= ypos;
-			this.control3dscale+= scale;
-			 $('playArea').style.transform = "rotatex("+this.control3dxaxis+"deg) translate("+this.control3dypos+"px,"+this.control3dxpos+"px) rotateZ("+this.control3dzaxis+"deg) scale("+this.control3dscale+","+this.control3dscale+") ";
+				$('c3dReset').innerHTML = "2D" ;
+				this.control3dxaxis+= xaxis;
+				if (this.control3dxaxis >= 90 ) { this.control3dxaxis = 90 ; }
+				if (this.control3dxaxis <= 0 ) { this.control3dxaxis = 0 ;}
+				this.control3dzaxis+= zaxis;
+				this.control3dxpos+= xpos;
+				this.control3dypos+= ypos;
+				this.control3dscale+= scale;
+				if (clear3d == true ) 
+				{
+					this.control3dxaxis=40;
+					this.control3dzaxis=10;
+					this.control3dxpos=-300;
+					this.control3dypos=-100;
+					this.control3dscale=0.9;
+				}
+				$('playArea').style.transform = "rotatex("+this.control3dxaxis+"deg) translate("+this.control3dypos+"px,"+this.control3dxpos+"px) rotateZ("+this.control3dzaxis+"deg) scale("+this.control3dscale+","+this.control3dscale+") ";
 			 
 			}
 		},
@@ -792,14 +809,15 @@ function (dojo, declare) {
 		},
 		
 		placewound: function(thetoken) {
-		x = Math.floor(Math.random() * 50) + 10;  	
-		y = Math.floor(Math.random() * 50) + 50;
+		x = Math.floor(Math.random() * 100) + 10;  	
+		y = Math.floor(Math.random() * 100) + 50;
 		dojo.place(
                 this.format_block('jstpl_woundtoken', {
                     id: thetoken.id ,
 					x : x,
 					y : y
-                }), thetoken.location);
+                }), "sword");
+		this.slideToObjectRelative ( "woundtoken_"+thetoken.id , thetoken.location);
 		this.addTooltipToClass( "woundtoken", _( "This monster has received a wound and now it has one less life point" ), "" );
     
 		},
@@ -1638,9 +1656,14 @@ function (dojo, declare) {
 			
 			dojo.toggleClass( notif.args.deck+"_item_"+notif.args.tile_id , "traveller", true);
 		    this[notif.args.deck].removeFromStockById (notif.args.tile_id, notif.args.destination);
-			if  ( notif.args.deck.charAt(0) == "d" &&  notif.args.type<22  )
+			if  ( notif.args.deck.charAt(0) == "d"   )
 			{
-				this["removed"].addToStockWithId( notif.args.type , "removed_"+notif.args.id  );
+			
+				dojo.byId("counter"+notif.args.deck).innerHTML="&#x21A8;"+ (eval (dojo.byId("counter"+notif.args.deck).innerHTML.charAt(1))-1 );
+				if ( notif.args.type<22 )
+				{
+					this["removed"].addToStockWithId( notif.args.type , "removed_"+notif.args.id  );
+				}
 			}	
         },
 		

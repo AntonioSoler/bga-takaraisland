@@ -25,20 +25,21 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 <div id="change3d">
- <button id="c3dAngleUp" class="button3d ">&#x290A;</button>
- <button id="c3dUp"     class="button3d ">&#8679;</button>
+ <button id="c3dAngleUp"   class="button3d ">&#x290A;</button>
+ <button id="c3dUp"        class="button3d ">&#8679;</button>
  <button id="c3dAngleDown" class="button3d">&#x290B;</button>
  <br>
- <button id="c3dLeft" class="button3d ">&#8678;</button>
+ <button id="c3dLeft"  class="button3d ">&#8678;</button>
  <button id="c3dReset" class="button3d">3D</button>
  <button id="c3dRight" class="button3d">&#8680;</button>
  <br>
  <button id="c3dRotateL" class="button3d">&#x21bb;</button>
- <button id="c3dDown" class="button3d ">&#8681;</button>
+ <button id="c3dDown"    class="button3d ">&#8681;</button>
  <button id="c3dRotateR" class="button3d ">&#x21ba;</button>
  <br>
- <button id="c3dZoomIn" class="button3d ">+</button>
+ <button id="c3dZoomIn"  class="button3d ">+</button>
  <button id="c3dZoomOut" class="button3d">-</button>
+ <button id="c3dClear"   class="button3d">X</button>
 </div>
 <br>
 <div id="playareascaler">
@@ -110,15 +111,18 @@
 				</div> 
 				<div id="HospitalC"></div>
 				<div id="WaitingroomC"></div>
-				<div id="deckholder1" class="deckholder"><div id="deck1" class="deck"><div id="button_deck1" class="buttondiv" ></div></div> </div>
-				<div id="deckholder2" class="deckholder"><div id="deck2" class="deck"><div id="button_deck2" class="buttondiv" ></div></div> </div>
-				<div id="deckholder3" class="deckholder"><div id="deck3" class="deck"><div id="button_deck3" class="buttondiv" ></div></div> </div>
-				<div id="deckholder4" class="deckholder"><div id="deck4" class="deck"><div id="button_deck4" class="buttondiv" ></div></div> </div>
-				<div id="deckholder5" class="deckholder"><div id="deck5" class="deck"><div id="button_deck5" class="buttondiv" ></div></div> </div>
-				<div id="deckholder6" class="deckholder"><div id="deck6" class="deck"><div id="button_deck6" class="buttondiv" ></div></div> </div>
+				<div id="deckholder1" class="deckholder"><div id="counterdeck1" class="deckcounter"></div><div id="deck1" class="deck"><div id="button_deck1" class="buttondiv"></div></div></div>
+				<div id="deckholder2" class="deckholder"><div id="counterdeck2" class="deckcounter"></div><div id="deck2" class="deck"><div id="button_deck2" class="buttondiv"></div></div></div>
+				<div id="deckholder3" class="deckholder"><div id="counterdeck3" class="deckcounter"></div><div id="deck3" class="deck"><div id="button_deck3" class="buttondiv"></div></div></div>
+				<div id="deckholder4" class="deckholder"><div id="counterdeck4" class="deckcounter"></div><div id="deck4" class="deck"><div id="button_deck4" class="buttondiv"></div></div></div>
+				<div id="deckholder5" class="deckholder"><div id="counterdeck5" class="deckcounter"></div><div id="deck5" class="deck"><div id="button_deck5" class="buttondiv"></div></div></div>
+				<div id="deckholder6" class="deckholder"><div id="counterdeck6" class="deckcounter"></div><div id="deck6" class="deck"><div id="button_deck6" class="buttondiv"></div></div></div>
 
 				<div id="workersC"></div>
-				<div id="treasuredeck"></div>
+				
+				<div id="treasuredeckholder">
+					<div id="treasuredeck"></div>
+				</div>
 				
 				<div id="counter"></div>
 				<div id="thedive"></div>
@@ -156,7 +160,8 @@
 			<!-- END camp -->
 			</div>
 			<div id="removed" class="tablecards"></div>
-		</div>	
+		</div>
+	
 </div>
 
 
