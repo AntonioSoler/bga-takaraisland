@@ -25,9 +25,9 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 <div id="change3d">
- <button id="c3dAngleUp"   class="button3d ">&#x290A;</button>
+ <button id="c3dAngleUp"   class="button3d ">&#x219b;;</button>
  <button id="c3dUp"        class="button3d ">&#8679;</button>
- <button id="c3dAngleDown" class="button3d">&#x290B;</button>
+ <button id="c3dAngleDown" class="button3d">&#x219a;</button>
  <br>
  <button id="c3dLeft"  class="button3d ">&#8678;</button>
  <button id="c3dReset" class="button3d">3D</button>

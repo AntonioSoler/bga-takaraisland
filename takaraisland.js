@@ -218,22 +218,22 @@ function (dojo, declare) {
 			_( "<b> THE MINER </b>  <hr>  Permits to dig 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert2",  "<div class='tooltipimage'><div class='card expertcardfront expert2' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE IMPERSONATOR</b> <hr>  Copies the effect of another specialist who is not available at the time. <p> For hiring this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
+			_( "<b> THE IMPERSONATOR</b> <hr>  Copies the effect of another specialist who is not available at the time.<p>To hire this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE ARCHEOLOGIST</b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE ARCHEOLOGIST</b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE SOOTHSAYER </b><hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE SOOTHSAYER </b><hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("sword", "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE MAGIC SWORD </b> <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold. <p> This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
+			_( "<b> THE MAGIC SWORD </b> <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold.<p>This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
 			
 			this.addTooltipHtml("HospitalC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the recovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat come here.<p>At the end of the turn a player can pay 2 Kara gold to accelerate the recovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("WaitingroomC", "<div class='tooltipimage' ><div class='hospitalthumb' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat come here <p> At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
+			_( "<b> THE HOSPITAL </b> <hr> Adventurers injured during exploration or in combat will come here.<p>At the end of the turn a player can pay 2 Kara gold to accelerate the rcovery of their injured adventurers. <p> If a player chooses not to pay the adventurers will spend another turn on the waitingroom." )+"</div>", "" );
 			
 			this.addTooltipHtml("thedive", "<div class='tooltipimage' ><div class='divethumb' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( "<b> THE DIVE </b> <hr>  The local pub of the island. <p>A player can send here up to 3 of his adventurers to make money gambling and will get 1 Kara gold for each one of them." )+"</div>", "" );
@@ -253,6 +253,8 @@ function (dojo, declare) {
 			this.addTooltip("explore4", _("Excavation site 4"),"");
 			this.addTooltip("explore5", _("Excavation site 5"),"");
 			this.addTooltip("explore6", _("Excavation site 6"),"");
+			
+			this.addTooltip("removed", _("This is the discard pile.<br> Once the reward is claimed by the player the cards are left here"),"");
 			
 			/*this.addTooltip("button_deck1", _("Browse/Gather Deck 1"),"");
 			this.addTooltip("button_deck2", _("Browse/Gather Deck 2"),"");
@@ -380,6 +382,7 @@ function (dojo, declare) {
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
+						dojo.removeClass( thiselement , "traveller");
 						this.recruitcon= dojo.connect(thiselement, 'onclick' , this, 'recruit');
 					}
 					list=dojo.query( '#HospitalC > div[id ^= "tile_'+this.getActivePlayerId()+'"]') ;
@@ -411,10 +414,10 @@ function (dojo, declare) {
 				list=dojo.query( '#playercardstore_'+this.getActivePlayerId()+' .visible') ;
 				for (var i = 0; i < list.length; i++)
 				{
-					var thiselement = list[i].id; 
-					dojo.addClass(thiselement, 'traveller');
+					var thiselement = list[i].id; 					
+					dojo.addClass(thiselement, 'flipped');
 					dojo.toggleClass(thiselement, 'visible');
-					console.log("*** returning expert"+thiselement);
+					
 					this.slideToObjectRelative ( thiselement , "expertholder" + thiselement.substr(-1) ,1000 ) ;
 				}
 				
@@ -427,6 +430,7 @@ function (dojo, declare) {
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;  //expert1
+					dojo.removeClass( thiselement , "traveller");
 					dojo.toggleClass(thiselement, 'flipped');
 					dojo.toggleClass(thiselement, 'visible');
 				}
@@ -445,7 +449,7 @@ function (dojo, declare) {
         onLeavingState: function( stateName )
         {
             console.log( 'Leaving state: '+stateName );
-            dojo.query(".traveller").removeClass("traveller");
+            
             switch( stateName )
             {
 
@@ -453,13 +457,16 @@ function (dojo, declare) {
 			    dojo.query( '.borderpulse' ).removeClass( 'borderpulse' )   ;
                 break;	
 				
-			case 'endturn':
-			    dojo.query(".traveller").removeClass("traveller");
-			    this.slideToObjectRelative ("sword","swordholder",1000);
+			case 'endturn':			    
+			    if ($(sword).parentElement.id != "swordholder" )
+				{
+					this.slideToObjectRelative ("sword","swordholder",1000);
+				}
 				list=dojo.query( '.playable .playertile' );
 				for (var i = 0; i < list.length; i++)
 				{
 					var thiselement = list[i].id;
+	
 					this.slideToObjectRelative ( thiselement , "TH_"+thiselement.split('_')[1],1000  ) 
 				}
 				dojo.forEach(this.gameconnections, dojo.disconnect);
@@ -467,7 +474,7 @@ function (dojo, declare) {
 			    dojo.query(".borderpulse").removeClass("borderpulse");
 			    this.gameconnections=[];
 				this.recruitcon=null;
-				dojo.query( '.flipped' ).addClass( 'traveller' );
+				
 			    dojo.query( '.flipped' ).removeClass( 'flipped' ) ;
                 break;
 			
@@ -509,7 +516,7 @@ function (dojo, declare) {
 				dojo.query(".buttondiv").style("display","none");
 				break;
             }
-			dojo.query(".traveller").removeClass("traveller");
+			
 			
         }, 
 
@@ -697,15 +704,12 @@ function (dojo, declare) {
 			position= xpos+"px "+ ypos+"px ";
 			
 			dojo.style('treasuredeck_item_treasure_'+card.id +'_back', "background-position", position);
-            this.slideToObjectRelative ('treasuredeck_item_treasure_'+card.id , "reward",1000,1000);
-			if (visible) 
-				{
-				dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "visible", true);
-				}		
-			else
-				{
-				dojo.toggleClass('treasuredeck_item_treasure_'+card.id, "flipped", true);
-				}
+            
+			
+			
+			
+			this.slideToObjectRelative ('treasuredeck_item_treasure_'+card.id , "workersC",1500,0, dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "flipped", true));
+			
 		},
 		
 		rolldice : function(r) {
@@ -978,14 +982,13 @@ function (dojo, declare) {
          */
         slideToObjectRelative : function(token, finalPlace, tlen, tdelay, onEnd) {
             this.resetPosition(token);
-             
-            dojo.toggleClass( token , "traveller", true);
+            dojo.removeClass( token , "traveller");
+            dojo.addClass( token , "traveller");
 			
             var box = this.attachToNewParentNoDestroy(token, finalPlace);
 			var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
 			
 			
-			dojo.toggleClass( token , "traveller", true);
 
             dojo.connect(anim, "onEnd", dojo.hitch(this, function(token) {
                 this.stripPosition(token);
@@ -1398,7 +1401,6 @@ function (dojo, declare) {
 			if( ! this.checkAction( 'viewdone' ) )
             {  return; }
 			dojo.query(".borderpulse").removeClass("borderpulse");
-			dojo.query(".flipped").addClass("traveller");
 			dojo.query(".flipped").removeClass("flipped");
 			if( this.checkAction( 'viewdone' ) )    // Check that this action is possible at this moment
             {            
@@ -1662,7 +1664,7 @@ function (dojo, declare) {
 				dojo.byId("counter"+notif.args.deck).innerHTML="&#x21A8;"+ (eval (dojo.byId("counter"+notif.args.deck).innerHTML.charAt(1))-1 );
 				if ( notif.args.type<22 )
 				{
-					this["removed"].addToStockWithId( notif.args.type , "removed_"+notif.args.id  );
+					this["removed"].addToStockWithId( notif.args.type , "removed_"+notif.args.id , notif.args.destination  );
 				}
 			}	
         },

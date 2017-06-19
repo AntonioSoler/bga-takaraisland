@@ -277,7 +277,7 @@ left: 1px;
 .card {
   width: 150px;
   height: 200px;
-  transition: transform 1s ease-out;
+  transition: transform 1s ease-out !important;
 }
 
 .stonetoken{
@@ -598,12 +598,13 @@ top: 65px ;
     width: 151px;
     height: 201px;
     position: absolute;
-    right: 1px;
+    left: 191px;
     top: 265px;
     border-style: solid;
     border-color: #ff0f40;
     /*transform-style: preserve-3d;*/
     z-index: 100;
+    pointer-events: none;
 }
 
 #treasurereward .card { 
@@ -680,7 +681,7 @@ tablecards .deck:hover .buttondiv {
   position: absolute;
   width: 50px;
   height: 50px;
-  background-color: #4db592;
+  background-color: #64e8bc;
   background-image:url('img/wound.png');
   background-position: center;
   border-radius: 50%;
@@ -739,12 +740,16 @@ tablecards .deck:hover .buttondiv {
     text-align: right;
 }
 
-.exploreholder div:nth-child(1) 
-{top:0px;left:0px;z-index: 50;}
-.exploreholder div:nth-child(2) 
-{top: 0px;left: 45px;z-index: 50;}
-.exploreholder div:nth-child(3) 
-{top: 0px;left: 90px;z-index: 50;}
+.exploreholder .playertile:nth-child(1) 
+{/* top:0px; *//* left:0px; */z-index: 50;
+transform: translateZ(20px);
+}
+.exploreholder .playertile:nth-child(2){transform: translateZ(22px) translate(45px,0px);}
+
+.exploreholder .playertile:nth-child(3) 
+{
+transform: translateZ(24px) translate(90px,0px);
+}
 
 .expertholder {
   width: 90px;
@@ -993,18 +998,15 @@ position: relative !important;
   top: 18px;
 }
 
-.playertileholder .playertile{
-	/* transition: top 0.5s ease, left 0.5s ease; */
-}
 
-.playertileholder div:nth-child(1) {
-	top: 0px;
+.playertileholder .playertile:nth-child(1) {
+	transform: translateZ(20px) translate(0px,0px);
 }
-.playertileholder div:nth-child(2) {
-	top: 88px;
+.playertileholder .playertile:nth-child(2) {
+	transform: translateZ(20px) translate(0px,88px);
 }
-.playertileholder div:nth-child(3) {
-	top: 177px;
+.playertileholder .playertile:nth-child(3) {
+	transform: translateZ(20px) translate(0px,177px);
 }
 
 .cardstore {
@@ -1079,11 +1081,23 @@ background-image: url('img/ffa500.jpg');
 	margin-right: -15px;
 	border: 0px;
 	position: absolute;
-	transform: translatez(8px);
-	/* transition: top 0.5s ease, left 0.5s ease; */
+	transform: translatez(15px);
+	transition: transform 1s ease;
 }
 
-
+.playertile::after {
+	content:"";
+	background:lightgrey;
+	box-shadow: 6px 6px 3px 1px rgba(0, 0, 0, 0.72), 0px 0px 0px 0px #faf5ef;
+	width:60px;
+	height:60px;
+	border-radius: 50%;
+	z-index: 1;
+	border: 0px;
+	position: absolute;
+	transform: translatez(-8px);
+	left:0px;
+}
 
 
 /*colortiles = { hff0000:2, h008000:3, h0000ff:0, hffa500:1 };*/
@@ -1424,36 +1438,40 @@ background-image: url('img/ffa500.jpg');
 }
 
 @keyframes flipanim{
-  50% {  transform: translateZ(120px);}
+  50% {  transform: translateZ(120px);
+  box-shadow: 8px 8px 7px 8px rgba(0, 0, 0, 0)}
 }
 @-webkit-keyframes flipanim {
-50% {  transform: translateZ(120px);}
+50% {  transform: translateZ(120px);
+  box-shadow: 8px 8px 7px 8px rgba(0, 0, 0, 0);}
 }
 @-moz-keyframes flipanim {
-50% {  transform: translateZ(120px);}
+50% {  transform: translateZ(120px);
+  box-shadow: 8px 8px 7px 8px rgba(0, 0, 0, 0);}
 }
 @-o-keyframes flipanim { 
-  50% {  transform: translateZ(120px);}
+  50% {  transform: translateZ(120px);
+  box-shadow: 8px 8px 7px 8px rgba(0, 0, 0, 0);}
 }
 
 .traveller {
-	-webkit-animation: travelanim 1s ease 1; /* Safari 4+ */
-    -moz-animation:    travelanim 1s ease 1; /* Fx 5+ */
-    -o-animation:      travelanim 1s ease 1; /* Opera 12+ */
-    animation:         travelanim 1s ease 1; /* IE 10+, Fx 29+ */    
+	-webkit-animation: travelanim 1.5s ease 1; /* Safari 4+ */
+    -moz-animation:    travelanim 1.5s ease 1; /* Fx 5+ */
+    -o-animation:      travelanim 1.5s ease 1; /* Opera 12+ */
+    animation:         travelanim 1.5s ease 1; /* IE 10+, Fx 29+ */    
 }
 
 @keyframes travelanim{
-  50% {  transform: translateZ(350px);}
+  50% {  transform: translateZ(250px);}
 }
 @-webkit-keyframes travelanim {
-50% {  transform: translateZ(350px);}
+50% {  transform: translateZ(250px);}
 }
 @-moz-keyframes travelanim {
-50% {  transform: translateZ(350px);}
+50% {  transform: translateZ(250px);}
 }
 @-o-keyframes travelanim { 
-  50% {  transform: translateZ(350px);}
+  50% {  transform: translateZ(250px);}
 }
 
 
