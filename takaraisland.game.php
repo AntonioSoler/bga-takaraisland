@@ -167,12 +167,14 @@ class takaraisland extends Table
 					array_push($cards, $card);   
 				}
         }
-	
+	 
         $this->cards->createCards( $cards, 'deep3' );
         //shuffle 
-        $this->cards->shuffle( 'deep3' );
+        
+		$sql = "UPDATE cards SET card_location='stones' WHERE card_type in (22 , 23)" ;
+		self::DbQuery( $sql );
 		
-		
+		$this->cards->shuffle( 'deep3' );
 		$decks=array('deck1','deck2','deck3','deck4','deck5','deck6');
 		shuffle($decks);
 		$location=array_pop($decks);

@@ -221,10 +221,10 @@ function (dojo, declare) {
 			_( "<b> THE IMPERSONATOR</b> <hr>  Copies the effect of another specialist who is not available at the time.<p>To hire this specialist you have to pay the price ot the selected specialist +2 Kara gold." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert3",  "<div class='tooltipimage'><div class='card expertcardfront expert3' ></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE ARCHEOLOGIST</b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE ARCHEOLOGIST</b> <hr> Allows the player to see the first 5 tiles on top of an excavation site deck.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("expert4",  "<div class='tooltipimage'><div class='card expertcardfront expert4'></div> </div> <div  class='tooltipmessage'> "  +
-			_( "<b> THE SOOTHSAYER </b><hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
+			_( "<b> THE SOOTHSAYER </b><hr>  Allows the player to see 3 consecutive tiles of an excavation site deck at any level.<p>The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>", "" );
 			
 			this.addTooltipHtml("sword", "<div class='tooltipimage'><div class='sword' ></div> </div> <div  class='tooltipmessage'> "  +
 			_( "<b> THE MAGIC SWORD </b> <hr>  <b> At the beggining of the turn </b>a player can rent the magic sword for  3 Kara gold.<p>This allows to fight a monster revealed on top of a deck. <p> Also if digging a monster appears there is no fight but the adventurer does not go to the hospital." )+"</div>", "" );
@@ -705,10 +705,14 @@ function (dojo, declare) {
 			
 			dojo.style('treasuredeck_item_treasure_'+card.id +'_back', "background-position", position);
             
+			this.attachToNewParentNoDestroy ('treasuredeck_item_treasure_'+card.id,'reward');
 			
+			dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "flipped", true);
 			
+			myanim = this.slideToObject ('treasuredeck_item_treasure_'+card.id , "reward",1500,1500, );
 			
-			this.slideToObjectRelative ('treasuredeck_item_treasure_'+card.id , "workersC",1500,0, dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "flipped", true));
+		
+            myanim.play();
 			
 		},
 		
@@ -1240,9 +1244,9 @@ function (dojo, declare) {
 							var html = "<div id='im_miner' class='tooltipimage'><div class='card expertcardfront expert1' ></div>"+
 									_( "<b> THE MINER </b> <hr> Permits to digg 2 tiles in of a excavation site deck. <p>XP tiles, Stones of Legend are kept by the player <p> The miner is not affected by the <b>&#10010;</b> go to hospital symbol.<p>Kara gold cards and Rockfalls are destroyed and give no reward.<p>If a monster appears there is no fight but the miner digging ends." )+"</div>"+
 									"&nbsp;<div id='im_arch' class='tooltipimage'><div class='card expertcardfront expert3' ></div>"+
-									_( "<b> THE ARCHEOLOGIST </b> <hr> Allows the player to see the first 5 tiles on top of a excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
+									_( "<b> THE ARCHEOLOGIST </b> <hr> Allows the player to see the first 5 tiles on top of an excavation site deck. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>"+
 									"&nbsp;<div id='im_sooth' class='tooltipimage'><div class='card expertcardfront expert4' ></div>"+
-									_( "<b> THE SOOTHSAYER </b> <hr>  Allows the player to see 3 consecutive tiles of a excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
+									_( "<b> THE SOOTHSAYER </b> <hr>  Allows the player to see 3 consecutive tiles of an excavation site deck at any level. <p> The rockfalls and monsters do not stop the survey. <p> Tiles already faced up still count as part of the survey." )+"</div>";
 									
 							// Show the dialog
 							
@@ -1665,6 +1669,7 @@ function (dojo, declare) {
 				if ( notif.args.type<22 )
 				{
 					this["removed"].addToStockWithId( notif.args.type , "removed_"+notif.args.id , notif.args.destination  );
+					//dojo.addClass( "removed_item_removed_"+notif.args.id, "traveller");
 				}
 			}	
         },
