@@ -709,9 +709,8 @@ function (dojo, declare) {
 			
 			dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "flipped", true);
 			
-			myanim = this.slideToObject ('treasuredeck_item_treasure_'+card.id , "reward",1500,1500, );
-			
-		
+			myanim = this.slideToObject ('treasuredeck_item_treasure_'+card.id , "reward",1500,1500 );
+
             myanim.play();
 			
 		},

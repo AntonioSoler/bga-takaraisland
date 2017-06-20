@@ -653,18 +653,6 @@ transition: transform 1s ease, visibility 1s ease;
 	display: none !important;
 	}
 
-/*.deckholder .deck:hover .buttondiv {  
-  display: block;
-  background-image:url('img/browse.gif');
-  cursor:zoom-in
-}
-
-tablecards .deck:hover .buttondiv {  
-  display: block;
-  cursor: zoom-out;
-  background-image:url('img/gather.gif');
-}*/
-
 .deckholder .deck .card:last-of-type:not(:only-of-type)  {
 	content:"";
 	position:absolute;
