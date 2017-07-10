@@ -24,22 +24,22 @@
     
     Please REMOVE this comment before publishing your game on BGA
 -->
-<div id="change3d">
- <button id="c3dAngleUp"   class="button3d ">&#x219b;;</button>
- <button id="c3dUp"        class="button3d ">&#8679;</button>
- <button id="c3dAngleDown" class="button3d">&#x219a;</button>
+<div id="tkchange3d">
+ <button id="tk3dAngleUp"   class="tkbutton3d ">&#x219b;;</button>
+ <button id="tk3dUp"        class="tkbutton3d ">&#8679;</button>
+ <button id="tk3dAngleDown" class="tkbutton3d">&#x219a;</button>
  <br>
- <button id="c3dLeft"  class="button3d ">&#8678;</button>
- <button id="c3dReset" class="button3d">3D</button>
- <button id="c3dRight" class="button3d">&#8680;</button>
+ <button id="tk3dLeft"  class="tkbutton3d ">&#8678;</button>
+ <button id="tk3dReset" class="tkbutton3d">3D</button>
+ <button id="tk3dRight" class="tkbutton3d">&#8680;</button>
  <br>
- <button id="c3dRotateL" class="button3d">&#x21bb;</button>
- <button id="c3dDown"    class="button3d ">&#8681;</button>
- <button id="c3dRotateR" class="button3d ">&#x21ba;</button>
+ <button id="tk3dRotateL" class="tkbutton3d">&#x21bb;</button>
+ <button id="tk3dDown"    class="tkbutton3d ">&#8681;</button>
+ <button id="tk3dRotateR" class="tkbutton3d ">&#x21ba;</button>
  <br>
- <button id="c3dZoomIn"  class="button3d ">+</button>
- <button id="c3dZoomOut" class="button3d">-</button>
- <button id="c3dClear"   class="button3d">X</button>
+ <button id="tk3dZoomIn"  class="tkbutton3d ">+</button>
+ <button id="tk3dZoomOut" class="tkbutton3d">-</button>
+ <button id="tk3dClear"   class="tkbutton3d">X</button>
 </div>
 <br>
 <div id="playareascaler">
@@ -111,12 +111,12 @@
 				</div> 
 				<div id="HospitalC"></div>
 				<div id="WaitingroomC"></div>
-				<div id="deckholder1" class="deckholder"><div id="counterdeck1" class="deckcounter"></div><div id="deck1" class="deck"><div id="button_deck1" class="buttondiv"></div></div></div>
-				<div id="deckholder2" class="deckholder"><div id="counterdeck2" class="deckcounter"></div><div id="deck2" class="deck"><div id="button_deck2" class="buttondiv"></div></div></div>
-				<div id="deckholder3" class="deckholder"><div id="counterdeck3" class="deckcounter"></div><div id="deck3" class="deck"><div id="button_deck3" class="buttondiv"></div></div></div>
-				<div id="deckholder4" class="deckholder"><div id="counterdeck4" class="deckcounter"></div><div id="deck4" class="deck"><div id="button_deck4" class="buttondiv"></div></div></div>
-				<div id="deckholder5" class="deckholder"><div id="counterdeck5" class="deckcounter"></div><div id="deck5" class="deck"><div id="button_deck5" class="buttondiv"></div></div></div>
-				<div id="deckholder6" class="deckholder"><div id="counterdeck6" class="deckcounter"></div><div id="deck6" class="deck"><div id="button_deck6" class="buttondiv"></div></div></div>
+				<div id="deckholder1" class="deckholder"><div id="deck1" class="deck"><div id="button_deck1" class="buttondiv"></div></div></div>
+				<div id="deckholder2" class="deckholder"><div id="deck2" class="deck"><div id="button_deck2" class="buttondiv"></div></div></div>
+				<div id="deckholder3" class="deckholder"><div id="deck3" class="deck"><div id="button_deck3" class="buttondiv"></div></div></div>
+				<div id="deckholder4" class="deckholder"><div id="deck4" class="deck"><div id="button_deck4" class="buttondiv"></div></div></div>
+				<div id="deckholder5" class="deckholder"><div id="deck5" class="deck"><div id="button_deck5" class="buttondiv"></div></div></div>
+				<div id="deckholder6" class="deckholder"><div id="deck6" class="deck"><div id="button_deck6" class="buttondiv"></div></div></div>
 
 				<div id="workersC"></div>
 				
@@ -125,18 +125,17 @@
 				</div>
 				
 				<div id="counter"></div>
+				<div id="xpcounter"> <div id="xpcountercount" class="deckcounter"> </div></div>
 				<div id="thedive"></div>
-				
-				
 					<div id="counterC" class="playable" ></div>			
 					<div id="diveC"    class="playable" ></div>
 					<div id="expertsC" class="playable" ></div>
-					<div id="explore1" class="exploreholder playable"></div>
-					<div id="explore2" class="exploreholder playable"></div>
-					<div id="explore3" class="exploreholder playable"></div>
-					<div id="explore4" class="exploreholder playable"></div>
-					<div id="explore5" class="exploreholder playable"></div>
-					<div id="explore6" class="exploreholder playable"></div>
+					<div id="explore1" class="exploreholder playable"><div id="counterdeck1" class="deckcounter"></div></div>
+					<div id="explore2" class="exploreholder playable"><div id="counterdeck2" class="deckcounter"></div></div>
+					<div id="explore3" class="exploreholder playable"><div id="counterdeck3" class="deckcounter"></div></div>
+					<div id="explore4" class="exploreholder playable"><div id="counterdeck4" class="deckcounter"></div></div>
+					<div id="explore5" class="exploreholder playable"><div id="counterdeck5" class="deckcounter"></div></div>
+					<div id="explore6" class="exploreholder playable"><div id="counterdeck6" class="deckcounter"></div></div>
 				
 				<div id="reward"   class="treasurereward"></div>
 			</div>

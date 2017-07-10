@@ -61,20 +61,20 @@ function (dojo, declare) {
 			this.param=new Array();
 			this.gameconnections=new Array();			
 			this.swordconnection=null;
-										//change3d: function ( xaxis , xpos , ypos , zaxis , pers, enable3d )
+										//tk3dchange3d: function ( xaxis , xpos , ypos , zaxis , zromm , enable3d , reset)
 			
-			dojo.connect($('c3dAngleUp'), "onclick", dojo.hitch(this, this.change3d,  10 , 0 , 0 , 0 , 0 , true  ,false));
-			dojo.connect($('c3dAngleDown'),"onclick", dojo.hitch(this, this.change3d,  -10 , 0 , 0 , 0 , 0 , true,false));
-			dojo.connect($('c3dUp'),      "onclick", dojo.hitch(this, this.change3d,  0 , -100 , 0 , 0 , 0 , true,false));
-			dojo.connect($('c3dDown'),    "onclick", dojo.hitch(this, this.change3d,  0 , 100 , 0 , 0 , 0 , true ,false));
-			dojo.connect($('c3dLeft'),    "onclick", dojo.hitch(this, this.change3d,  0 , 0 , -100 , 0 , 0 , true,false));
-			dojo.connect($('c3dRight'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 100 , 0 , 0 , true ,false));
-			dojo.connect($('c3dRotateL'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 10 , 0 , true  ,false));
-			dojo.connect($('c3dRotateR'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , -10 , 0 , true ,false));
-			dojo.connect($('c3dReset'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 , false  ,false));
-			dojo.connect($('c3dZoomIn'),  "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0.1 , true ,false));
-			dojo.connect($('c3dZoomOut'), "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , -0.1 , true,false));
-			dojo.connect($('c3dClear'),   "onclick", dojo.hitch(this, this.change3d,  0 , 0 , 0 , 0 , 0 ,  true  , true));
+			dojo.connect($('tk3dAngleUp'), "onclick", dojo.hitch(this, this.tk3dchange3d,  10 , 0 , 0 , 0 , 0 , true  ,false));
+			dojo.connect($('tk3dAngleDown'),"onclick", dojo.hitch(this, this.tk3dchange3d,  -10 , 0 , 0 , 0 , 0 , true,false));
+			dojo.connect($('tk3dUp'),      "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , -100 , 0 , 0 , 0 , true,false));
+			dojo.connect($('tk3dDown'),    "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 100 , 0 , 0 , 0 , true ,false));
+			dojo.connect($('tk3dLeft'),    "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , -100 , 0 , 0 , true,false));
+			dojo.connect($('tk3dRight'),   "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 100 , 0 , 0 , true ,false));
+			dojo.connect($('tk3dRotateL'), "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , 10 , 0 , true  ,false));
+			dojo.connect($('tk3dRotateR'), "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , -10 , 0 , true ,false));
+			dojo.connect($('tk3dReset'),   "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , 0 , 0 , false  ,false));
+			dojo.connect($('tk3dZoomIn'),  "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , 0 , 0.1 , true ,false));
+			dojo.connect($('tk3dZoomOut'), "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , 0 , -0.1 , true,false));
+			dojo.connect($('tk3dClear'),   "onclick", dojo.hitch(this, this.tk3dchange3d,  0 , 0 , 0 , 0 , 0 ,  true  , true));
             // Setting up player boards
 			
 			for( var player_id in gamedatas.players )
@@ -185,6 +185,12 @@ function (dojo, declare) {
 				//$('treasuredeck_item_treasure_'+card.id).style.transform = myvalue ;
 				dojo.style('treasuredeck_item_treasure_'+card.id , "transform", myvalue );
             }
+			
+			for (i=1 ; i<=this.gamedatas.xpstock ;i++)
+			{
+				dojo.place("<div id='xpstock"+i+"' class='xpstock' style='transform: translateZ("+ i * 4 + "px);'></div>", "xpcounter" , "last") ;
+			}
+			dojo.byId("xpcountercount").innerHTML="&#x21A8;"+this.gamedatas.xpstock;
 			
 			/*dojo.connect( $('button_deck1'), 'onclick', this, 'browseGatherDeck' );
 			dojo.connect( $('button_deck2'), 'onclick', this, 'browseGatherDeck' );
@@ -332,6 +338,7 @@ function (dojo, declare) {
 			case 'hireexpert':
 			    dojo.forEach(this.gameconnections, dojo.disconnect);
 				dojo.query(".borderpulse").removeClass("borderpulse");
+				dojo.query(".traveller").removeClass("traveller");
 				this.gameconnections=[];
 				if (this.myDlg)	
 					{ 
@@ -340,7 +347,7 @@ function (dojo, declare) {
 					}
 			    if (this.isCurrentPlayerActive() )
 				{
-					list =dojo.query( '.expertholder .card' ).addClass( 'borderpulse' ) ;
+					list =dojo.query( '.expertholder .expert' ).addClass( 'borderpulse' ) ;
 					for (var i = 0; i < list.length; i++)
 					{
 						var thiselement = list[i];
@@ -557,7 +564,16 @@ function (dojo, declare) {
                     break;
 					
 				 case 'endturn':
-					this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
+				    if ( this.getActivePlayerId() == args.mapowner )
+					{
+						this.addActionButton( 'reward_1', _('get 5 Kara Gold for the Map'), 'choosereward' );
+					
+						this.addActionButton( 'reward_2', _('get 2 XP for the Map'), 'choosereward' ); 
+					}
+					else
+					{ 
+						this.addActionButton( 'viewdone_button', _("END TURN"), 'viewdone' );
+					}
 					break;
 				 
 				 case 'hireexpert':
@@ -579,12 +595,7 @@ function (dojo, declare) {
 				
 				case 'playermove':
 				   				   
-				    if ( this.getActivePlayerId() == args.mapowner )
-					{
-						this.addActionButton( 'reward_1', _('get 5 Kara Gold for the Map'), 'choosereward' );
-					
-						this.addActionButton( 'reward_2', _('get 2 XP for the Map'), 'choosereward' ); 
-					}
+				    
                     break;	
 				/*              
                  Example:
@@ -611,7 +622,7 @@ function (dojo, declare) {
             script.
         
         */
-        change3d: function ( xaxis , xpos , ypos , zaxis , scale, enable3d , clear3d )
+        tk3dchange3d: function ( xaxis , xpos , ypos , zaxis , scale, enable3d , clear3d )
 		{
 
 			if ( enable3d == false ){
@@ -620,13 +631,13 @@ function (dojo, declare) {
 			
 			if ( this.control3dmode3d == false )
 			{			
-		    $('c3dReset').innerHTML = "3D" ;
+		    $('tk3dReset').innerHTML = "3D" ;
 			
 			$('playArea').style.transform = "rotatex("+0+"deg) translate("+0+"px,"+0+"px) rotateZ("+0+"deg)" ; 		
 			}
 			else
 			{
-				$('c3dReset').innerHTML = "2D" ;
+				$('tk3dReset').innerHTML = "2D" ;
 				this.control3dxaxis+= xaxis;
 				if (this.control3dxaxis >= 90 ) { this.control3dxaxis = 90 ; }
 				if (this.control3dxaxis <= 0 ) { this.control3dxaxis = 0 ;}
@@ -705,13 +716,13 @@ function (dojo, declare) {
 			
 			dojo.style('treasuredeck_item_treasure_'+card.id +'_back', "background-position", position);
             
-			this.attachToNewParentNoDestroy ('treasuredeck_item_treasure_'+card.id,'reward');
+			//this.attachToNewParentNoDestroy ('treasuredeck_item_treasure_'+card.id,'reward');
 			
-			dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "flipped", true);
+			dojo.toggleClass('treasuredeck_item_treasure_'+card.id , "visible", true);
 			
-			myanim = this.slideToObject ('treasuredeck_item_treasure_'+card.id , "reward",1500,1500 );
-
-            myanim.play();
+			setTimeout(this.slideToObjectRelative ('treasuredeck_item_treasure_'+card.id , "reward",1500) , 1500 );
+            // myanim =
+            // myanim.play();
 			
 		},
 		
@@ -989,7 +1000,7 @@ function (dojo, declare) {
             dojo.addClass( token , "traveller");
 			
             var box = this.attachToNewParentNoDestroy(token, finalPlace);
-			var anim = this.slideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
+			var anim = this.MySlideToObjectPos(token, finalPlace, box.l, box.t, tlen, tdelay);
 			
 			
 
@@ -1000,6 +1011,112 @@ function (dojo, declare) {
 
             anim.play();
         },
+		
+		MySlideToObjectPos: function (token, finalPlace, leftpos, rightpos, tlen, tdelay)
+		{
+			if (token === null)
+			{
+				console.error("slideToObjectPos: mobile obj is null");
+			}
+			if (finalPlace === null)
+			{
+				console.error("slideToObjectPos: target obj is null");
+			}
+			if (leftpos === null)
+			{
+				console.error("slideToObjectPos: target x is null");
+			}
+			if (rightpos === null)
+			{
+				console.error("slideToObjectPos: target y is null");
+			}
+			var tgt = dojo.position(finalPlace);
+			var src = dojo.position(token);
+			if (typeof tlen == "undefined")
+			{
+				tlen = 500;
+			}
+			if (typeof tdelay == "undefined")
+			{
+				tdelay = 0;
+			}
+			if (this.instantaneousMode)
+			{
+				tdelay = Math.min(1, tdelay);
+				tlen = Math.min(1, tlen);
+			}
+			var left = dojo.style(token, "left");
+			var top = dojo.style(token, "top");
+			left = left + tgt.x - src.x + leftpos;
+			top = top + tgt.y - src.y + rightpos;
+			return dojo.fx.slideTo(
+			{
+				node: token,
+				top: top,
+				left: left,
+				delay: tdelay,
+				duration: tlen,
+				unit: "px"
+			}
+			);
+		},
+		
+		MySlideToObject: function (_a37, _a38, _a39, _a3a)
+		{
+			if (_a37 === null)
+			{
+				console.error("slideToObject: mobile obj is null");
+			}
+			if (_a38 === null)
+			{
+				console.error("slideToObject: target obj is null");
+			}
+			var tgt = dojo.position(_a38);
+			var src = dojo.position(_a37);
+			if (typeof _a39 == "undefined")
+			{
+				_a39 = 500;
+			}
+			if (typeof _a3a == "undefined")
+			{
+				_a3a = 0;
+			}
+			if (this.instantaneousMode)
+			{
+				_a3a = Math.min(1, _a3a);
+				_a39 = Math.min(1, _a39);
+			}
+			var left = dojo.style(_a37, "left");
+			var top = dojo.style(_a37, "top");
+			left = left + tgt.x - src.x + (tgt.w - src.w) / 2;
+			top = top + tgt.y - src.y + (tgt.h - src.h) / 2;
+			return dojo.fx.slideTo(
+			{
+				node: _a37,
+				top: top,
+				left: left,
+				delay: _a3a,
+				duration: _a39,
+				unit: "px"
+			}
+			);
+		},
+		MySlideTemporaryObject: function (_a47, _a48, from, to, _a49, _a4a)
+					{
+						var obj = dojo.place(_a47, _a48);
+						dojo.style(obj, "position", "absolute");
+						dojo.style(obj, "left", "0px");
+						dojo.style(obj, "top", "0px");
+						this.placeOnObject(obj, from);
+						var anim = this.MySlideToObject(obj, to, _a49, _a4a);
+						var _a4b = function (node)
+						{
+							dojo.destroy(node);
+						};
+						dojo.connect(anim, "onEnd", _a4b);
+						anim.play();
+						return anim;
+					},
 		
 		stripPosition : function(token) {
             // console.log(token + " STRIPPING");
@@ -1046,7 +1163,7 @@ function (dojo, declare) {
 			for (var i = 1 ; i<= amount ; i++)
 			{
 				dojo.byId(source).innerHTML=eval(dojo.byId(source).innerHTML) - 1;
-				this.slideTemporaryObject( '<div class="bigcoin spining"></div>', 'page-content', source, destination, 1000 , animspeed );
+				this.MySlideTemporaryObject( '<div class="bigcoin spining"></div>', 'page-content', source, destination, 1000 , animspeed );
 				animspeed += 200;
 			}
         },
@@ -1057,7 +1174,7 @@ function (dojo, declare) {
 			dojo.style(obj, "position", "absolute");
 			dojo.style(obj, "left", "0px");
 			dojo.style(obj, "top", "0px");
-			var anim = this.slideToObject(obj, to, duration, delay );
+			var anim = this.MySlideToObject(obj, to, duration, delay );
 			
 			this.param.push(to);
             
@@ -1074,7 +1191,7 @@ function (dojo, declare) {
 			dojo.style(obj, "top", "0px");
 			this.placeOnObject(obj, from);
 			
-			var anim = this.slideToObject(obj, to, duration, delay );
+			var anim = this.MySlideToObject(obj, to, duration, delay );
 			
 			this.param.push(to);
             
@@ -1552,7 +1669,7 @@ function (dojo, declare) {
             this.notifqueue.setSynchronous('revealcard', 3000);
 			
 			dojo.subscribe('browsecards', this, "notif_browsecards");
-            this.notifqueue.setSynchronous('browsecards', 3000);
+            this.notifqueue.setSynchronous('browsecards', 2000);
 			
 			dojo.subscribe('playerpaysgold', this, "notif_playerpaysgold");
             this.notifqueue.setSynchronous('playerpaysgold', 2000);
@@ -1578,8 +1695,8 @@ function (dojo, declare) {
 			dojo.subscribe('fliptreasure', this, "notif_fliptreasure");
             this.notifqueue.setSynchronous('fliptreasure', 3000);
 			
-			dojo.subscribe('tableWindow', this, "notif_finalScore");
-            this.notifqueue.setSynchronous('tableWindow', 5000);
+			dojo.subscribe('notif_finalScore', this, "notif_finalScore");
+            this.notifqueue.setSynchronous('notif_finalScore', 5000);
             // 
         },  
         
@@ -1677,7 +1794,14 @@ function (dojo, declare) {
         {
             console.log( 'notif_playergetxp' );
             console.log( notif );
-            this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;	
+            this.gamedatas.players[notif.args.player_id]['xp']+=notif.args.amount;
+            if ( notif.args.source == "xpcounter" )
+			{
+				 //debugger;
+				 dojo.destroy ( dojo.query('#xpcounter div:last-child')[0].id);
+				 dojo.byId("xpcountercount").innerHTML="&#x21A8;"+ ( (dojo.byId("xpcountercount").innerHTML.replace(/\D+/g, ""))-1 );
+				 
+			}
 			this.giveXp ( notif.args.source, notif.args.player_id , notif.args.amount , notif.args.token_id, notif.args.NOSELL);
         },
 		
@@ -1716,9 +1840,13 @@ function (dojo, declare) {
 		{
             console.log('**** Notification : finalScore');
             console.log(notif);
-
-            // Update score
-            //this.scoreCtrl[notif.args.player_id].incValue(notif.args.score_delta);
+			id     = _(notif.args.id);
+			title  = _(notif.args.title);
+			header = _(notif.args.header);
+			footer = _(notif.args.footer);
+			closing= _(notif.args.closing);
+			
+            this.displayTableWindow( id, title, notif.args.table, header, footer, closing);
         },
         
    });             

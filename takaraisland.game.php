@@ -291,8 +291,15 @@ class takaraisland extends Table
 		
 		$gold=self::getGoldBalance($player_id);
 		
+		$maxXp= array ( 2 => 6 , 3 => 9 , 4 => 12 );
+		
+		$sql = "SELECT COUNT(*) FROM tokens WHERE card_type=6 and card_location_arg>0 ";
+        $adquiredxp = self::getUniqueValueFromDB( $sql );  
+		
+		$result['xpstock']= $maxXp[sizeof($players)] - $adquiredxp ;
+		
 		$sql = "SELECT COUNT(*) FROM tokens WHERE card_type=4 and card_location='swordholder' ";
-        $swordlocation = self::getUniqueValueFromDB( $sql );  //only you can see your tent
+        $swordlocation = self::getUniqueValueFromDB( $sql );  // where is the sword?
 		
 		if ( self::getGameStateValue('playermoves') == 1 AND $gold > 2 AND $current_player_id == $player_id AND $swordlocation == 1 )
 			{	
@@ -522,10 +529,12 @@ class takaraisland extends Table
 				case 0:
 				
 			}
-		
+		$this->gamestate->nextState("endturn");
 		}
 		
-			
+		
+		
+		
         
     }
 
@@ -627,9 +636,11 @@ class takaraisland extends Table
 							) );
 	$topcards=$this->cards->getCardsOnTop( 3 , 'deck'.$sitenr );
 	$cards=array();
+	
 	foreach($topcards as $thiscard )
 	{
-		if (( $this->card_types[$thiscard['type']]['isMonster'] ==1) AND ( self::getCardStatus($thiscard['id'])==0) ) 
+	
+      	if (( $this->card_types[$thiscard['type']]['isMonster'] ==1) AND ( self::getCardStatus($thiscard['id'])==0) ) 
 		{
 			self::setGameStateValue('monsterpresent' ,1 );;
 		}
@@ -660,6 +671,7 @@ class takaraisland extends Table
 		}
 	}
 	
+	$this->gamestate->nextState( 'browsecards' );
 	self::notifyPlayer( $player_id, "browsecards", clienttranslate( '${player_name} : These are the cards you can see on the survey of Excavation site: ${sitenr}' ), array(
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
@@ -667,21 +679,24 @@ class takaraisland extends Table
 					'cards' => $cards
 					) );
 			
-	$this->gamestate->nextState( 'browsecards' );
+	
     }
 	
 	function viewdone()
     {
 	self::checkAction( 'viewdone' );
 	$state=$this->gamestate->state();
-	if ( $state['name'] == "hireexpert")
+	switch ($state['name']) 
 		{
-			$this->gamestate->nextState( "playermove" );
+			case "hireexpert":
+				$this->gamestate->nextState( "playermove" );
+				break;
+			case "endturn":
+				$this->gamestate->nextState( "finish" );
+				break;
 			
-		}
-	else
-		{
-		$this->gamestate->nextState( );
+			default:
+			   $this->gamestate->nextState( );;
 		}
     }
 	
@@ -763,37 +778,54 @@ class takaraisland extends Table
 					) );
 			
 		}
-	
+	self::stendturn();
     }
 	
 	function buy()
     {
+	$players = self::loadPlayersBasicInfos();
+    $playernum= sizeof($players);
 	self::checkAction( 'buy' );
 	$player_id = self::getActivePlayerId();
-	if ( self::getGoldBalance($player_id) >=5 ) 
-		{
-		self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
-		self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to the Counter' ), array(
-						'player_id' => $player_id,
-						'player_name' => self::getActivePlayerName(),
-						'amount' => 5 ,  
-						'destination' => "counterC"
-						) );	
-		$xp=2;
-		self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
-		$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location,card_location_arg) VALUES (6,$xp,'$player_id',1)";
-		self::DbQuery( $sql );
-		$token_id=self::DbGetLastId();
+	$maxXp= array ( 2 => 6 , 3 => 9 , 4 => 12 );
+		
+	$sql = "SELECT COUNT(*) FROM tokens WHERE card_type=6 and card_location_arg>0 ";
+    $adquiredxp = self::getUniqueValueFromDB( $sql );  
+		
+	$xpstock= $maxXp[sizeof($players)] - $adquiredxp ;
+	if ( $xpstock >0 ) 
+		{	
+		if ( self::getGoldBalance($player_id) >=5 ) 
+			{
+			self::DbQuery( "UPDATE player set player_gold = player_gold - 5 WHERE Player_id = $player_id" );	
+			self::notifyAllPlayers( "playerpaysgold", clienttranslate( '${player_name} pays 5 <div class="goldlog"></div> to the Counter' ), array(
+							'player_id' => $player_id,
+							'player_name' => self::getActivePlayerName(),
+							'amount' => 5 ,  
+							'destination' => "counterC"
+							) );	
+			$xp=2;
+			self::DbQuery( "UPDATE player set player_xp = player_xp + $xp WHERE Player_id = $player_id" );
+			$sql = "INSERT INTO tokens ( card_type, card_type_arg, card_location,card_location_arg) VALUES (6,$xp,'$player_id',1)";
+			self::DbQuery( $sql );
+			$token_id=self::DbGetLastId();
 
-		self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} buys 2 <div class="xplog"></div> points at the Counter' ), array(
-				'player_id' => $player_id,
-				'player_name' => self::getActivePlayerName(),
-				'amount' => $xp,
-				'source' => "playercardstore_".$player_id,
-				'token_id' => $token_id ,
-				'NOSELL' =>  1
-				) );
-		$this->gamestate->nextState( );
+			self::notifyAllPlayers( "playergetxp", clienttranslate( '${player_name} buys 2 <div class="xplog"></div> points at the Counter' ), array(
+					'player_id' => $player_id,
+					'player_name' => self::getActivePlayerName(),
+					'amount' => $xp,
+					'source' => "xpcounter",
+					'token_id' => $token_id ,
+					'NOSELL' =>  1
+					) );
+			$this->gamestate->nextState( );
+			}
+		}
+	 else
+		{
+			self::notifyAllPlayers( 'message', 'SORRY!! ${player_name} you tried to buy an XP token but there is no stock at The Counter ', array(
+							'player_name' => self::getActivePlayerName()
+							) );
 		}
 	
     }
@@ -927,14 +959,15 @@ class takaraisland extends Table
 						case "13":       // TREASURE
 						case "18":
 						        self::incStat (1,"cards_digged_player",$player_id);
-								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on site ${sitenr}.' ), array(
 										'player_id' => $player_id,
 										'player_name' => self::getActivePlayerName(),
 										'destination' => "playercardstore_".$player_id,
 										'tile_id' => "card_". $topcards[$i]['id'],
 										'deck' => $topcards[$i]['location'],
 										'type' => $topcards[$i]['type'],
-										'id' => $topcards[$i]['id']
+										'id' => $topcards[$i]['id'],
+										'sitenr' => substr( $deckpicked ,-1)
 										) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );
@@ -943,14 +976,15 @@ class takaraisland extends Table
 						case "2":       // ROCKFALL
 						case "14":
 								self::incStat (1,"cards_digged_player",$player_id);
-								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
+								self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on site ${sitenr}.' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'destination' => "playercardstore_".$player_id,
 									'tile_id' => "card_". $topcards[$i]['id'],
 									'deck' => $topcards[$i]['location'],
 									'type' => $topcards[$i]['type'],
-							        'id' => $topcards[$i]['id']
+							        'id' => $topcards[$i]['id'],
+									'sitenr' => substr( $deckpicked ,-1)
 									) );
 								$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcards[$i]['id'];
 								self::DbQuery( $sql );	
@@ -1268,7 +1302,7 @@ class takaraisland extends Table
 					) );
 			
 		}
-	
+	self::stendturn();
     }
 	
 	function finish()
@@ -1440,9 +1474,15 @@ class takaraisland extends Table
 		$tilesh = self::getUniqueValueFromDB( $sql );   // DOES THE PLAYER HAS TILES in Hospital TO PAY FOR?
 		$tilest=$tilesh+$tilesb;
 		$gold=self::getGoldBalance($player_id);
-		if ( ( $tilest == 0 ) OR ( $gold < 2 ) OR ( ($tilesh==0) AND ($gold < 5 )) )
+		$mapowner=self::getGameStateValue( 'mapowner' );
+		
+		if ( $player_id <> $mapowner )
 		{
-			$this->gamestate->nextState( );
+			if ( ( $tilest == 0 ) OR ( $gold < 2 ) OR ( ($tilesh==0) AND ($gold < 5 ))  )
+			{
+				$this->gamestate->nextState("finish");
+			}
+				
 		}
 		
 	}
@@ -1521,8 +1561,8 @@ class takaraisland extends Table
 					'player_id' => $player_id,
 					'player_name' => self::getActivePlayerName(),
 					'token' => $thetoken,
-					'monstername' => $monstername
-					
+					'monstername' => $monstername,
+					'i18n' => array('monstername')
 					) );
 				
 			}
@@ -1537,7 +1577,8 @@ class takaraisland extends Table
 					'player_name' => self::getActivePlayerName(),
 					'destination' => "HospitalC",
 					'monstername' => $monstername,
-					'tile_id' => "tile_".$player_id."_".$tile
+					'tile_id' => "tile_".$player_id."_".$tile,
+					 'i18n' => array('monstername')
 					) );
 				;
 				break;
@@ -1558,7 +1599,8 @@ class takaraisland extends Table
 				'monstername' => $monstername,
 				'deck' => $topcard['location'],
 				'type' => $topcard['type'] ,
-				'id' => $topcard['id'] 
+				'id' => $topcard['id'],
+				 'i18n' => array('monstername')
 				) );
 			$xp=$this->card_types[$topcard['type']]['xp'];
 			$gold=$this->card_types[$topcard['type']]['gold'];
@@ -1690,14 +1732,15 @@ class takaraisland extends Table
 			case "13":       // TREASURE
 			case "18":
 						self::incStat (1,"cards_digged_player",$player_id);
-						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on ${deck}.' ), array(
+						self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a treasure card on site ${sitenr}.' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "card_". $topcard['id'],
 								'deck' => $topcard['location'],
 								'type' => $topcard['type'],
-								'id' => $topcard['id']
+								'id' => $topcard['id'],
+								'sitenr' => $sitenr
 								) );
 						$sql = "UPDATE cards set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
@@ -1710,14 +1753,15 @@ class takaraisland extends Table
 						if ($cardstatus == 3) 
 						{
 							self::incStat (1,"cards_digged_player",$player_id);
-							self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on ${deck}.' ), array(
+							self::notifyAllPlayers( "removecard", clienttranslate( '${player_name} digs a rockfall card on site ${sitenr}.' ), array(
 								'player_id' => $player_id,
 								'player_name' => self::getActivePlayerName(),
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "card_". $topcard['id'],
 								'deck' => $topcard['location'],
 								'type' => $topcard['type'],
-								'id' => $topcard['id']
+								'id' => $topcard['id'],
+								'sitenr' => $sitenr
 								) );
 							$gold=0 ;
 							for ($g=1 ; $g<=6 ; $g++ )
@@ -1856,7 +1900,8 @@ class takaraisland extends Table
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "treasure_". $topcard['id'],
 								'deck' => 'treasuredeck',
-								'cardname' => $cardname
+								'cardname' => $cardname,
+								'i18n' => array('cardname')
 									) );
 						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
@@ -1912,7 +1957,8 @@ class takaraisland extends Table
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
 									'token' => $thetoken,
-									'monstername' => $monstername
+									'monstername' => $monstername,
+									'i18n' => array('monstername')
 									) );	
 							}
 							else     //  Mimic chest escapes
@@ -1920,7 +1966,8 @@ class takaraisland extends Table
 								self::notifyAllPlayers( "message", clienttranslate( '${player_name} fails to defeat the ${monstername}' ), array(
 									'player_id' => $player_id,
 									'player_name' => self::getActivePlayerName(),
-									'monstername' => $monstername
+									'monstername' => $monstername,
+									'i18n' => array('monstername')
 									) );
 								;
 								break;
@@ -1969,8 +2016,8 @@ class takaraisland extends Table
 								'destination' => "playercardstore_".$player_id,
 								'tile_id' => "treasure_". $topcard['id'],
 								'deck' => 'treasuredeck',
-								'cardname' => $cardname 
-								
+								'cardname' => $cardname ,
+								'i18n' => array('cardname')
 									) );
 						$sql = "UPDATE treasures set card_location = 'removed' WHERE card_id = ".$topcard['id'];
 						self::DbQuery( $sql );
@@ -1995,11 +2042,11 @@ class takaraisland extends Table
         
         //left hand col
         $table[0][] = array( 'str' => ' ', 'args' => array(), 'type' => 'header');
-        $table[1][] = $this->resources["gold"    ];
-        $table[2][] = $this->resources["experience"  ];
-        $table[3][] = $this->resources["stone of legend"];
-		$table[4][] = clienttranslate(' Points =  XP + ( Gold / 5 ) + Stones * 10 ');
-        $table[5][] = clienttranslate(' FINAL SCORE ');
+        $table[1][] = "<div class='coin' ></div>";
+        $table[2][] = "<div class='xpcounter'></div>";
+        $table[3][] = "<div class='stoneicon'></div>";
+		$table[4][] = '<h5><div class="xplog"></div> + ( <div class="goldlog"></div> / 5 ) + <div class="stoneicon" style="transform: scale(0.6,0.6);margin-left: 0px;"></div> * 10 </h5>';
+        $table[5][] = clienttranslate($this->resources["score_window_title"]);
 		
         foreach( $players as $player_id => $player )
         {
@@ -2038,7 +2085,7 @@ class takaraisland extends Table
 			if ( self::getGameStateValue('stonesfound') == 0)
 			{
 			 	$score = 0 ;
-				$score_aux = 0 ;
+				$XP = 0 ;
 			}
 			
 			$table[5][] = $score ;
@@ -2053,14 +2100,14 @@ class takaraisland extends Table
         }
 		
 
-        $this->notifyAllPlayers( "tableWindow", '', array(
+        $this->notifyAllPlayers( "notif_finalScore", '', array(
             "id" => 'finalScoring',
             "title" => $this->resources["score_window_title"],
             "table" => $table,
-            "header" => '<div>'.$this->resources["win_condition"].'</div>',
-			"footer" => '<div>'.$this->resources["end_condition"].'</div>',
-			"closing" => clienttranslate( "OK" )
-            //"closelabel" => clienttranslate( "Closing button label" )
+            "header" =>$this->resources["win_condition"],
+			"footer" =>$this->resources["end_condition"],
+			"closing" => clienttranslate( "OK" ),
+           'i18n' => array( 'header' , 'footer')
         ) ); 
     }
 
