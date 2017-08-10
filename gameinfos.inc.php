@@ -74,6 +74,7 @@ $gameinfos = array(
 // Diplomacy of the game, from 0 (no interaction in this game) to 5 (totally based on interaction and discussion between players)
 'diplomacy' => 0,    
 
+'game_interface_width' => 1020,
 
 // Games categories
 //  You can attribute any number of "tags" to your game.
